@@ -1,6 +1,6 @@
 # Trading Modes and Themes Documentation
 
-This document covers trading modes switching (DEMO, PAPER, TESTNET, LIVE) and theme management (Light/Dark/System) in the CITARION platform.
+This document covers trading modes switching (MIXED, DEMO, PAPER, TESTNET, LIVE) and theme management (Light/Dark/System) in the CITARION platform.
 
 ---
 
@@ -8,17 +8,21 @@ This document covers trading modes switching (DEMO, PAPER, TESTNET, LIVE) and th
 
 1. [Overview](#overview)
 2. [Trading Modes](#trading-modes)
+   - [MIXED Mode](#mixed-mode) ⭐ NEW DEFAULT
    - [DEMO Mode](#demo-mode)
    - [PAPER Mode](#paper-mode)
    - [TESTNET Mode](#testnet-mode)
    - [LIVE Mode](#live-mode)
    - [Mode Comparison](#mode-comparison)
-3. [Mode Switching](#mode-switching)
+3. [Per-Exchange Mode Configuration](#per-exchange-mode-configuration) ⭐ NEW
+   - [Exchange Mode Mapping](#exchange-mode-mapping)
+   - [API Integration](#api-integration)
+4. [Mode Switching](#mode-switching)
    - [ModeSwitch Component](#modeswitch-component)
    - [Header Integration](#header-integration)
    - [Safety Measures](#safety-measures)
    - [Visual Indication](#visual-indication)
-4. [Theme System](#theme-system)
+5. [Theme System](#theme-system)
    - [Light/Dark/System Modes](#lightdarksystem-modes)
    - [next-themes Integration](#next-themes-integration)
    - [CSS Variables](#css-variables)
@@ -34,6 +38,13 @@ This document covers trading modes switching (DEMO, PAPER, TESTNET, LIVE) and th
 ## Overview
 
 CITARION provides a flexible trading environment with multiple trading modes and visual themes. The system allows seamless switching between simulation and real trading, with clear visual indicators to prevent accidental real-money trades.
+
+### Default Mode
+
+**MIXED** is the default trading mode in CITARION. This mode allows each exchange to operate in its optimal testing mode:
+- **Binance/Bybit/BitMEX** → TESTNET mode (separate testnet registration)
+- **OKX/Bitget/BingX/BloFin** → DEMO mode (native demo support)
+- **Other exchanges** → PAPER mode (virtual simulation)
 
 ### Architecture
 
@@ -64,9 +75,88 @@ src/
 // From src/lib/exchange/types.ts
 export type TradingMode = "LIVE" | "TESTNET" | "DEMO";
 
-// Extended mode for UI (includes PAPER)
-type ExtendedTradingMode = "PAPER" | "TESTNET" | "DEMO" | "LIVE";
+// Extended mode for UI (includes PAPER and MIXED)
+type ExtendedTradingMode = "PAPER" | "TESTNET" | "DEMO" | "LIVE" | "MIXED";
+
+// Per-exchange mode configuration (NEW)
+interface ExchangeModeConfig {
+  exchangeId: ExchangeId;
+  mode: TradingMode;
+  lastUpdated: Date;
+}
+
+// Global trading mode state (NEW)
+interface TradingModeState {
+  globalMode: ExtendedTradingMode;
+  exchangeModes: Record<ExchangeId, TradingMode>;
+}
 ```
+
+---
+
+### MIXED Mode ⭐ DEFAULT
+
+**Описание:** Универсальный режим, который автоматически выбирает оптимальный режим для каждой биржи.
+
+| Параметр | Значение |
+|----------|----------|
+| **API Key** | По необходимости |
+| **Баланс** | Зависит от биржи |
+| **Цены** | Реальные рыночные |
+| **Ордера** | Зависит от биржи |
+| **Риск** | Нулевой (безопасный по умолчанию) |
+
+#### Автоматический выбор режима
+
+```typescript
+// Из src/lib/exchange/mode-config.ts
+const EXCHANGE_MODE_MAPPING: Record<ExchangeId, TradingMode> = {
+  // Testnet exchanges (separate registration required)
+  binance: "TESTNET",
+  bybit: "TESTNET",
+  bitmex: "TESTNET",
+  
+  // Demo exchanges (native demo support)
+  okx: "DEMO",
+  bitget: "DEMO",
+  bingx: "DEMO",
+  blofin: "DEMO",
+  
+  // Paper trading (no API required)
+  kucoin: "PAPER",
+  htx: "PAPER",
+  hyperliquid: "PAPER",
+  coinbase: "PAPER",
+  aster: "PAPER",
+};
+
+function getEffectiveMode(
+  globalMode: ExtendedTradingMode,
+  exchangeId: ExchangeId
+): TradingMode {
+  if (globalMode === "MIXED") {
+    return EXCHANGE_MODE_MAPPING[exchangeId] || "PAPER";
+  }
+  
+  // Check if exchange supports the selected mode
+  const config = EXCHANGE_CONFIGS[exchangeId];
+  if (globalMode === "TESTNET" && !config.hasTestnet) {
+    return "PAPER"; // Fallback to paper
+  }
+  if (globalMode === "DEMO" && !config.hasDemo) {
+    return "PAPER"; // Fallback to paper
+  }
+  
+  return globalMode as TradingMode;
+}
+```
+
+#### Преимущества MIXED режима
+
+1. **Безопасность** - Никакого риска реальных средств по умолчанию
+2. **Удобство** - Автоматический выбор оптимального режима для каждой биржи
+3. **Гибкость** - Возможность переопределить режим для конкретной биржи
+4. **Тестирование** - Идеально подходит для разработки и тестирования стратегий
 
 ---
 
@@ -328,16 +418,130 @@ if (actualTradingMode === "LIVE") {
 
 ### Mode Comparison
 
-| Характеристика | PAPER | DEMO | TESTNET | LIVE |
-|---------------|-------|------|---------|------|
-| **API Key** | ❌ | ⚠️ Опционально | ✅ | ✅ |
-| **Реальные деньги** | ❌ | ❌ | ❌ | ✅ |
-| **Реальные цены** | ✅ | ✅ | ✅ | ✅ |
-| **Реальные ордера** | ❌ | ⚠️ Симуляция | ✅ | ✅ |
-| **Отдельная регистрация** | ❌ | ❌ | ✅ | ❌ |
-| **Faucet** | N/A | N/A | ✅ | N/A |
-| **Риск потери** | ❌ | ❌ | ❌ | ✅ |
-| **Подходит для** | Обучение | Тестирование стратегий | Тестирование API | Реальная торговля |
+| Характеристика | MIXED ⭐ | PAPER | DEMO | TESTNET | LIVE |
+|---------------|---------|-------|------|---------|------|
+| **API Key** | Зависит от биржи | ❌ | ⚠️ Опционально | ✅ | ✅ |
+| **Реальные деньги** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Реальные цены** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Реальные ордера** | Зависит от биржи | ❌ | ⚠️ Симуляция | ✅ | ✅ |
+| **Отдельная регистрация** | Зависит от биржи | ❌ | ❌ | ✅ | ❌ |
+| **Faucet** | Зависит от биржи | N/A | N/A | ✅ | N/A |
+| **Риск потери** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Подходит для** | По умолчанию | Обучение | Тестирование стратегий | Тестирование API | Реальная торговля |
+
+---
+
+## Per-Exchange Mode Configuration ⭐ NEW
+
+### Exchange Mode Mapping
+
+Каждая биржа имеет свой оптимальный режим торговли в MIXED режиме:
+
+| Exchange | MIXED Default | TESTNET | DEMO | LIVE | PAPER |
+|----------|---------------|---------|------|------|-------|
+| **Binance** | TESTNET | ✅ | ❌ | ✅ | Fallback |
+| **Bybit** | TESTNET | ✅ | ❌ | ✅ | Fallback |
+| **OKX** | DEMO | ❌ | ✅ | ✅ | Fallback |
+| **Bitget** | DEMO | ❌ | ✅ | ✅ | Fallback |
+| **BingX** | DEMO | ❌ | ✅ | ✅ | Fallback |
+| **BloFin** | DEMO | ❌ | ✅ | ✅ | Fallback |
+| **KuCoin** | PAPER | ✅ | ❌ | ✅ | Default |
+| **HTX/Huobi** | PAPER | ❌ | ❌ | ✅ | Default |
+| **HyperLiquid** | PAPER | ✅ | ❌ | ✅ | Default |
+| **BitMEX** | TESTNET | ✅ | ❌ | ✅ | Fallback |
+| **Coinbase** | PAPER | ❌ | ❌ | ✅ | Default |
+| **Aster DEX** | PAPER | ❌ | ❌ | ✅ | Default |
+
+### Mode Configuration Interface
+
+```typescript
+// Из src/lib/exchange/mode-config.ts
+
+interface ExchangeModeConfig {
+  exchangeId: ExchangeId;
+  defaultMode: TradingMode;       // Default mode for MIXED
+  supportedModes: TradingMode[];  // All supported modes
+  testnetConfig?: TestnetConfig;  // Testnet configuration
+  demoConfig?: DemoConfig;        // Demo configuration
+}
+
+const EXCHANGE_MODE_CONFIGS: Record<ExchangeId, ExchangeModeConfig> = {
+  binance: {
+    exchangeId: "binance",
+    defaultMode: "TESTNET",
+    supportedModes: ["LIVE", "TESTNET", "PAPER"],
+    testnetConfig: {
+      supported: true,
+      separateRegistration: true,
+      registrationUrl: "https://testnet.binancefuture.com",
+      initialBalance: 15000,
+      balanceCurrency: "USDT",
+      hasFaucet: true,
+    },
+  },
+  okx: {
+    exchangeId: "okx",
+    defaultMode: "DEMO",
+    supportedModes: ["LIVE", "DEMO", "PAPER"],
+    demoConfig: {
+      supported: true,
+      type: "simulation",
+      demoCurrency: "USDT",
+      initialBalance: 10000,
+      specialHeader: { name: "x-simulated-trading", value: "1" },
+      demoApiKeyRequired: true,
+    },
+  },
+  kucoin: {
+    exchangeId: "kucoin",
+    defaultMode: "PAPER",
+    supportedModes: ["LIVE", "PAPER"],
+  },
+  // ... other exchanges
+};
+```
+
+### API Integration
+
+#### Get Effective Mode for Exchange
+
+```typescript
+// В торговых компонентах и API
+import { getEffectiveMode } from "@/lib/exchange/mode-config";
+
+// Получение эффективного режима для конкретной биржи
+const effectiveMode = getEffectiveMode(globalMode, exchangeId);
+
+// Пример использования
+const globalMode = "MIXED"; // из zustand store
+const exchangeId = "binance";
+
+const mode = getEffectiveMode(globalMode, exchangeId);
+// mode = "TESTNET" (так как binance → TESTNET в MIXED)
+
+// Для OKX
+const okxMode = getEffectiveMode("MIXED", "okx");
+// okxMode = "DEMO"
+```
+
+#### Per-Exchange Mode Override
+
+```typescript
+// Переопределение режима для конкретной биржи
+interface TradingModeState {
+  globalMode: ExtendedTradingMode;
+  exchangeModes: Partial<Record<ExchangeId, TradingMode>>; // Overrides
+}
+
+// В zustand store
+const { globalMode, exchangeModes, setExchangeMode } = useCryptoStore();
+
+// Установка режима для конкретной биржи
+setExchangeMode("binance", "LIVE"); // Переопределение на LIVE
+
+// Получение актуального режима
+const binanceMode = exchangeModes["binance"] || getEffectiveMode(globalMode, "binance");
+```
 
 ---
 
@@ -350,7 +554,7 @@ if (actualTradingMode === "LIVE") {
 ```typescript
 // Из src/components/layout/header.tsx
 
-// Mode configuration
+// Mode configuration - включает MIXED как режим по умолчанию
 const MODE_CONFIG: Record<ExtendedTradingMode, {
   label: string;
   color: string;
@@ -359,7 +563,18 @@ const MODE_CONFIG: Record<ExtendedTradingMode, {
   icon: typeof TestTube;
   description: string;
   requiresApiKey: boolean;
+  isDefault?: boolean;
 }> = {
+  MIXED: {
+    label: "MIXED",
+    color: "text-cyan-500",
+    bgColor: "bg-cyan-500/10",
+    borderColor: "border-cyan-500/20",
+    icon: Layers,
+    description: "Автоматический выбор режима для каждой биржи",
+    requiresApiKey: false,
+    isDefault: true, // Режим по умолчанию
+  },
   PAPER: {
     label: "PAPER",
     color: "text-blue-500",
@@ -479,12 +694,25 @@ const ModeIcon = modeConfig.icon;
 
 ```typescript
 const handleModeChange = (mode: ExtendedTradingMode) => {
-  // Map to store's TradingMode type
-  const storeMode: TradingMode = mode === "LIVE" ? "REAL" : "DEMO";
-  setTradingMode(storeMode);
+  // Set global mode
+  setTradingMode(mode);
   
-  // Update account type based on mode
+  // Log mode change
   console.log(`[Header] Switching to ${mode} mode`);
+  
+  // If MIXED mode, show info about per-exchange modes
+  if (mode === "MIXED") {
+    toast.info("MIXED mode active", {
+      description: "Each exchange will use its optimal testing mode"
+    });
+  }
+  
+  // If switching to LIVE, show warning
+  if (mode === "LIVE") {
+    toast.warning("LIVE mode active", {
+      description: "⚠️ Real money trading enabled!"
+    });
+  }
 };
 ```
 
@@ -517,6 +745,7 @@ const handleResetBalance = async () => {
 
 | Mode | Badge Color | Icon | Description |
 |------|-------------|------|-------------|
+| MIXED ⭐ | Cyan | Layers | Автоматический выбор (по умолчанию) |
 | PAPER | Blue | FlaskConical | Симуляция |
 | TESTNET | Yellow | TestTube | Тестовая сеть |
 | DEMO | Purple | Zap | Демо режим |
@@ -1250,6 +1479,29 @@ await fetch("/api/trade/open", {
 });
 ```
 
+### 7. Use MIXED Mode for Development ⭐ NEW
+
+```typescript
+// ✅ Good - MIXED mode automatically selects optimal mode per exchange
+const { tradingMode } = useCryptoStore();
+
+// Default to MIXED for development
+if (process.env.NODE_ENV === "development" && !tradingMode) {
+  setTradingMode("MIXED");
+}
+```
+
+### 8. Get Effective Mode for Exchange
+
+```typescript
+// ✅ Good - Always get effective mode for specific exchange
+import { getEffectiveMode } from "@/lib/exchange/mode-config";
+
+const effectiveMode = getEffectiveMode(tradingMode, selectedExchange);
+
+// In MIXED mode: binance → TESTNET, okx → DEMO, kucoin → PAPER
+```
+
 ---
 
 ## Related Documentation
@@ -1258,7 +1510,8 @@ await fetch("/api/trade/open", {
 - [Theme Customization](../ui/THEME_CUSTOMIZATION.md) - Detailed theme configuration
 - [UI Components Audit](../UI_COMPONENTS_AUDIT.md) - Component coverage
 - [Exchange Configuration](../exchanges/README.md) - Exchange-specific settings
+- [Bots Dashboard](./BOTS_DASHBOARD.md) - Bot management with trading modes
 
 ---
 
-*Last updated: March 2026*
+*Last updated: June 2026*

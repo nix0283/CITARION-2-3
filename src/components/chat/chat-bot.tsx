@@ -15,6 +15,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  useTradingConfigStore,
+  type ExchangeTradingMode,
+  type TradingSource,
+  TRADING_MODE_INFO,
+} from "@/stores/trading-config-store";
+import {
   Bot,
   User,
   Send,
@@ -45,6 +51,10 @@ import {
   DollarSign,
   Percent,
   Clock,
+  FlaskConical,
+  TestTube,
+  AlertTriangle,
+  Check,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -99,15 +109,50 @@ function generateId(): string {
 }
 
 export function ChatBot() {
+  // Trading config store
+  const {
+    primaryExchange,
+    setPrimaryExchange,
+    getEffectiveMode,
+    setExchangeMode,
+    getSupportedModes,
+  } = useTradingConfigStore();
+  
+  const source: TradingSource = "signal";
+  
   const [input, setInput] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [selectedExchange, setSelectedExchange] = useState("binance");
-  const [mode, setMode] = useState<"DEMO" | "REAL">("DEMO");
+  const [selectedExchange, setSelectedExchange] = useState(primaryExchange[source]);
   const [isLoading, setIsLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
+  
+  // Get current trading mode for the selected exchange
+  const tradingMode = getEffectiveMode(selectedExchange);
+  const supportedModes = getSupportedModes(selectedExchange);
+  const modeInfo = TRADING_MODE_INFO[tradingMode];
+  
+  // Mode icons
+  const MODE_ICONS: Record<ExchangeTradingMode, typeof FlaskConical> = {
+    PAPER: FlaskConical,
+    TESTNET: TestTube,
+    DEMO: Zap,
+    LIVE: AlertTriangle,
+  };
+  
+  // Update exchange and sync with trading config
+  const handleExchangeChange = (newExchange: string) => {
+    setSelectedExchange(newExchange);
+    setPrimaryExchange(source, newExchange);
+  };
+  
+  // Handle mode change
+  const handleModeChange = (mode: ExchangeTradingMode) => {
+    setExchangeMode(selectedExchange, "futures", mode);
+    toast.success(`Режим изменён на ${mode}`);
+  };
 
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) {
@@ -674,12 +719,11 @@ export function ChatBot() {
             <Badge
               className={cn(
                 "text-xs",
-                mode === "DEMO"
-                  ? "bg-green-500/10 text-green-500 border-green-500/20"
-                  : "bg-orange-500/10 text-orange-500 border-orange-500/20"
+                modeInfo.bgColor,
+                modeInfo.color
               )}
             >
-              {mode}
+              {tradingMode}
             </Badge>
           </div>
         </div>
@@ -768,8 +812,8 @@ export function ChatBot() {
         <div className="p-4 border-t border-border flex-shrink-0 bg-card">
           <div className="flex items-center gap-2 mb-2">
             <Building2 className="h-3 w-3 text-muted-foreground" />
-            <Select value={selectedExchange} onValueChange={setSelectedExchange}>
-              <SelectTrigger className="h-7 text-xs w-[140px]">
+            <Select value={selectedExchange} onValueChange={handleExchangeChange}>
+              <SelectTrigger className="h-7 text-xs w-[120px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -780,15 +824,31 @@ export function ChatBot() {
                 ))}
               </SelectContent>
             </Select>
-            <Select value={mode} onValueChange={(v) => setMode(v as "DEMO" | "REAL")}>
-              <SelectTrigger className="h-7 text-xs w-[80px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="DEMO">DEMO</SelectItem>
-                <SelectItem value="REAL">REAL</SelectItem>
-              </SelectContent>
-            </Select>
+            {/* Quick Mode Buttons */}
+            <div className="flex gap-1">
+              {supportedModes.map((mode) => {
+                const info = TRADING_MODE_INFO[mode];
+                const Icon = MODE_ICONS[mode];
+                const isActive = tradingMode === mode;
+                
+                return (
+                  <Button
+                    key={mode}
+                    variant={isActive ? "default" : "ghost"}
+                    size="sm"
+                    className={cn(
+                      "h-6 text-[10px] px-2",
+                      isActive && info.bgColor,
+                      isActive && info.color
+                    )}
+                    onClick={() => handleModeChange(mode)}
+                  >
+                    <Icon className="h-2.5 w-2.5 mr-0.5" />
+                    {mode}
+                  </Button>
+                );
+              })}
+            </div>
           </div>
           <form
             onSubmit={(e) => {

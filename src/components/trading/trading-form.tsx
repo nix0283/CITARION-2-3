@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 import { useCryptoStore } from "@/stores/crypto-store";
+import {
+  useTradingConfigStore,
+  type ExchangeTradingMode,
+  type TradingSource,
+  TRADING_MODE_INFO,
+} from "@/stores/trading-config-store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +39,10 @@ import {
   AlertTriangle,
   Building2,
   Keyboard,
+  FlaskConical,
+  TestTube,
+  Zap,
+  Check,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -72,7 +82,19 @@ const EXCHANGES = [
 export function TradingForm() {
   const { account, positions, addPosition, addTrade, marketPrices } =
     useCryptoStore();
-  const [exchange, setExchange] = useState("binance");
+  
+  // Trading config store
+  const {
+    primaryExchange,
+    setPrimaryExchange,
+    getEffectiveMode,
+    setExchangeMode,
+    getSupportedModes,
+  } = useTradingConfigStore();
+  
+  const source: TradingSource = "manual";
+  
+  const [exchange, setExchange] = useState(primaryExchange[source]);
   const [symbol, setSymbol] = useState("BTCUSDT");
   const [direction, setDirection] = useState<"LONG" | "SHORT">("LONG");
   const [amount, setAmount] = useState("100");
@@ -84,10 +106,34 @@ export function TradingForm() {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
 
+  // Get current trading mode for the selected exchange
+  const tradingMode = getEffectiveMode(exchange);
+  const supportedModes = getSupportedModes(exchange);
+  const modeInfo = TRADING_MODE_INFO[tradingMode];
+  
+  // Mode icons
+  const MODE_ICONS: Record<ExchangeTradingMode, typeof FlaskConical> = {
+    PAPER: FlaskConical,
+    TESTNET: TestTube,
+    DEMO: Zap,
+    LIVE: AlertTriangle,
+  };
+  
   const balance = account?.virtualBalance?.USDT || 0;
-  const isDemo = account?.accountType === "DEMO";
+  const isPaperTrading = tradingMode === "PAPER";
   const currentPrice = marketPrices[symbol]?.price || 0;
   const selectedExchange = EXCHANGES.find(e => e.id === exchange);
+  
+  // Update primary exchange when exchange changes
+  const handleExchangeChange = (newExchange: string) => {
+    setExchange(newExchange);
+    setPrimaryExchange(source, newExchange);
+  };
+  
+  // Handle mode change
+  const handleModeChange = (mode: ExchangeTradingMode) => {
+    setExchangeMode(exchange, "futures", mode);
+  };
 
   // Calculate position details
   const positionSize = parseFloat(amount) || 0;
@@ -132,7 +178,7 @@ export function TradingForm() {
         unrealizedPnl: 0,
         stopLoss: stopLoss ? parseFloat(stopLoss) : undefined,
         takeProfit: takeProfit ? parseFloat(takeProfit) : undefined,
-        isDemo,
+        isDemo: tradingMode !== "LIVE",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -148,8 +194,9 @@ export function TradingForm() {
           leverage,
           stopLoss: stopLoss || null,
           takeProfit: takeProfit || null,
-          isDemo,
+          isDemo: tradingMode !== "LIVE",
           exchangeId: exchange,
+          tradingMode,
         }),
       });
 
@@ -168,13 +215,13 @@ export function TradingForm() {
           pnl: 0,
           pnlPercent: 0,
           fee: estimatedFee,
-          isDemo,
+          isDemo: tradingMode !== "LIVE",
           createdAt: new Date().toISOString(),
         };
         addTrade(trade);
 
         toast.success(
-          `Позиция ${direction} открыта: ${symbol} ${isDemo ? "[DEMO]" : "[REAL]"}`
+          `Позиция ${direction} открыта: ${symbol} [${tradingMode}]`
         );
       }
     } catch (error) {
@@ -193,11 +240,12 @@ export function TradingForm() {
             <div className="flex items-center gap-2">
               <Calculator className="h-5 w-5 text-primary" />
               Новая сделка
-              {isDemo && (
-                <Badge variant="outline" className="demo-badge text-xs ml-2">
-                  DEMO
-                </Badge>
-              )}
+              <Badge 
+                variant="outline" 
+                className={cn("text-xs ml-2", modeInfo.bgColor, modeInfo.color, modeInfo.borderColor)}
+              >
+                {tradingMode}
+              </Badge>
             </div>
             {/* Keyboard shortcuts button - Desktop only */}
             <Button
@@ -230,7 +278,7 @@ export function TradingForm() {
               <Building2 className="h-3 w-3" />
               Биржа
             </Label>
-            <Select value={exchange} onValueChange={setExchange}>
+            <Select value={exchange} onValueChange={handleExchangeChange}>
               <SelectTrigger className="min-h-11">
                 <SelectValue />
               </SelectTrigger>
@@ -250,6 +298,39 @@ export function TradingForm() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Trading Mode Quick Select */}
+          <div className="space-y-2">
+            <Label className="text-xs text-muted-foreground">Режим торговли</Label>
+            <div className="flex flex-wrap gap-1">
+              {supportedModes.map((mode) => {
+                const info = TRADING_MODE_INFO[mode];
+                const Icon = MODE_ICONS[mode];
+                const isActive = tradingMode === mode;
+                
+                return (
+                  <Button
+                    key={mode}
+                    variant={isActive ? "default" : "outline"}
+                    size="sm"
+                    className={cn(
+                      "h-8 text-xs px-3",
+                      isActive && info.bgColor,
+                      isActive && info.color,
+                      isActive && "border",
+                      isActive && info.borderColor
+                    )}
+                    onClick={() => handleModeChange(mode)}
+                  >
+                    <Icon className="h-3 w-3 mr-1" />
+                    {mode}
+                    {isActive && <Check className="h-3 w-3 ml-1" />}
+                  </Button>
+                );
+              })}
+            </div>
+            <p className="text-[10px] text-muted-foreground">{modeInfo.description}</p>
           </div>
 
           {/* Trading Pair */}
@@ -469,7 +550,7 @@ export function TradingForm() {
                 ) : (
                   <TrendingDown className="mr-2 h-5 w-5" />
                 )}
-                Открыть {direction} {isDemo ? "[DEMO]" : ""}
+                Открыть {direction} [{tradingMode}]
               </>
             )}
           </Button>

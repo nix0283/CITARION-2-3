@@ -1887,3 +1887,39 @@ Stage Summary:
   - src/lib/exchange/price-fetcher.ts
   - src/app/api/portfolio/balances/route.ts
   - docs/components/PORTFOLIO_MANAGEMENT.md
+
+---
+Task ID: TRADING-MODES-DOCS
+Agent: Main Agent
+Task: Document MIXED mode and per-exchange mode configuration
+
+Work Log:
+- Updated docs/components/TRADING_MODES_AND_THEMES.md:
+  - Added MIXED mode as default trading mode
+  - Added Per-Exchange Mode Configuration section
+  - Updated Table of Contents with new sections
+  - Added Exchange Mode Mapping table
+  - Added MODE_CONFIG with MIXED mode
+  - Updated Mode Comparison table
+  - Added getEffectiveMode() API documentation
+  - Added Best Practices for MIXED mode
+  - Updated last updated date to June 2026
+- Updated README.md:
+  - Added MIXED Mode to Trading Features section
+  - Updated Bot Configuration with MIXED mode
+  - Added EXCHANGE_MODE_MAPPING code example
+- Updated docs/exchanges/README.md:
+  - Added Default Trading Mode: MIXED section
+  - Added MIXED Default column to exchanges table
+  - Updated last updated date to June 2026
+
+Stage Summary:
+- MIXED mode documented as default trading mode
+- Per-exchange mode configuration fully documented:
+  - TESTNET: Binance, Bybit, BitMEX
+  - DEMO: OKX, Bitget, BingX, BloFin
+  - PAPER: KuCoin, HTX, HyperLiquid, Coinbase, Aster DEX
+- Files modified:
+  - docs/components/TRADING_MODES_AND_THEMES.md
+  - README.md
+  - docs/exchanges/README.md

@@ -1,6 +1,6 @@
 # CITARION Exchange Integration Documentation
 
-**Version:** 2.0 | **Last Updated:** March 2026 | **Supported Exchanges:** 12
+**Version:** 2.0 | **Last Updated:** June 2026 | **Supported Exchanges:** 12
 
 ---
 
@@ -8,22 +8,29 @@
 
 CITARION provides unified access to 12 cryptocurrency exchanges through a standardized interface, enabling seamless multi-exchange trading.
 
+### Default Trading Mode: MIXED ⭐
+
+**MIXED** is the default trading mode, which automatically selects the optimal mode for each exchange:
+- **TESTNET** for Binance, Bybit, BitMEX (separate registration required)
+- **DEMO** for OKX, Bitget, BingX, BloFin (native demo support)
+- **PAPER** for other exchanges (virtual simulation)
+
 ### Supported Exchanges
 
-| Exchange | Type | Trading | Testnet | Demo | WebSocket | Copy Trading |
-|----------|------|---------|---------|------|-----------|--------------|
-| **Binance** | CEX | ✅ | ✅ | ❌ | ✅ | ✅ Master/Follower |
-| **Bybit** | CEX | ✅ | ✅ | ❌ | ✅ | ✅ Master/Follower |
-| **OKX** | CEX | ✅ | ❌ | ✅ | ✅ | ✅ Master/Follower |
-| **Bitget** | CEX | ✅ | ❌ | ✅ | ✅ | ✅ Master/Follower |
-| **BingX** | CEX | ✅ | ❌ | ✅ | ✅ | ✅ Master/Follower |
-| **KuCoin** | CEX | ✅ | ❌ | ❌ | ✅ | ❌ |
-| **HTX/Huobi** | CEX | ✅ | ❌ | ❌ | ✅ | ❌ |
-| **HyperLiquid** | DEX | ✅ | ❌ | ❌ | ✅ | ❌ |
-| **BitMEX** | CEX | ✅ | ✅ | ❌ | ✅ | ❌ |
-| **BloFin** | CEX | ✅ | ❌ | ✅ | ✅ | ❌ |
-| **Coinbase** | CEX | ✅ | ❌ | ❌ | ✅ | ❌ |
-| **Aster DEX** | DEX | ✅ | ❌ | ❌ | ✅ | ❌ |
+| Exchange | Type | Trading | Testnet | Demo | MIXED Default | WebSocket | Copy Trading |
+|----------|------|---------|---------|------|---------------|-----------|--------------|
+| **Binance** | CEX | ✅ | ✅ | ❌ | TESTNET | ✅ | ✅ Master/Follower |
+| **Bybit** | CEX | ✅ | ✅ | ❌ | TESTNET | ✅ | ✅ Master/Follower |
+| **OKX** | CEX | ✅ | ❌ | ✅ | DEMO | ✅ | ✅ Master/Follower |
+| **Bitget** | CEX | ✅ | ❌ | ✅ | DEMO | ✅ | ✅ Master/Follower |
+| **BingX** | CEX | ✅ | ❌ | ✅ | DEMO | ✅ | ✅ Master/Follower |
+| **KuCoin** | CEX | ✅ | ❌ | ❌ | PAPER | ✅ | ❌ |
+| **HTX/Huobi** | CEX | ✅ | ❌ | ❌ | PAPER | ✅ | ❌ |
+| **HyperLiquid** | DEX | ✅ | ❌ | ❌ | PAPER | ✅ | ❌ |
+| **BitMEX** | CEX | ✅ | ✅ | ❌ | TESTNET | ✅ | ❌ |
+| **BloFin** | CEX | ✅ | ❌ | ✅ | DEMO | ✅ | ❌ |
+| **Coinbase** | CEX | ✅ | ❌ | ❌ | PAPER | ✅ | ❌ |
+| **Aster DEX** | DEX | ✅ | ❌ | ❌ | PAPER | ✅ | ❌ |
 
 ---
 

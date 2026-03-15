@@ -131,6 +131,7 @@ CITARION is a comprehensive **algorithmic trading platform** designed for profes
 
 ### Trading Features
 - **Multi-Exchange Trading** - Single interface for 12 exchanges
+- **MIXED Mode** ⭐ - Automatic optimal mode per exchange (default)
 - **Demo/Paper Trading** - Virtual balance with real prices
 - **Signal Parsing** - Cornix format support with multi-entry
 - **Position Management** - Trailing stops, take profits, DCA
@@ -507,7 +508,7 @@ interface BotConfig {
   botType: 'grid' | 'dca' | 'bb' | 'vision' | 'orion' | 'argus' | 'range' | 'logos';
   symbol: string;
   exchange: ExchangeId;
-  tradingMode: 'PAPER' | 'TESTNET' | 'DEMO' | 'LIVE';
+  tradingMode: 'MIXED' | 'PAPER' | 'TESTNET' | 'DEMO' | 'LIVE'; // MIXED is default
   leverage: number;
   maxPositions: number;
   riskPerTrade: number;
@@ -515,6 +516,27 @@ interface BotConfig {
   takeProfit?: number;
   trailingStop?: TrailingStopConfig;
 }
+
+// Per-Exchange Mode Mapping (for MIXED mode)
+const EXCHANGE_MODE_MAPPING = {
+  // TESTNET: Binance, Bybit, BitMEX (separate registration required)
+  binance: 'TESTNET',
+  bybit: 'TESTNET',
+  bitmex: 'TESTNET',
+  
+  // DEMO: OKX, Bitget, BingX, BloFin (native demo support)
+  okx: 'DEMO',
+  bitget: 'DEMO',
+  bingx: 'DEMO',
+  blofin: 'DEMO',
+  
+  // PAPER: Other exchanges (virtual simulation)
+  kucoin: 'PAPER',
+  htx: 'PAPER',
+  hyperliquid: 'PAPER',
+  coinbase: 'PAPER',
+  aster: 'PAPER',
+};
 ```
 
 ---

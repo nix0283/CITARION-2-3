@@ -24,6 +24,12 @@ import {
   type Exchange,
 } from "@/lib/exchanges";
 import {
+  useTradingConfigStore,
+  EXCHANGE_MODE_SUPPORT,
+  TRADING_MODE_INFO,
+  type ExchangeTradingMode,
+} from "@/stores/trading-config-store";
+import {
   Building2,
   Link2,
   Unlink,
@@ -39,6 +45,9 @@ import {
   Wifi,
   WifiOff,
   XCircle,
+  FlaskConical,
+  Zap,
+  Check,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -65,6 +74,82 @@ const EXCHANGE_STYLES: Record<string, { color: string; bgColor: string }> = {
   bitget: { color: "#00D084", bgColor: "#00D08420" },
   bingx: { color: "#4285F4", bgColor: "#4285F420" },
 };
+
+// Mode icons
+const MODE_ICONS: Record<ExchangeTradingMode, typeof FlaskConical> = {
+  PAPER: FlaskConical,
+  TESTNET: TestTube,
+  DEMO: Zap,
+  LIVE: AlertTriangle,
+};
+
+// Exchange Mode Selector Component
+interface ExchangeModeSelectorInlineProps {
+  exchangeId: string;
+  exchangeType: ExchangeType;
+}
+
+function ExchangeModeSelectorInline({ exchangeId, exchangeType }: ExchangeModeSelectorInlineProps) {
+  const { getEffectiveMode, setExchangeMode, getSupportedModes, globalMode } = useTradingConfigStore();
+  
+  const currentMode = getEffectiveMode(exchangeId, exchangeType);
+  const supportedModes = getSupportedModes(exchangeId);
+  
+  // In non-MIXED mode, show the global mode
+  const isMixed = globalMode === "MIXED";
+  
+  const handleModeChange = (mode: ExchangeTradingMode) => {
+    setExchangeMode(exchangeId, exchangeType, mode);
+    toast.success(`${exchangeId.toUpperCase()}: режим изменён на ${mode}`);
+  };
+  
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">Trading Mode:</span>
+        {!isMixed && (
+          <Badge variant="outline" className="text-[10px] text-muted-foreground">
+            Global: {globalMode}
+          </Badge>
+        )}
+      </div>
+      <div className="flex flex-wrap gap-1">
+        {supportedModes.map((mode) => {
+          const info = TRADING_MODE_INFO[mode];
+          const Icon = MODE_ICONS[mode];
+          const isActive = currentMode === mode;
+          
+          return (
+            <Button
+              key={mode}
+              variant={isActive ? "default" : "outline"}
+              size="sm"
+              className={cn(
+                "h-6 text-[10px] px-2",
+                isActive && info.bgColor,
+                isActive && info.color,
+                isActive && "border",
+                isActive && info.borderColor,
+                !isMixed && "opacity-50"
+              )}
+              onClick={() => handleModeChange(mode)}
+              disabled={!isMixed}
+            >
+              <Icon className="h-2.5 w-2.5 mr-0.5" />
+              {mode}
+              {isActive && <Check className="h-2.5 w-2.5 ml-0.5" />}
+            </Button>
+          );
+        })}
+      </div>
+      {!isMixed && (
+        <p className="text-[10px] text-muted-foreground">
+          Enable MIXED mode to configure per-exchange
+        </p>
+      )}
+    </div>
+  );
+}
 
 export function ExchangesPage() {
   const [accounts, setAccounts] = useState<ConnectedAccount[]>([]);
@@ -409,6 +494,9 @@ export function ExchangesPage() {
                           </Badge>
                         )}
                       </div>
+
+                      {/* Trading Mode Selector - Per Exchange */}
+                      <ExchangeModeSelectorInline exchangeId={exchange.id} exchangeType={type} />
 
                       {/* Account info if connected */}
                       {account && (
