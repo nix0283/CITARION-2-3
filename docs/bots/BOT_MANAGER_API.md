@@ -1,8 +1,10 @@
 # Bot Manager & API
 
+**Version:** 2.0 | **Last Updated:** January 2025 | **Status:** Production
+
 ## Overview
 
-The Bot Manager provides centralized control for all trading bots in the CITARION platform. It handles bot lifecycle, configuration, statistics tracking, and integration with the Event Bus.
+The Bot Manager provides centralized control for all trading bots in the CITARION platform. It handles bot lifecycle, configuration, statistics tracking, real-time monitoring via WebSocket, and integration with the Event Bus.
 
 ## Architecture
 
@@ -21,6 +23,11 @@ The Bot Manager provides centralized control for all trading bots in the CITARIO
 │  │  Bot Control    │    │   Event Bus     │    │  Market Data    │      │
 │  │     Panel       │    │   (Signals)     │    │    Service      │      │
 │  └─────────────────┘    └─────────────────┘    └─────────────────┘      │
+│                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                    WebSocket Service (Port 3003)                 │    │
+│  │  Real-time bot status updates, metrics, and events               │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -319,6 +326,10 @@ src/lib/bot-manager/
 
 src/app/api/bots/
 ├── route.ts                    # List all bots
+├── unified/route.ts            # Unified bots API (all types)
+├── grid/route.ts               # Grid bot operations
+├── dca/route.ts                # DCA bot operations
+├── bb/route.ts                 # BB bot operations
 └── [botType]/
     └── route.ts                # Single bot operations
 
@@ -326,5 +337,214 @@ src/app/api/signals/
 └── route.ts                    # Signal operations
 
 src/components/bots/
-└── bot-control-panel.tsx       # UI component
+├── bot-control-panel.tsx       # UI component
+├── bots-dashboard.tsx          # Unified bots dashboard
+├── bot-card.tsx                # Bot card component
+├── bot-config-modal.tsx        # Configuration modal
+└── new-bot-modal.tsx           # New bot creation modal
+
+src/hooks/
+└── use-bots.ts                 # React hook for bot management
+
+mini-services/bot-monitor/
+└── index.ts                    # WebSocket monitoring service (port 3003)
+```
+
+---
+
+## Unified API Endpoints
+
+### GET /api/bots/unified
+
+Получение списка всех ботов с унифицированным форматом.
+
+**Query параметры:**
+
+| Параметр | Тип | Описание |
+|----------|-----|----------|
+| `type` | BotType | Фильтр по типу бота |
+| `status` | BotStatus | Фильтр по статусу |
+| `exchangeId` | string | Фильтр по бирже |
+
+**Ответ:**
+
+```json
+{
+  "success": true,
+  "bots": [
+    {
+      "id": "grid-1",
+      "type": "grid",
+      "name": "BTC Grid Master",
+      "status": "RUNNING",
+      "isActive": true,
+      "symbol": "BTCUSDT",
+      "exchangeId": "binance",
+      "direction": "BOTH",
+      "metrics": {
+        "realizedPnL": 245.50,
+        "totalTrades": 156,
+        "winRate": 0.68
+      }
+    }
+  ],
+  "stats": {
+    "totalBots": 5,
+    "activeBots": 3,
+    "pausedBots": 1,
+    "stoppedBots": 1,
+    "totalInvested": 5000,
+    "totalPnL": 890.20
+  }
+}
+```
+
+### POST /api/bots/unified
+
+Управление ботом (start/pause/stop/restart).
+
+**Тело запроса:**
+
+```json
+{
+  "botId": "grid-1",
+  "botType": "grid",
+  "action": "start",
+  "options": {
+    "closePositions": false
+  }
+}
+```
+
+**Ответ:**
+
+```json
+{
+  "success": true,
+  "bot": {
+    "id": "grid-1",
+    "status": "RUNNING",
+    "isActive": true
+  }
+}
+```
+
+---
+
+## WebSocket API (Port 3003)
+
+WebSocket сервис для real-time мониторинга ботов.
+
+### Подключение
+
+```typescript
+import { io } from 'socket.io-client';
+
+// Подключение через gateway
+const socket = io('/?XTransformPort=3003', {
+  transports: ['websocket', 'polling'],
+  autoConnect: true,
+  reconnection: true,
+});
+```
+
+### События от сервера
+
+| Событие | Данные | Описание |
+|---------|--------|----------|
+| `initial_data` | `{ bots: WSBotStatus[], events: WSBotEvent[] }` | Начальные данные при подключении |
+| `bot_update` | `WSBotStatus` | Обновление статуса бота |
+| `bot_metrics` | `{ botId, metrics, timestamp }` | Обновление метрик в real-time |
+| `bot_event` | `WSBotEvent` | Событие бота (trade, error, etc.) |
+
+### События от клиента
+
+| Событие | Данные | Описание |
+|---------|--------|----------|
+| `get_bot_status` | `botId: string` | Запрос статуса бота |
+| `get_all_bots` | - | Запрос всех ботов |
+| `start_bot` | `{ botId: string }` | Запуск бота |
+| `stop_bot` | `{ botId: string }` | Остановка бота |
+| `pause_bot` | `{ botId: string }` | Пауза бота |
+| `subscribe_bot` | `botId: string` | Подписка на обновления бота |
+| `unsubscribe_bot` | `botId: string` | Отписка от обновлений |
+
+### Пример использования
+
+```typescript
+// Подключение
+socket.on('connect', () => {
+  console.log('Connected to bot monitor');
+});
+
+// Получение начальных данных
+socket.on('initial_data', (data) => {
+  console.log('Bots:', data.bots);
+  console.log('Recent events:', data.events);
+});
+
+// Обновление статуса бота
+socket.on('bot_update', (bot) => {
+  console.log(`Bot ${bot.name} status: ${bot.status}`);
+});
+
+// Обновление метрик
+socket.on('bot_metrics', (data) => {
+  console.log(`Bot ${data.botId} PnL: ${data.metrics.unrealizedPnL}`);
+});
+
+// Запуск бота
+socket.emit('start_bot', { botId: 'grid-1' });
+```
+
+---
+
+## React Hook: useBots
+
+Хук для управления ботами с WebSocket поддержкой.
+
+```typescript
+import { useBots } from '@/hooks/use-bots';
+
+function MyComponent() {
+  const {
+    bots,
+    stats,
+    isLoading,
+    error,
+    wsConnected,
+    refresh,
+    controlBot,
+  } = useBots({
+    enableWebSocket: true,
+    autoRefresh: true,
+  });
+  
+  // Запуск бота
+  const handleStart = async () => {
+    await controlBot('grid-1', 'grid', 'start');
+  };
+  
+  return (
+    <div>
+      {wsConnected ? '🟢 Live' : '🟡 Polling'}
+      {bots.map(bot => (
+        <div key={bot.id}>{bot.name} - {bot.status}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+### Опции useBots
+
+```typescript
+interface UseBotsOptions {
+  type?: BotType;              // Фильтр по типу
+  status?: BotStatus;          // Фильтр по статусу
+  exchangeId?: string;         // Фильтр по бирже
+  refreshInterval?: number;    // Интервал обновления (default: 30000ms)
+  autoRefresh?: boolean;       // Автообновление (default: true)
+  enableWebSocket?: boolean;   // WebSocket (default: true)
+}
 ```

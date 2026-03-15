@@ -49,6 +49,7 @@ import { FrequencyBotPanel } from "@/components/bots/frequency-bot-panel";
 import { HFTBotPanel } from "@/components/bots/hft-bot-panel";
 import { MFTBotPanel } from "@/components/bots/mft-bot-panel";
 import { LFTBotPanel } from "@/components/bots/lft-bot-panel";
+import { BotsDashboard } from "@/components/bots/bots-dashboard";
 import { FundingPanel } from "@/components/funding/funding-panel";
 import { ChatBot } from "@/components/chat/chat-bot";
 import { PositionsTable } from "@/components/dashboard/positions-table";
@@ -269,7 +270,7 @@ const PIE_COLORS = [COLORS.primary, COLORS.blue, COLORS.purple, COLORS.success, 
 // ============================================
 
 function DashboardContent() {
-  const { activeTab, sidebarOpen, account } = useCryptoStore();
+  const { activeTab, setActiveTab, sidebarOpen, account } = useCryptoStore();
   const { connectionStatus, lastUpdated } = usePriceContext();
   const btcPrice = useRealtimePrice("BTCUSDT");
   const isDemo = account?.accountType === "DEMO";
@@ -295,7 +296,7 @@ function DashboardContent() {
       case "dashboard":
         return <DashboardView />;
       case "bots":
-        return <BotsView bots={filteredBots} selectedType={selectedBotType} onTypeChange={setSelectedBotType} />;
+        return <BotsDashboard onNavigate={setActiveTab} />;
       case "signals":
         return (
           <SignalsView

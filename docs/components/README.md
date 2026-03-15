@@ -39,6 +39,7 @@ This folder contains documentation for all UI components in the CITARION trading
 
 | Document | Components | Status |
 |----------|------------|--------|
+| [BOTS_DASHBOARD.md](./BOTS_DASHBOARD.md) | Unified Bots Dashboard, Bot Card, Bot Config Modal, New Bot Modal, useBots Hook, WebSocket Integration | ✅ 100% |
 | [OPERATIONAL_BOTS.md](./OPERATIONAL_BOTS.md) | Grid Bot, DCA Bot, BB Bot | ✅ 100% |
 | [ANALYTICAL_BOTS.md](./ANALYTICAL_BOTS.md) | Argus Bot, Orion Bot, Vision Bot, Range Bot, Wolf Bot | ✅ 100% |
 | [FREQUENCY_BOTS_UI.md](./FREQUENCY_BOTS_UI.md) | HFT Bot, MFT Bot, LFT Bot | ✅ 100% |
