@@ -1923,3 +1923,42 @@ Stage Summary:
   - docs/components/TRADING_MODES_AND_THEMES.md
   - README.md
   - docs/exchanges/README.md
+
+---
+Task ID: EXCHANGES-REFACTOR-PHASE1
+Agent: Main Agent
+Task: Refactor Exchanges section - Add DEMO, TESTNET, PAPER account types support
+
+Work Log:
+- Read exchanges-page.tsx to understand current implementation
+- Added EXCHANGES_BY_ACCOUNT_TYPE constant for filtering exchanges by account type:
+  - LIVE: All exchanges (Binance, Bybit, OKX, Bitget, BingX)
+  - DEMO: Only OKX, Bitget, BingX
+  - TESTNET: Only Binance, Bybit
+  - PAPER: All exchanges (internal simulation)
+- Created getExchangesForAccountType() helper function
+- Updated AddAccountDialog component:
+  - Added accountType prop
+  - Filtered exchanges list based on account type
+  - Added special handling for PAPER accounts (no API keys needed)
+  - Made wizard steps dynamic (2 steps for PAPER, 3 for others)
+  - Updated dialog title and descriptions for each account type
+- Updated EmptyState component with accountType prop
+- Updated AccountCard component to show correct badge based on account type
+- Updated main ExchangesPage component:
+  - Added dialogAccountType state
+  - Created openAddDialog() function for specific account types
+  - Updated handleAddAccount() to handle DEMO, TESTNET, PAPER types
+  - Added "Add Account" buttons for all account type tabs
+  - Replaced placeholder content with actual functionality
+
+Stage Summary:
+- All 4 account type tabs (LIVE, DEMO, TESTNET, PAPER) now functional
+- DEMO tab shows only OKX, Bitget, BingX
+- TESTNET tab shows only Binance, Bybit
+- PAPER tab creates virtual accounts without API keys
+- Each tab has "Add Account" button that opens wizard with filtered exchanges
+- Account cards show correct type badge (LIVE, DEMO, TESTNET, PAPER)
+- PAPER accounts display "Виртуальная торговля" instead of API Key
+- Files modified: src/components/exchanges/exchanges-page.tsx
+

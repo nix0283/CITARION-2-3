@@ -19,12 +19,30 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
 
-    // Mask sensitive data
-    const safeAccounts = accounts.map((acc) => ({
-      ...acc,
-      apiKey: acc.apiKey ? maskApiKey(acc.apiKey) : null,
-      apiSecret: acc.apiSecret ? "••••••••" : null,
-    }));
+    // Mask sensitive data and map account types back to UI types
+    const safeAccounts = accounts.map((acc) => {
+      // Map database types back to UI types:
+      // REAL + isTestnet=true -> TESTNET
+      // REAL + isTestnet=false -> LIVE
+      // DEMO + virtualBalance -> PAPER or DEMO (we'll use PAPER for now as DEMO in UI means exchange demo mode)
+      let uiAccountType = acc.accountType;
+      if (acc.accountType === "REAL" && acc.isTestnet) {
+        uiAccountType = "TESTNET";
+      } else if (acc.accountType === "REAL" && !acc.isTestnet) {
+        uiAccountType = "LIVE";
+      } else if (acc.accountType === "DEMO") {
+        // Could be PAPER or DEMO - we'll check if it has API keys
+        // If no API keys, it's likely PAPER (internal simulation)
+        uiAccountType = acc.apiKey ? "DEMO" : "PAPER";
+      }
+      
+      return {
+        ...acc,
+        accountType: uiAccountType,
+        apiKey: acc.apiKey ? maskApiKey(acc.apiKey) : null,
+        apiSecret: acc.apiSecret ? "••••••••" : null,
+      };
+    });
 
     return NextResponse.json({
       success: true,
@@ -55,25 +73,76 @@ export async function POST(request: NextRequest) {
       subAccount,
       isTestnet = false,
       accountType = "REAL",
+      initialBalanceCurrency = "USDT",
+      initialBalanceAmount = 10000,
     } = body;
 
-    // Validate required fields for REAL accounts
-    if (accountType === "REAL") {
-      if (!exchangeId || !apiKey || !apiSecret) {
+    // Validate required fields
+    // PAPER accounts don't need API keys (internal simulation)
+    // TESTNET uses testnet API keys (optional validation)
+    // DEMO uses exchange demo mode (may or may not need keys depending on exchange)
+    // REAL requires API keys
+    const needsApiKeys = accountType === "REAL" || accountType === "TESTNET" || accountType === "DEMO";
+    
+    if (needsApiKeys) {
+      if (!exchangeId) {
         return NextResponse.json(
-          { error: "Exchange ID, API Key and API Secret are required for REAL accounts" },
+          { error: "Exchange ID is required" },
           { status: 400 }
         );
       }
+      if (accountType === "REAL" && (!apiKey || !apiSecret)) {
+        return NextResponse.json(
+          { error: "API Key and API Secret are required for REAL accounts" },
+          { status: 400 }
+        );
+      }
+    } else if (!exchangeId) {
+      return NextResponse.json(
+        { error: "Exchange ID is required" },
+        { status: 400 }
+      );
     }
 
-    // Encrypt API credentials for REAL accounts
-    let encryptedKey = apiKey;
-    let encryptedSecret = apiSecret;
-    let encryptedPassphrase = apiPassphrase;
-    let encryptedUid = apiUid;
+    // Map account types to database schema
+    // Schema only supports REAL or DEMO, so we map:
+    // - LIVE -> REAL
+    // - TESTNET -> REAL with isTestnet=true
+    // - DEMO -> DEMO
+    // - PAPER -> DEMO with virtualBalance
+    let dbAccountType: string;
+    let dbIsTestnet = isTestnet;
+    let virtualBalance: string | null = null;
     
-    if (accountType === "REAL" && apiKey && apiSecret) {
+    switch (accountType) {
+      case "LIVE":
+        dbAccountType = "REAL";
+        break;
+      case "TESTNET":
+        dbAccountType = "REAL";
+        dbIsTestnet = true;
+        break;
+      case "PAPER":
+        dbAccountType = "DEMO";
+        // Use provided initial balance configuration
+        virtualBalance = JSON.stringify({ 
+          [initialBalanceCurrency]: initialBalanceAmount 
+        });
+        break;
+      case "DEMO":
+      default:
+        dbAccountType = "DEMO";
+        virtualBalance = JSON.stringify({ USDT: 10000 });
+        break;
+    }
+
+    // Encrypt API credentials for accounts with real keys
+    let encryptedKey = apiKey || null;
+    let encryptedSecret = apiSecret || null;
+    let encryptedPassphrase = apiPassphrase || null;
+    let encryptedUid = apiUid || null;
+    
+    if (apiKey && apiSecret) {
       try {
         encryptedKey = encryptApiKey(apiKey);
         encryptedSecret = encryptApiKey(apiSecret);
@@ -88,37 +157,45 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Check if this exchange already exists
+    // Check if this exchange already exists for this account type
     const existing = await db.account.findFirst({
       where: {
         exchangeId,
         exchangeType,
-        accountType,
+        accountType: dbAccountType,
+        isTestnet: dbIsTestnet,
       },
     });
 
     if (existing) {
       // Update existing account
+      const updateData: Record<string, unknown> = {
+        apiKey: encryptedKey,
+        apiSecret: encryptedSecret,
+        apiPassphrase: encryptedPassphrase,
+        apiUid: encryptedUid,
+        subAccount,
+        isTestnet: dbIsTestnet,
+        lastSyncAt: null,
+        lastError: null,
+        isActive: true,
+      };
+      
+      if (virtualBalance) {
+        updateData.virtualBalance = virtualBalance;
+      }
+
       const updated = await db.account.update({
         where: { id: existing.id },
-        data: {
-          apiKey: encryptedKey,
-          apiSecret: encryptedSecret,
-          apiPassphrase: encryptedPassphrase,
-          apiUid: encryptedUid,
-          subAccount,
-          isTestnet,
-          lastSyncAt: null,
-          lastError: null,
-          isActive: true,
-        },
+        data: updateData,
       });
 
       return NextResponse.json({
         success: true,
         account: {
           ...updated,
-          apiKey: maskApiKey(apiKey || ""),
+          accountType, // Return original account type
+          apiKey: apiKey ? maskApiKey(apiKey) : null,
           apiSecret: "••••••••",
         },
         message: `Аккаунт ${exchangeName || exchangeId} обновлён`,
@@ -130,7 +207,7 @@ export async function POST(request: NextRequest) {
     const account = await db.account.create({
       data: {
         userId,
-        accountType,
+        accountType: dbAccountType,
         exchangeId,
         exchangeType,
         exchangeName: exchangeName || exchangeId,
@@ -139,19 +216,34 @@ export async function POST(request: NextRequest) {
         apiPassphrase: encryptedPassphrase,
         apiUid: encryptedUid,
         subAccount,
-        isTestnet,
+        isTestnet: dbIsTestnet,
         isActive: true,
-        virtualBalance: accountType === "DEMO" ? JSON.stringify({ USDT: 10000 }) : null,
+        virtualBalance,
       },
     });
+
+    // Create PaperAccount for PAPER accounts
+    if (accountType === "PAPER") {
+      await db.paperAccount.create({
+        data: {
+          accountId: account.id,
+          initialBalanceCurrency,
+          initialBalanceAmount,
+          currentBalances: JSON.stringify({ 
+            [initialBalanceCurrency]: initialBalanceAmount 
+          }),
+          peakBalance: initialBalanceAmount,
+        },
+      });
+    }
 
     // Log the action
     await db.systemLog.create({
       data: {
         level: "INFO",
         category: "SYSTEM",
-        message: `Exchange connected: ${exchangeId} (${exchangeType})`,
-        details: JSON.stringify({ accountId: account.id, isTestnet }),
+        message: `Exchange connected: ${exchangeId} (${exchangeType}) - ${accountType}`,
+        details: JSON.stringify({ accountId: account.id, isTestnet: dbIsTestnet, originalType: accountType }),
       },
     });
 
@@ -159,10 +251,13 @@ export async function POST(request: NextRequest) {
       success: true,
       account: {
         ...account,
-        apiKey: maskApiKey(apiKey || ""),
+        accountType, // Return original account type
+        apiKey: apiKey ? maskApiKey(apiKey) : null,
         apiSecret: "••••••••",
       },
-      message: `Биржа ${exchangeName || exchangeId} успешно подключена`,
+      message: accountType === "PAPER" 
+        ? `Виртуальный аккаунт ${exchangeName || exchangeId} создан`
+        : `Биржа ${exchangeName || exchangeId} успешно подключена`,
     });
   } catch (error) {
     console.error("Connect exchange error:", error);
@@ -177,7 +272,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { id, isActive, apiKey, apiSecret, apiPassphrase, subAccount, isTestnet } = body;
+    const { id, isActive, apiKey, apiSecret, apiPassphrase, subAccount, isTestnet, hedgeMode } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -193,6 +288,7 @@ export async function PUT(request: NextRequest) {
     if (apiPassphrase !== undefined) updateData.apiPassphrase = apiPassphrase;
     if (subAccount !== undefined) updateData.subAccount = subAccount;
     if (isTestnet !== undefined) updateData.isTestnet = isTestnet;
+    if (hedgeMode !== undefined) updateData.hedgeMode = hedgeMode;
 
     const account = await db.account.update({
       where: { id },

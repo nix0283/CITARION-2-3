@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCryptoStore } from "@/stores/crypto-store";
 import {
   useTradingConfigStore,
@@ -105,6 +105,10 @@ export function TradingForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
+  
+  // Paper account state
+  const [paperAccountId, setPaperAccountId] = useState<string | null>(null);
+  const [paperBalance, setPaperBalance] = useState(0);
 
   // Get current trading mode for the selected exchange
   const tradingMode = getEffectiveMode(exchange);
@@ -119,10 +123,50 @@ export function TradingForm() {
     LIVE: AlertTriangle,
   };
   
-  const balance = account?.virtualBalance?.USDT || 0;
   const isPaperTrading = tradingMode === "PAPER";
   const currentPrice = marketPrices[symbol]?.price || 0;
   const selectedExchange = EXCHANGES.find(e => e.id === exchange);
+  
+  // Fetch PAPER account when in PAPER mode
+  useEffect(() => {
+    if (isPaperTrading) {
+      fetchPaperAccount();
+    }
+  }, [isPaperTrading, exchange]);
+  
+  const fetchPaperAccount = async () => {
+    try {
+      // Get all PAPER accounts
+      const response = await fetch("/api/exchange?accountType=PAPER");
+      if (response.ok) {
+        const data = await response.json();
+        // Find PAPER account for selected exchange
+        const paperAccount = data.accounts?.find(
+          (acc: {exchangeId: string}) => acc.exchangeId === exchange
+        );
+        if (paperAccount) {
+          setPaperAccountId(paperAccount.id);
+          // Get full paper account details
+          const detailResponse = await fetch(`/api/paper-trading/account?accountId=${paperAccount.id}`);
+          if (detailResponse.ok) {
+            const detailData = await detailResponse.json();
+            if (detailData.account) {
+              const balances = detailData.account.currentBalances || {};
+              const mainCurrency = Object.keys(balances)[0] || "USDT";
+              setPaperBalance(balances[mainCurrency] || 0);
+            }
+          }
+        } else {
+          setPaperAccountId(null);
+          setPaperBalance(0);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch PAPER account:", error);
+    }
+  };
+  
+  const balance = isPaperTrading ? paperBalance : (account?.virtualBalance?.USDT || 0);
   
   // Update primary exchange when exchange changes
   const handleExchangeChange = (newExchange: string) => {
@@ -166,6 +210,80 @@ export function TradingForm() {
     setIsSubmitting(true);
 
     try {
+      // For PAPER mode, use paper-trading API
+      if (isPaperTrading && paperAccountId) {
+        const response = await fetch("/api/paper-trading/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            accountId: paperAccountId,
+            symbol,
+            side: direction === "LONG" ? "BUY" : "SELL",
+            direction,
+            orderType: "MARKET",
+            quantity: parseFloat((leveragedSize / currentPrice).toFixed(8)),
+            leverage,
+            stopLoss: stopLoss ? parseFloat(stopLoss) : null,
+            takeProfit: takeProfit ? parseFloat(takeProfit) : null,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          
+          if (data.success) {
+            // Update local store for immediate UI feedback
+            const position = {
+              id: data.position?.id || `pos-${Date.now()}`,
+              symbol,
+              direction,
+              totalAmount: leveragedSize / currentPrice,
+              avgEntryPrice: currentPrice,
+              currentPrice,
+              leverage,
+              unrealizedPnl: 0,
+              stopLoss: stopLoss ? parseFloat(stopLoss) : undefined,
+              takeProfit: takeProfit ? parseFloat(takeProfit) : undefined,
+              isDemo: true,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            };
+            addPosition(position);
+
+            const trade = {
+              id: data.order?.id || `trade-${Date.now()}`,
+              symbol,
+              direction,
+              status: "OPEN" as const,
+              entryPrice: currentPrice,
+              amount: positionSize,
+              leverage,
+              pnl: 0,
+              pnlPercent: 0,
+              fee: estimatedFee,
+              isDemo: true,
+              createdAt: new Date().toISOString(),
+            };
+            addTrade(trade);
+
+            toast.success(
+              `PAPER позиция ${direction} открыта: ${symbol}`
+            );
+            
+            // Refresh paper account balance
+            fetchPaperAccount();
+          } else {
+            toast.error(data.error || "Ошибка при открытии позиции");
+          }
+        } else {
+          toast.error("Ошибка при открытии PAPER позиции");
+        }
+        
+        setIsSubmitting(false);
+        return;
+      }
+      
+      // For non-PAPER modes, use standard trade API
       // Create position
       const position = {
         id: `pos-${Date.now()}`,
@@ -331,6 +449,21 @@ export function TradingForm() {
               })}
             </div>
             <p className="text-[10px] text-muted-foreground">{modeInfo.description}</p>
+            
+            {/* PAPER account warning */}
+            {isPaperTrading && !paperAccountId && (
+              <div className="flex items-center gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                <AlertTriangle className="h-4 w-4 text-amber-500" />
+                <div className="text-xs">
+                  <span className="text-amber-600 dark:text-amber-400 font-medium">
+                    Нет PAPER аккаунта для {selectedExchange?.name || exchange}
+                  </span>
+                  <span className="text-muted-foreground block">
+                    Создайте PAPER аккаунт в разделе Биржи
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Trading Pair */}

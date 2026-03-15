@@ -123,6 +123,9 @@ model Account {
   // Testnet mode
   isTestnet Boolean @default(false)
 
+  // Trading mode settings
+  hedgeMode Boolean @default(false) // false = One-Way Mode, true = Hedge Mode
+
   // Virtual Balance (only for DEMO accounts)
   // JSON string: {"USDT": 10000.00, "BTC": 0.5, "ETH": 2.0}
   virtualBalance String?
@@ -154,6 +157,9 @@ model Account {
   kronBots        KronBot[]
 
   @@unique([userId, exchangeId, exchangeType])
+  
+  // Paper trading
+  paperAccount PaperAccount?
 }
 
 // ==================== TRADING ====================
@@ -1294,54 +1300,6 @@ model MarketSettings {
   updatedAt DateTime @updatedAt
 }
 
-// ==================== PAPER TRADING PERSISTENCE ====================
-
-model PaperTradingAccount {
-  id     String  @id @default(cuid())
-  userId String?
-
-  // Account config
-  name            String
-  initialBalance  Float
-  balance         Float
-  equity          Float
-  availableMargin Float
-  maxEquity       Float
-
-  // PnL tracking
-  totalPnl        Float @default(0)
-  totalPnlPercent Float @default(0)
-  realizedPnl     Float @default(0)
-  unrealizedPnl   Float @default(0)
-  maxDrawdown     Float @default(0)
-  currentDrawdown Float @default(0)
-
-  // Status
-  status    String    @default("IDLE") // IDLE, RUNNING, PAUSED, STOPPED
-  startedAt DateTime?
-  stoppedAt DateTime?
-
-  // Config JSON
-  config String // JSON: PaperTradingConfig
-
-  // State JSON (positions, tradeHistory, equityCurve)
-  positions    String @default("[]") // JSON array of PaperPosition
-  tradeHistory String @default("[]") // JSON array of PaperTrade
-  equityCurve  String @default("[]") // JSON array of last 1000 points
-
-  // Metrics JSON
-  metrics String? // JSON: PaperTradingMetrics
-
-  // Slippage tracking
-  slippageLog String @default("[]") // JSON array of slippage records
-
-  lastUpdate DateTime @default(now())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@index([userId, status])
-}
-
 // ==================== ARGUS BOT ====================
 // Automated pump and dump detection and trading
 // Named after the mythological hundred-eyed giant who watches everything
@@ -1901,78 +1859,6 @@ model StrategyTemplate {
 
   @@index([botType, isPublic])
   @@index([userId, category])
-}
-
-// ==================== PAPER TRADING ENGINE V2 ====================
-// Separate tables for better data integrity and querying
-
-model PaperAccount {
-  id              String   @id @default(uuid())
-  userId          String?
-  initialBalance  Float
-  balance         Float
-  equity          Float
-  availableMargin Float
-  marginUsed      Float
-  currentDrawdown Float
-  maxDrawdown     Float
-  status          String   @default("ACTIVE")
-  positions       String? // JSON
-  equityCurve     String? // JSON (последние 1000 точек)
-  metrics         String? // JSON
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  paperPositions PaperPosition[]
-  paperTrades    PaperTrade[]
-
-  @@index([userId, status])
-}
-
-model PaperPosition {
-  id               String    @id @default(uuid())
-  accountId        String
-  symbol           String
-  direction        String
-  totalSize        Float
-  entryPrice       Float
-  currentPrice     Float
-  unrealizedPnl    Float
-  stopLoss         Float?
-  takeProfit       String? // JSON array
-  leverage         Int
-  marginUsed       Float
-  liquidationPrice Float?
-  status           String    @default("OPEN")
-  trailingStop     String? // JSON
-  totalFundingPaid Float     @default(0)
-  openedAt         DateTime  @default(now())
-  closedAt         DateTime?
-
-  account PaperAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
-
-  @@index([accountId, status])
-  @@index([symbol, status])
-}
-
-model PaperTrade {
-  id         String   @id @default(uuid())
-  accountId  String
-  positionId String?
-  symbol     String
-  direction  String
-  side       String // OPEN, CLOSE, PARTIAL_CLOSE
-  size       Float
-  price      Float
-  pnl        Float?
-  fee        Float
-  reason     String?
-  timestamp  DateTime @default(now())
-
-  account PaperAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
-
-  @@index([accountId, timestamp])
-  @@index([symbol, timestamp])
 }
 
 // ==================== SIGNAL CLASSIFICATION & FILTERING ====================
@@ -3796,4 +3682,188 @@ model LogosFeedbackEntry {
   
   @@index([patternType, createdAt])
   @@index([outcomeId])
+}
+
+
+// ==================== PAPER TRADING ====================
+// Virtual trading simulation for PAPER account type
+
+model PaperAccount {
+  id        String @id @default(cuid())
+  accountId String @unique
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  
+  // Initial balance configuration
+  initialBalanceCurrency String @default("USDT") // USDT, USDC, USD, BTC, ETH
+  initialBalanceAmount   Float  @default(10000)  // Initial amount
+  
+  // Current balances (JSON: {"USDT": 8500.50, "BTC": 0.15, "ETH": 1.2})
+  currentBalances String @default("{}")
+  
+  // Trading settings
+  leverage        Int     @default(1)
+  marginMode      String  @default("ISOLATED")
+  hedgeMode       Boolean @default(false)
+  takerFeeRate    Float   @default(0.0004)
+  makerFeeRate    Float   @default(0.0002)
+  slippagePercent Float   @default(0.0005)
+  
+  // Trading limits
+  maxPositionSize   Float?
+  maxOpenPositions  Int    @default(10)
+  maxLeverage       Int    @default(20)
+  
+  // Performance tracking
+  totalTrades       Int   @default(0)
+  winningTrades     Int   @default(0)
+  losingTrades      Int   @default(0)
+  totalPnL          Float @default(0)
+  totalFees         Float @default(0)
+  totalRealizedPnL  Float @default(0)
+  peakBalance       Float @default(0)
+  maxDrawdown       Float @default(0)
+  
+  // Status
+  isReset           Boolean @default(false)
+  resetAt           DateTime?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  paperOrders    PaperOrder[]
+  paperPositions PaperPosition[]
+  balanceHistory PaperBalanceHistory[]
+  
+  @@index([accountId])
+}
+
+model PaperOrder {
+  id             String @id @default(cuid())
+  paperAccountId String
+  paperAccount   PaperAccount @relation(fields: [paperAccountId], references: [id], onDelete: Cascade)
+  
+  clientOrderId  String @unique
+  exchangeOrderId String?
+  
+  symbol     String
+  marketType String @default("FUTURES")
+  
+  side       String
+  direction  String?
+  orderType  String
+  
+  price      Float?
+  quantity   Float
+  stopPrice  Float?
+  
+  status       String @default("PENDING")
+  filledQty    Float @default(0)
+  avgFillPrice Float?
+  
+  fee        Float @default(0)
+  feeAsset   String?
+  quoteQty   Float @default(0)
+  
+  stopLoss   Float?
+  takeProfit Float?
+  
+  positionId String?
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  triggeredAt DateTime?
+  filledAt    DateTime?
+  cancelledAt DateTime?
+  expiredAt   DateTime?
+  
+  reduceOnly    Boolean @default(false)
+  closePosition Boolean @default(false)
+  timeInForce   String @default("GTC")
+  
+  rejectReason String?
+  
+  position PaperPosition? @relation(fields: [positionId], references: [id])
+  
+  @@index([paperAccountId, status])
+  @@index([paperAccountId, symbol])
+  @@index([status, createdAt])
+}
+
+model PaperPosition {
+  id             String @id @default(cuid())
+  paperAccountId String
+  paperAccount   PaperAccount @relation(fields: [paperAccountId], references: [id], onDelete: Cascade)
+  
+  symbol     String
+  marketType String @default("FUTURES")
+  
+  direction String
+  status    String @default("OPEN")
+  
+  quantity   Float
+  entryPrice Float
+  leverage   Int @default(1)
+  marginMode String @default("ISOLATED")
+  margin     Float
+  
+  currentPrice Float @default(0)
+  unrealizedPnl Float @default(0)
+  unrealizedPnlPercent Float @default(0)
+  liquidationPrice Float?
+  
+  stopLoss       Float?
+  takeProfit     Float?
+  trailingStop   String?
+  trailingActive Boolean @default(false)
+  highestPrice   Float?
+  lowestPrice    Float?
+  
+  totalFundingPaid Float @default(0)
+  totalFundingReceived Float @default(0)
+  lastFundingTime DateTime?
+  
+  realizedPnl Float @default(0)
+  realizedPnlPercent Float @default(0)
+  totalFees Float @default(0)
+  
+  closePrice Float?
+  closeReason String?
+  
+  hedgePositionId String?
+  
+  openedAt DateTime @default(now())
+  closedAt DateTime?
+  updatedAt DateTime @updatedAt
+  
+  orders PaperOrder[]
+  
+  @@unique([paperAccountId, symbol, direction, status])
+  @@index([paperAccountId, status])
+  @@index([paperAccountId, symbol])
+}
+
+model PaperBalanceHistory {
+  id             String @id @default(cuid())
+  paperAccountId String
+  paperAccount   PaperAccount @relation(fields: [paperAccountId], references: [id], onDelete: Cascade)
+  
+  timestamp DateTime @default(now())
+  
+  balances String
+  
+  equityUsd Float @default(0)
+  
+  unrealizedPnl Float @default(0)
+  realizedPnl Float @default(0)
+  dailyPnL Float @default(0)
+  
+  changeReason String?
+  changeDetails String?
+  
+  orderId String?
+  positionId String?
+  
+  createdAt DateTime @default(now())
+  
+  @@index([paperAccountId, timestamp])
 }
