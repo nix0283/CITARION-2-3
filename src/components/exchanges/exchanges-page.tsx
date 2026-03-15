@@ -929,20 +929,26 @@ export function ExchangesPage() {
       if (response.ok) {
         const data = await response.json();
         // Transform API data to our format
-        const transformedAccounts: ExchangeAccount[] = (data.accounts || []).map((acc: Record<string, unknown>) => ({
-          id: acc.id as string,
-          exchangeId: acc.exchangeId as string,
-          exchangeName: acc.exchangeName as string,
-          marketType: (acc.exchangeType as MarketType) || "futures",
-          accountType: acc.isTestnet ? "TESTNET" : acc.accountType === "DEMO" ? "DEMO" : acc.accountType === "PAPER" ? "PAPER" : "LIVE",
-          isActive: acc.isActive as boolean,
-          hedgeMode: false, // TODO: add to schema
-          apiKey: acc.apiKey as string,
-          apiPassphrase: acc.apiPassphrase as string,
-          lastSyncAt: acc.lastSyncAt as string,
-          lastError: acc.lastError as string,
-          hasData: acc.isActive && !acc.lastError,
-        }));
+        const transformedAccounts: ExchangeAccount[] = (data.accounts || []).map((acc: Record<string, unknown>) => {
+          // Parse exchangeType - remove paper suffix if present
+          const rawExchangeType = (acc.exchangeType as string) || "futures";
+          const marketType = rawExchangeType.split("-paper-")[0] as MarketType;
+          
+          return {
+            id: acc.id as string,
+            exchangeId: acc.exchangeId as string,
+            exchangeName: acc.exchangeName as string,
+            marketType,
+            accountType: acc.isTestnet ? "TESTNET" : acc.accountType === "DEMO" ? "DEMO" : acc.accountType === "PAPER" ? "PAPER" : "LIVE",
+            isActive: acc.isActive as boolean,
+            hedgeMode: false, // TODO: add to schema
+            apiKey: acc.apiKey as string,
+            apiPassphrase: acc.apiPassphrase as string,
+            lastSyncAt: acc.lastSyncAt as string,
+            lastError: acc.lastError as string,
+            hasData: acc.isActive && !acc.lastError,
+          };
+        });
         setAccounts(transformedAccounts);
       }
     } catch (error) {

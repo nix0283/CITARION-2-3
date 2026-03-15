@@ -24,16 +24,18 @@ export async function GET(request: NextRequest) {
       // Map database types back to UI types:
       // REAL + isTestnet=true -> TESTNET
       // REAL + isTestnet=false -> LIVE
-      // DEMO + virtualBalance -> PAPER or DEMO (we'll use PAPER for now as DEMO in UI means exchange demo mode)
+      // DEMO + exchangeType contains "-paper-" -> PAPER
+      // DEMO without "-paper-" -> DEMO
       let uiAccountType = acc.accountType;
+      const isPaperAccount = acc.exchangeType.includes("-paper-");
+      
       if (acc.accountType === "REAL" && acc.isTestnet) {
         uiAccountType = "TESTNET";
       } else if (acc.accountType === "REAL" && !acc.isTestnet) {
         uiAccountType = "LIVE";
       } else if (acc.accountType === "DEMO") {
-        // Could be PAPER or DEMO - we'll check if it has API keys
-        // If no API keys, it's likely PAPER (internal simulation)
-        uiAccountType = acc.apiKey ? "DEMO" : "PAPER";
+        // Check if it's a PAPER account by looking for the paper suffix
+        uiAccountType = isPaperAccount ? "PAPER" : "DEMO";
       }
       
       return {
@@ -158,58 +160,69 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if this exchange already exists for this account type
-    const existing = await db.account.findFirst({
-      where: {
-        exchangeId,
-        exchangeType,
-        accountType: dbAccountType,
-        isTestnet: dbIsTestnet,
-      },
-    });
-
-    if (existing) {
-      // Update existing account
-      const updateData: Record<string, unknown> = {
-        apiKey: encryptedKey,
-        apiSecret: encryptedSecret,
-        apiPassphrase: encryptedPassphrase,
-        apiUid: encryptedUid,
-        subAccount,
-        isTestnet: dbIsTestnet,
-        lastSyncAt: null,
-        lastError: null,
-        isActive: true,
-      };
-      
-      if (virtualBalance) {
-        updateData.virtualBalance = virtualBalance;
-      }
-
-      const updated = await db.account.update({
-        where: { id: existing.id },
-        data: updateData,
-      });
-
-      return NextResponse.json({
-        success: true,
-        account: {
-          ...updated,
-          accountType, // Return original account type
-          apiKey: apiKey ? maskApiKey(apiKey) : null,
-          apiSecret: "••••••••",
+    // For PAPER accounts, always create new (skip existing check)
+    if (accountType !== "PAPER") {
+      const existing = await db.account.findFirst({
+        where: {
+          exchangeId,
+          exchangeType,
+          accountType: dbAccountType,
+          isTestnet: dbIsTestnet,
         },
-        message: `Аккаунт ${exchangeName || exchangeId} обновлён`,
       });
+
+      if (existing) {
+        // Update existing account
+        const updateData: Record<string, unknown> = {
+          apiKey: encryptedKey,
+          apiSecret: encryptedSecret,
+          apiPassphrase: encryptedPassphrase,
+          apiUid: encryptedUid,
+          subAccount,
+          isTestnet: dbIsTestnet,
+          lastSyncAt: null,
+          lastError: null,
+          isActive: true,
+        };
+        
+        if (virtualBalance) {
+          updateData.virtualBalance = virtualBalance;
+        }
+
+        const updated = await db.account.update({
+          where: { id: existing.id },
+          data: updateData,
+        });
+
+        return NextResponse.json({
+          success: true,
+          account: {
+            ...updated,
+            accountType, // Return original account type
+            apiKey: apiKey ? maskApiKey(apiKey) : null,
+            apiSecret: "••••••••",
+          },
+          message: `Аккаунт ${exchangeName || exchangeId} обновлён`,
+        });
+      }
     }
 
     // Create new account
     const userId = await getDefaultUserId();
+    
+    // For PAPER accounts, add unique suffix to exchangeType to bypass unique constraint
+    // @@unique([userId, exchangeId, exchangeType])
+    // This allows multiple PAPER accounts for the same exchange
+    const paperSuffix = accountType === "PAPER" 
+      ? `-paper-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 6)}`
+      : "";
+    
     const account = await db.account.create({
       data: {
         userId,
         accountType: dbAccountType,
         exchangeId,
-        exchangeType,
+        exchangeType: exchangeType + paperSuffix,
         exchangeName: exchangeName || exchangeId,
         apiKey: encryptedKey,
         apiSecret: encryptedSecret,
