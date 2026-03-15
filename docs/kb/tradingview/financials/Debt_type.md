@@ -1,0 +1,95 @@
+# Debt type
+
+**URL:** https://www.tradingview.com/support/solutions/43000728507-debt-type/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Financials 
+- / [ Bonds ](/support/folders/43000594677-bonds/)
+- / [ Debt type ](/support/solutions/43000728507-debt-type/)
+
+# Debt type 
+ Bonds are credit market instruments and their types vary according to different categories.
+
+- Investment grade bonds, issued by companies with high credit ratings, offer low risk and lower interest rates.
+- High-yield bonds are issued by companies with lower credit ratings and offer higher interest rates.
+- Convertible bonds allow holders to convert them into shares of the issuer's stock, which can lead to capital appreciation.
+- Redeemable bonds give the issuer the right to redeem the bond before maturity at a predetermined price.
+- Floating rate bonds have a variable interest rate that protects investors from interest rate risk.
+- Couponless bonds do not pay periodic interest but are sold at a discount from face value.
+
+#### Asset backed security
+
+An asset-backed security (ABS) is a type of financial investment that is collateralized by an underlying pool of assets. These assets usually generate a cash flow from debt, such as loans, leases, credit card balances, or receivables. It takes the form of a bond or note, paying income at a fixed rate for a set amount of time, until maturity.
+
+The underlying assets of an ABS are often illiquid and can’t be sold on their own. So, pooling assets together and creating a financial instrument out of them—a process called securitization—allows the issuer to make illiquid assets marketable to investors.
+
+#### Bill / Discount note
+
+A Bill/Discount note is a short-term debt obligation issued at a discount to par. Discount notes are typically issued by government-sponsored agencies or highly-rated corporate borrowers. Discount notes have maturity dates of up to one year in length.
+
+Investors purchase discount notes at a discounted price and receive the note's face value at maturity. The profit the investor earns is the spread between the discounted purchase price of the note and the face value redemption price the investor receives upon the note's maturity. This makes them a potentially profitable investment for those willing to wait until maturity.
+
+Discount notes are considered safe investments because they are backed by the credit of the US government.
+
+#### Bond / Note
+
+A note, also known as a promissory note, is a financial instrument that contains a written promise by the issuer to pay a definite sum of money to the payee on demand or at a specified future date. This sum of money usually includes the principal amount and the interest.
+
+The interest is paid periodically over the life of the note. Investors who purchase notes receive periodic interest payments over the life of the note, providing a steady income stream. At maturity, the investor receives the principal amount.
+
+#### Commercial mortgage backed security
+
+CMBS is an investment backed by a pool of commercial properties, serving as collateral to ensure repayment in case of default. It combines various loans covering property types like apartments, hotels, and offices into a single investment.
+
+With fixed interest rates providing stable cash flow and prepayment penalties ensuring consistency, investors are attracted to CMBS.
+
+Mortgages underlying CMBS are categorized by credit risk, with senior tranches receiving minimal risk and both interest and principal payments, while lower tranches offer higher returns but absorb more risk.
+
+Convertible / Exchangeable
+
+Convertible / Exchangeable bonds offer interest payments but can be converted into a set number of common stock shares. Conversion typically occurs at the bondholder's discretion and can be done at specific times during the bond's life.
+
+These hybrid securities are highly sensitive to changes in interest rates, underlying stock price, and issuer's credit rating. Exchangeable bonds allow conversion into equity of a different company than the issuer. The conversion price is the per-share price at which conversion occurs, determined when the conversion ratio is set.
+
+Exchangeable bonds hold a higher value than straight debt due to the added option to exchange, making them potentially profitable investments for patient investors.
+
+#### Covered bond
+
+Covered bonds are debt securities issued by a bank or mortgage institution and collateralized against a pool of assets that, in case of failure of the issuer, can cover claims at any point of time. They are subject to specific legislation to protect bondholders.
+
+The underlying loans remain on the books of the banks that issued them, reducing the risk of losses to investors. They offer better downside protection to investors than an asset-backed security.
+
+#### Linked securities
+
+Linked Securities are securities whose principal value at maturity or any other payment will be determined by reference to one or more equity or debt securities, any statistical measure of economic or financial performance, or the price or value of any commodity or any other item or index or any combination.
+
+They offer a potential for higher yields compared to traditional fixed-income securities, diversification benefits by linking returns to equity market performance, and a short-term investment horizon with typically one-year maturity.
+
+#### Money market
+
+Money market bonds are short-term debt securities issued by governments, financial institutions, or corporations with maturities typically ranging from a few days to one year.
+
+These bonds are considered low-risk investments due to their short duration and high liquidity, making them attractive to investors seeking stability and capital preservation. Money market bonds are often used as a cash management tool by investors and institutions to park excess funds temporarily.
+
+#### Pass-through
+
+Pass-through bonds are securities that allow the cash flows from underlying assets, such as mortgages or other loans, to pass directly through to investors. In the case of mortgage-backed securities, for example, the monthly mortgage payments made by borrowers are collected and distributed to investors holding these securities.
+
+Pass-through bonds provide investors with a steady stream of income based on the performance of the underlying assets, making them popular among income-seeking investors. These bonds can offer diversification benefits and potentially higher yields compared to traditional fixed-income securities.
+
+#### Preferred bond
+
+Preferred bonds are a type of fixed-income investment that exhibit characteristics similar to equity. They are primarily issued by prominent banks and insurance companies. These securities have unique features: they are perpetual and callable, usually providing dividends instead of traditional coupons.
+
+These bonds can provide investors with the potential for a relatively high source of income, diversification from core bonds, reduced portfolio volatility, lower risk of default, reduced interest rate risk and certain tax advantages.
+
+#### Residential mortgage backed security (RMBS)
+
+RMBS are debt-based assets backed by the interest paid on residential loans. Mortgages and home-equity loans have a comparatively low rate of default and a high rate of interest since there is a high demand for the ownership of a personal or family residence. Investor risk is mitigated by pooling many of these loans to minimize the risk of default.
+
+RMBS has the advantage of providing less risk and greater profitability to investors. It allows the issuing entities to raise more cash for reserves, against which they can make more loans. As borrowers pay their mortgage every month, the underlying loans backing RMBS de-risk. The cashflows are returned to RMBS investors, allowing them to de-risk their investments.
+ Previous Previous Term to maturity Next Next Maturity type Launch Supercharts
+

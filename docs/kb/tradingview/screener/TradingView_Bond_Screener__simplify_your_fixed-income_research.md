@@ -1,0 +1,156 @@
+# TradingView Bond Screener: simplify your fixed-income research
+
+**URL:** https://www.tradingview.com/support/solutions/43000743951-tradingview-bond-screener-simplify-your-fixed-income-research/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / [ Bond Screener ](/support/folders/43000596897-bond-screener/)
+- / [ TradingView Bond Screener: simplify your fixed-income research ](/support/solutions/43000743951-tradingview-bond-screener-simplify-your-fixed-income-research/)
+
+# TradingView Bond Screener: simplify your fixed-income research 
+ [Bond Screener](https://www.tradingview.com/bond-screener/) can help you compare and analyze government and corporate bonds based on your unique criteria. Bonds are usually more predictable and often less volatile than stocks and many other financial instruments. However, the level of risk depends on various factors: the bond’s issue characteristics, external macroeconomic conditions, the issuer’s financial health, and other factors. With the Bond Screener, you can select instruments that match your risk preferences and investment goals.
+
+**CONTENTS:**
+
+- [What is the Bond Screener](#What-is-the-Bond-Screener)
+- [How to access the Bond Screener](#How-to-access-the-Bond-Screener)
+- [How to use the Bond Screener](#How-to-use-the-Bond-Screener) [Filters](#Filters)
+- [Column sets](#Column-sets)
+
+#### What is the Bond Screener 
+
+The Bond Screener is a financial analysis tool that allows you to filter different bonds by various metrics such as maturity date, issuer, coupon, and others.
+
+Including bonds in a portfolio can help reduce volatility and make portfolio management more predictable through diversification across asset classes. Keep in mind that bonds are not risk-free: their resilience depends on the issuer and the terms of the issue. Even sovereign bonds of countries with high credit ratings (compared with bonds with lower credit ratings) are still exposed to macroeconomic conditions and interest rate changes.
+
+#### How to access the Bond Screener 
+
+From the main page, click the "Products" dropdown, hover over Screeners, and click "Bonds."
+
+Another way is via [Supercharts](https://www.tradingview.com/support/solutions/43000746464-getting-started-with-supercharts/). On the right toolbar, click "Products" → "Screeners." At the top, click "Stock Screener" → "Bond Screener."
+
+Regardless of the page you access it from, these are the same screeners with identical functionality — so pick the one you prefer.
+
+#### How to use the Bond Screener 
+
+When you first access it, you'll see the US bond market data sorted by maturity date.
+
+One main feature of the Bond Screener is the ability to create multiple screens and save them for further analysis. You can also use preconfigured sets of filters we've selected to help you discover bonds that may interest you. In the top-left corner, click "US Treasuries" → "Open screen…".
+
+In the same dropdown, you can access recently used screens, export results as a CSV file, create a new screen, and make other adjustments.
+
+You can create personalized screens by selecting desired filters, clicking the blue "Save" button, and naming your screen.
+
+On the right, you'll findScreener settings where you can choose what to display — symbol logo, description, type, currency — and refresh frequency.
+
+Next to it is the "Hide filters" button — when you've configured your screener, hide the upper panel to view and analyze more bonds.
+
+#### Filters 
+
+The Bond Screener offers numerous groups of filters:
+
+- **Security info:** General information about the security such as price, debt type, and issue currency
+- **Ratings:** What S&P analysts think of the issuer's reliability
+- **Issuer:** Choose to filter securities by type, credit parent, industry, issuer, or sector
+- **Amounts:** Apply such filters as face value, denomination, or outstanding amount
+- **Coupon:** From here, filter bonds by various coupon metrics
+- **Bond features:** Inflation protection, Sharia compliant, or social responsibility — all can be found here
+
+In the filter editing dialog, select the filtering condition.
+
+To add new filter conditions, click the "+" button or press Shift + F.
+
+#### Column sets 
+
+Below the filters, you can find column sets, each containing the information relevant to a specific type of analysis. You can always add a new column set using the "+" button on the right.
+
+Default column set configuration:
+
+- **Overview:** Key bond metrics — country/region, bond type, price, maturity date, and more
+- **Security info:** Find whether the bond is current, its term, issue date, placement type, ownership form, and other details
+- **Amounts:** Issue amount in native currency, outstanding amount and ratio, face value, and more
+- **Bond features:** See whether the bond is sinkable, convertible, secured, redeemable, and has similar features
+- **Coupon:** Its frequency, type, change, and percent
+- **Issuer:** Issuer's full name, sector and industry it operates in, and its S&P rating
+- **Ratings:** Both long-term and short-term ratings as well as their outlooks
+
+#### Oh, and one more bond tool… 
+
+[TradingView Yield Curves](https://www.tradingview.com/support/solutions/43000758123-tradingview-yield-curves-navigate-bond-rates-and-charts/) is another tool designed specifically for government securities. With it, you can compare sovereign bonds by maturity and identify the most suitable jurisdiction for investment.
+
+Also read:
+
+- [TradingView screeners walkthrough](https://www.tradingview.com/support/solutions/43000718885-tradingview-screeners-walkthrough/)
+- [TradingView heatmaps: from global trends to details](https://www.tradingview.com/support/solutions/43000766446-tradingview-heatmaps-from-global-trends-to-details/) 
+
+- [Introduction to fundamental analysis](https://www.tradingview.com/support/solutions/43000759574-introduction-to-fundamental-analysis-on-tradingview/)
+- [The technical analysis essentials](https://www.tradingview.com/support/solutions/43000759577-the-technical-analysis-essentials-with-tradingview/) 
+
+- [How to trade on TradingView](https://www.tradingview.com/support/solutions/43000756695-how-to-trade-on-tradingview/)
+ Previous Previous TradingView ETF Screener: your shortcut to top funds Next Next Crypto Coins Screener: discover hidden gems Launch Supercharts
+
+---
+
+## Изображения
+
+### Изображение 1
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43587105080/original/15oCy-FANlDAFJhrY3Ey0J-wZQUtYVRMbA.png?1760971632
+
+**Описание:**
+
+This image shows the **TradingView** platform interface, specifically the main dashboard with a dropdown menu open. Here's a detailed breakdown:
+
+
+### **Top Navigation Bar**
+- **TradingView Logo**: Black circular icon with \
+
+---
+
+### Изображение 2
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43588281687/original/oOsOJZt6INO1TJkkLVDRW-DKOjpCOQpLOQ.gif?1761566749
+
+**Описание:**
+
+Image could not be processed
+
+---
+
+### Изображение 3
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43588281619/original/1GGUzib-GxY8xZkTqTO7y0fNthYppSE_eg.gif?1761566733
+
+**Описание:**
+
+Image could not be processed
+
+---
+
+### Изображение 4
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43587105081/original/H8m31psIjaAkjC4JoWjztUxnXLsr_nEkSQ.png?1760971632
+
+**Описание:**
+
+The image displays a **TradingView bond screener interface** focused on **US Treasuries**, with a dropdown menu open for screen management. Here’s a detailed breakdown of the UI elements, their purposes, and the data presented:
+
+
+### **1. Top Navigation Bar**
+- **TradingView Logo**: Left-aligned, links to the homepage.  
+- **Search Bar**: Labeled \
+
+---
+
+### Изображение 5
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43587105079/original/f0v9Rvte2CYfNZuSpIVOxZRFOQmu3Du88Q.png?1760971632
+
+**Описание:**
+
+This image shows a **TradingView bond screener interface** focused on filtering and displaying **US Treasuries (specifically \
+
+---
+

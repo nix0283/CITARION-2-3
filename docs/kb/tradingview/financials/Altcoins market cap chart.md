@@ -1,0 +1,16 @@
+# Altcoins market cap chart
+
+**URL:** https://www.tradingview.com/support/solutions/43000723018-altcoins-market-cap-chart/
+
+---
+
+- [ Help Center ](/) - / [ Knowledge base ](/knowledge-base/) - / Financials - / [ Crypto ](/support/folders/43000590536-crypto/) - / [ Altcoins market cap chart ](/support/solutions/43000723018-altcoins-market-cap-chart/) # Altcoins market cap chart Altcoins market cap chart shows the total market capitalization of the top-125 cryptocurrencies, excluding BTC and some other top cryptocurrencies.It offers traders a comprehensive insight into the dynamics of mid and lower-cap cryptocurrencies. By excluding the dominant influence of the largest assets, this analysis enables a closer examination of market trends, sentiment shifts, and potential trading opportunities within the broader cryptocurrency space. Traders can use this information to refine their strategies, identify emerging trends, and navigate the market with a more granular understanding of the diverse range of cryptocurrencies beyond the top-tier assets. Previous Previous Total market cap chart excluding BTC Next Next Dominance by market cap Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+
+![Image 2](https://static.tradingview.com/static/bundles/look-first-light.74b5bba06f657157cdb4.svg)
+

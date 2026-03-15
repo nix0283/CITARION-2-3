@@ -1,0 +1,140 @@
+# GDP From Agriculture (GDPA)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651025-gdp-from-agriculture-gdpa/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ GDP From Agriculture (GDPA) ](/support/solutions/43000651025-gdp-from-agriculture-gdpa/)
+
+# GDP From Agriculture (GDPA) 
+ GDP from agriculture.
+
+All countries for which *GDPA* is available are listed below:
+
+- Afghanistan
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Azerbaijan
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Belize
+- Benin
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Burkina Faso
+- Cambodia
+- Cameroon
+- Canada
+- Cape Verde
+- Chile
+- China
+- Colombia
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Ecuador
+- Egypt
+- El Salvador
+- Estonia
+- Ethiopia
+- Finland
+- France
+- Gambia
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Guatemala
+- Guinea
+- Honduras
+- Hong Kong
+- Hungary
+- India
+- Indonesia
+- Iran
+- Ireland
+- Israel
+- Italy
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Laos
+- Latvia
+- Lesotho
+- Liberia
+- Malawi
+- Malaysia
+- Maldives
+- Mauritius
+- Mexico
+- Mongolia
+- Morocco
+- Mozambique
+- Namibia
+- Nepal
+- Netherlands
+- New Zealand
+- Nicaragua
+- Nigeria
+- North Korea
+- Norway
+- Oman
+- Pakistan
+- Palestine
+- Panama
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Romania
+- Russia
+- Rwanda
+- Saudi Arabia
+- Senegal
+- Serbia
+- Seychelles
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sweden
+- Taiwan
+- Tajikistan
+- Tanzania
+- Thailand
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Vietnam
+- Zambia
+ Previous Previous GDP Deflator (GDPD) Next Next GDP From Construction (GDPC) Launch Supercharts
+

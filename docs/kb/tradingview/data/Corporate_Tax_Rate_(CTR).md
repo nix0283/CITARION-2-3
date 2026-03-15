@@ -1,0 +1,179 @@
+# Corporate Tax Rate (CTR)
+
+**URL:** https://www.tradingview.com/support/solutions/43000650979-corporate-tax-rate-ctr/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Corporate Tax Rate (CTR) ](/support/solutions/43000650979-corporate-tax-rate-ctr/)
+
+# Corporate Tax Rate (CTR) 
+ Corporate income tax rate.
+
+All countries for which *CTR* is available are listed below:
+
+- Afghanistan
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Aruba
+- Australia
+- Austria
+- Azerbaijan
+- Bahamas
+- Bahrain
+- Bangladesh
+- Barbados
+- Belarus
+- Belgium
+- Bermuda
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Cambodia
+- Cameroon
+- Canada
+- Cayman Islands
+- Chad
+- Chile
+- China
+- Colombia
+- Congo
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Equatorial Guinea
+- Estonia
+- Ethiopia
+- Euro Area
+- Fiji
+- Finland
+- France
+- Gabon
+- Gambia
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Guatemala
+- Guinea
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iraq
+- Ireland
+- Isle of Man
+- Israel
+- Italy
+- Ivory Coast
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Kuwait
+- Laos
+- Latvia
+- Lebanon
+- Lesotho
+- Libya
+- Liechtenstein
+- Lithuania
+- Luxembourg
+- Macau
+- Macedonia
+- Madagascar
+- Malawi
+- Malaysia
+- Maldives
+- Malta
+- Mauritania
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Morocco
+- Mozambique
+- Myanmar
+- Namibia
+- Netherlands
+- New Zealand
+- Nicaragua
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Panama
+- Papua New Guinea
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Puerto Rico
+- Qatar
+- Republic of the Congo
+- Romania
+- Russia
+- Rwanda
+- Samoa
+- Saudi Arabia
+- Senegal
+- Serbia
+- Seychelles
+- Sierra Leone
+- Singapore
+- Slovakia
+- Slovenia
+- Solomon Islands
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sudan
+- Suriname
+- Swaziland
+- Sweden
+- Switzerland
+- Syrian Arab Republic
+- Taiwan
+- Tanzania
+- Thailand
+- Tonga
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Vanuatu
+- Venezuela
+- Vietnam
+- Yemen
+- Zambia
+- Zimbabwe
+ Previous Previous Corporate Profits (CPR) Next Next Corruption Index (CORPI) Launch Supercharts
+

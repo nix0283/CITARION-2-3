@@ -1,0 +1,133 @@
+# Social Security Rate For Employees (SSRE)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651189-social-security-rate-for-employees-ssre/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Social Security Rate For Employees (SSRE) ](/support/solutions/43000651189-social-security-rate-for-employees-ssre/)
+
+# Social Security Rate For Employees (SSRE) 
+ Social security rate for employees.
+
+All countries for which *SSRE* is available are listed below:
+
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahamas
+- Bahrain
+- Barbados
+- Belarus
+- Belgium
+- Bolivia
+- Bosnia and Herzegovina
+- Brazil
+- Bulgaria
+- Cameroon
+- Canada
+- Chad
+- Chile
+- China
+- Colombia
+- Congo
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Ecuador
+- Egypt
+- El Salvador
+- Equatorial Guinea
+- Estonia
+- Fiji
+- Finland
+- France
+- Gabon
+- Germany
+- Greece
+- Guatemala
+- Guinea
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Ivory Coast
+- Jamaica
+- Japan
+- Jordan
+- Kenya
+- Kosovo
+- Kuwait
+- Laos
+- Latvia
+- Lebanon
+- Libya
+- Lithuania
+- Luxembourg
+- Madagascar
+- Malaysia
+- Malta
+- Mauritania
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Mozambique
+- Netherlands
+- New Zealand
+- Norway
+- Panama
+- Papua New Guinea
+- Paraguay
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Republic of the Congo
+- Romania
+- Russia
+- Rwanda
+- Saint Lucia
+- Saudi Arabia
+- Serbia
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sweden
+- Switzerland
+- Taiwan
+- Tajikistan
+- Thailand
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Venezuela
+- Vietnam
+- Zambia
+ Previous Previous Social Security Rate For Companies (SSRC) Next Next Steel Production (SP) Launch Supercharts
+

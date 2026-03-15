@@ -1,0 +1,165 @@
+# CPI Transportation (CPIT)
+
+**URL:** https://www.tradingview.com/support/solutions/43000650941-cpi-transportation-cpit/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ CPI Transportation (CPIT) ](/support/solutions/43000650941-cpi-transportation-cpit/)
+
+# CPI Transportation (CPIT) 
+ CPI Transportation.
+
+All countries for which *CPIT* is available are listed below:
+
+- Afghanistan
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Aruba
+- Australia
+- Austria
+- Bahrain
+- Bangladesh
+- Barbados
+- Belgium
+- Belize
+- Benin
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Bulgaria
+- Burkina Faso
+- Burundi
+- Cambodia
+- Cameroon
+- Canada
+- Cape Verde
+- Chile
+- Colombia
+- Congo
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Djibouti
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Estonia
+- Euro Area
+- Fiji
+- Finland
+- France
+- Gabon
+- Gambia
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Guatemala
+- Guinea
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iran
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Ivory Coast
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kosovo
+- Kuwait
+- Kyrgyzstan
+- Latvia
+- Lebanon
+- Lesotho
+- Liberia
+- Libya
+- Lithuania
+- Luxembourg
+- Macau
+- Madagascar
+- Malawi
+- Malaysia
+- Maldives
+- Mali
+- Malta
+- Mauritania
+- Mauritius
+- Mexico
+- Montenegro
+- Morocco
+- Mozambique
+- Myanmar
+- Namibia
+- Netherlands
+- New Caledonia
+- New Zealand
+- Nicaragua
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Palestine
+- Panama
+- Paraguay
+- Peru
+- Philippines
+- Portugal
+- Puerto Rico
+- Qatar
+- Romania
+- Rwanda
+- Saudi Arabia
+- Senegal
+- Serbia
+- Seychelles
+- Sierra Leone
+- Singapore
+- Slovakia
+- Slovenia
+- Somalia
+- South Africa
+- South Korea
+- South Sudan
+- Spain
+- Sri Lanka
+- Swaziland
+- Sweden
+- Switzerland
+- Taiwan
+- Tanzania
+- Thailand
+- Timor-leste
+- Togo
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Venezuela
+- Vietnam
+- Zambia
+- Zimbabwe
+ Previous Previous CPI Median (CPIM) Next Next CPI Trimmed Mean (CPITM) Launch Supercharts
+

@@ -1,0 +1,16 @@
+# Redemption type
+
+**URL:** https://www.tradingview.com/support/solutions/43000728518-redemption-type/
+
+---
+
+- [ Help Center ](/) - / [ Knowledge base ](/knowledge-base/) - / Financials - / [ Bonds ](/support/folders/43000594677-bonds/) - / [ Redemption type ](/support/solutions/43000728518-redemption-type/) # Redemption type Redemption type refers to the specific conditions under which a bond can be redeemed by the issuer or the bondholder. Callable A callable bond, also known as a redeemable bond, is a type of bond that provides the issuer with the right, but not the obligation, to redeem the bond before its maturity date. The issuer may choose to call their bond if market interest rates move lower, allowing them to re-borrow at a more beneficial rate. Callable bonds compensate investors for the potential early redemption as they typically offer a more attractive interest rate or coupon rate due to their callable nature. However, if the bonds are redeemed, the investors will lose some future interest payments. Callable and putable A bond that is both putable and callable gives both the issuer and the bondholder options before the bond's maturity date. The issuer has the right to redeem the bond early (callable), and the bondholder has the right to force the issuer to redeem the bond early (putable). This type of bond can be beneficial or disadvantageous to the investor depending on market conditions. The callable feature benefits the issuer, and so investors of these bonds are compensated with a more attractive interest rate. On the other hand, the putable feature provides investors with protection from potential interest rate increases. Putable A putable bond is a type of bond that provides the holder of a bond (the investor) the right, but not the obligation, to force the issuer to redeem the bond before its maturity date. The embedded put option can be exercised after a predetermined date. Putable bonds provide investors with protection from potential interest rate increases. If interest rates have significantly increased, the investors do not have an incentive to keep the bonds until maturity. Rather than holding the bonds to maturity, they can exercise the embedded put option and receive the principal amount of their initial investment. None A non-putable and non-callable bond is a bond that cannot be redeemed early by either the issuer or the bondholder. The issuer of a non-callable bond subjects itself to interest rate risk because it locks in the interest rate it will pay until the security matures. Non-callable bonds tend to pay investors a lower interest rate than callable bonds. However, the risk is lower for the investor, who is assured of receiving the stated interest rate for the duration of the security. The non-putable feature means that investors cannot force the issuer to redeem the bond early, which could be disadvantageous if market conditions change. Previous Previous Ownership form Next Next Next call date Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+
+![Image 2](https://static.tradingview.com/static/bundles/look-first-light.74b5bba06f657157cdb4.svg)
+

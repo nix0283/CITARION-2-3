@@ -1,0 +1,16 @@
+[bot-monitor] Installing dependencies...
+bun install v1.3.10 (30e609e0)
+Resolving dependencies
+Resolved, downloaded and extracted [66]
+Saved lockfile
+
++ socket.io@4.8.3
+
+22 packages installed [662.00ms]
+[bot-monitor] Running bun run dev...
+$ bun --hot index.ts
+Bot Monitor Service running on port 3003
+CORS allowed origins: http://localhost:3000, http://localhost:3001, http://127.0.0.1:3000, http://127.0.0.1:3001
+Initialized 3 demo bots
+Bot Monitor Service initialized
+Features: Real-time bot status, trade notifications, position updates

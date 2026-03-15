@@ -1,0 +1,140 @@
+# Consumer Spending (CS)
+
+**URL:** https://www.tradingview.com/support/solutions/43000650970-consumer-spending-cs/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Consumer Spending (CS) ](/support/solutions/43000650970-consumer-spending-cs/)
+
+# Consumer Spending (CS) 
+ Consumer spending on goods and services.
+
+All countries for which *CS* is available are listed below:
+
+- Afghanistan
+- Albania
+- Algeria
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Burkina Faso
+- Cambodia
+- Cameroon
+- Canada
+- Cape Verde
+- Chile
+- China
+- Colombia
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Estonia
+- Euro Area
+- Finland
+- France
+- Georgia
+- Germany
+- Greece
+- Guatemala
+- Guinea
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iran
+- Ireland
+- Israel
+- Italy
+- Ivory Coast
+- Japan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Kuwait
+- Kyrgyzstan
+- Latvia
+- Lebanon
+- Lithuania
+- Luxembourg
+- Macau
+- Macedonia
+- Malawi
+- Malaysia
+- Malta
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Morocco
+- Mozambique
+- Namibia
+- Nepal
+- Netherlands
+- New Zealand
+- Nicaragua
+- Nigeria
+- Norway
+- Pakistan
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Romania
+- Russia
+- Rwanda
+- Saudi Arabia
+- Serbia
+- Seychelles
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sweden
+- Switzerland
+- Taiwan
+- Thailand
+- Tunisia
+- Turkey
+- Turkmenistan
+- Uganda
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Venezuela
+- Vietnam
+- Yemen
+ Previous Previous Consumer Price Index (CPI) Next Next Continuing Jobless Claims (CJC) Launch Supercharts
+

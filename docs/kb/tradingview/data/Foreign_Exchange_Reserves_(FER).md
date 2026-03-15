@@ -1,0 +1,141 @@
+# Foreign Exchange Reserves (FER)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651020-foreign-exchange-reserves-fer/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Foreign Exchange Reserves (FER) ](/support/solutions/43000651020-foreign-exchange-reserves-fer/)
+
+# Foreign Exchange Reserves (FER) 
+ Volume of foreign exchange reserves.
+
+All countries for which *FER* is available are listed below:
+
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahamas
+- Bahrain
+- Bangladesh
+- Barbados
+- Belarus
+- Belgium
+- Belize
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Bulgaria
+- Burundi
+- Canada
+- Cape Verde
+- Chile
+- China
+- Colombia
+- Congo
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Euro Area
+- Finland
+- France
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Guatemala
+- Guinea
+- Guyana
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Ireland
+- Israel
+- Italy
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kuwait
+- Kyrgyzstan
+- Laos
+- Latvia
+- Lithuania
+- Luxembourg
+- Macau
+- Malawi
+- Malaysia
+- Maldives
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Morocco
+- Mozambique
+- Namibia
+- Netherlands
+- New Zealand
+- Nicaragua
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Papua New Guinea
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Romania
+- Russia
+- Sao Tome and Principe
+- Saudi Arabia
+- Serbia
+- Seychelles
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Swaziland
+- Sweden
+- Switzerland
+- Taiwan
+- Thailand
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Venezuela
+- Vietnam
+- Zambia
+ Previous Previous Foreign Direct Investment (FDI) Next Next Foreign Stock Investment (FSI) Launch Supercharts
+

@@ -1,0 +1,110 @@
+# Analysis: Sortino ratio
+
+**URL:** https://www.tradingview.com/support/solutions/43000756110-analysis-sortino-ratio/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Portfolio 
+- / [ Analysis ](/support/folders/43000598045-analysis/)
+- / [ Analysis: Sortino ratio ](/support/solutions/43000756110-analysis-sortino-ratio/)
+
+# Analysis: Sortino ratio 
+
+#### Definition: 
+ The Sortino Ratio is a modification of the Sharpe Ratio developed by Frank Sortino. Unlike the Sharpe Ratio, it ignores positive volatility, focusing only on drawdowns that are dangerous for the investor.
+
+#### Interpretation: 
+
+It shows how well the return compensates for risk. The final value directly indicates how many percent of return corresponds to 1% of downside deviation.
+
+The generally accepted target value of the indicator is ≥ 2, but the ratio with the benchmark and the market situation should always be taken into account.
+
+#### Example: 
+
+Portfolio:
+
+- Risk Free Rate (RFR) = 2%
+- 2025-01-01 deposit of 1000
+- 2025-03-03 purchase of NASDAQ:AAPL (qty:1, price: 190, commission: 0)
+- 2025-04-11 Sortino Ratio calculation date. Last price of AAPL = 198.15
+
+Sortino ratio portfolio 0.047%:
+
+- Downside risk is poorly compensated by return
+- Each percent of accepted downside deviation brought only 0.047% of excess return
+
+Sortino ratio benchmark -0.817%:
+
+- For each unit percent of downside deviation, the portfolio lost 0.817% of return relative to the risk-free rate
+
+Note: The short-term nature of the observed period, taken for simplification of the calculation, should be considered.
+
+#### Calculation: 
+
+Sortino Ratio = (Rp − RFR) / DD
+
+- Rp (Return of portfolio) — portfolio performance in percent, calculated monthly for the period using the TWR method
+
+- RFR (Risk Free Rate) — taken from the portfolio settings. Since the annual rate is set in the settings, it must be converted to the rate for the period before calculation
+
+- DD (Downside Deviation) — standard deviation among the negative values of performance for the period
+
+Example of Sortino Ratio calculation from interpretation:
+
+- Monthly RFR calculation:
+ 2 / 12 = 0.167%
+- Rp calculation:
+ Performance by periods: January: 0
+- February: 0
+- March: 3.2% (obtained: pv on March 31 → ((1032.13 − 1000) / 1000) * 100 )
+- April: −2.3% (obtained: ((1008.15 − 1032.13) / 1032.13) * 100 )
+
+Rp = (0 + 0 + 3.2 − 2.3) / 4 = 0.225
+
+- DD calculation: January: min(0, 0 − 0.167)² = 0.0279
+- February: min(0, 0 − 0.167)² = 0.0279
+- March: min(0, 3.2 − 0.167)² = 0
+- April: min(0, −2.3 − 0.167)² = 6.1009
+
+DD = ((0.0279 + 0.0279 + 0 + 6.1009) / 4)^(1/2) = 1.24%
+
+- Sortino Ratio calculation:
+SR = (Rp − RFR) / DD = (0.225% − 0.167%) / 1.24% ≈ 0.047%
+
+Reference in Pine:
+
+ Pine Script® // @version= 6 
+ indicator ( "Sortino ratio example" ) 
+ method downsideDeviation ( array < float > returns , series float targetReturn ) => 
+ float sum = 0.0 
+ for r in returns 
+ if r >= targetReturn 
+ continue 
+ sum += math.pow ( r - targetReturn , 2 ) 
+ sum /= returns . size () 
+ float result = math.sqrt ( sum ) 
+
+ method sortinoRatio ( array < float > returnsArray , series float annualBenchmark ) => 
+ var int numberOfperiods = 12 
+ if barstate.islast 
+ float fixedPeriodReturn = annualBenchmark / numberOfperiods 
+ float downsideDev = returnsArray . downsideDeviation ( fixedPeriodReturn ) 
+ float avgReturn = returnsArray . avg () 
+ float result = ( avgReturn - fixedPeriodReturn ) / downsideDev 
+
+ array < float > arr = array.from ( 0 , 0 , 3.2 , -2.3 ) 
+ float sortino = sortinoRatio ( arr , 2 ) 
+ plot ( sortino , precision = 3 ) 
+ Expand 17 lines 
+#### Note: 
+ If all transactions were made in the current month relative to the indicator's calculation date, the indicator will not be calculated, since there is not a single completed calendar month.
+
+Also read
+
+- [Analysis: Sharpe ratio](https://www.tradingview.com/support/solutions/43000756107/)
+- [Original Pine script from TV library](https://www.tradingview.com/script/oOgZRqiM-RiskMetrics/)
+- [General about Sortino](https://www.tradingview.com/support/solutions/43000681697-risk-performance-ratios-sortino-ratio/)
+ Previous Previous Analysis: Sharpe ratio Next Next Analysis: Holdings performance Launch Supercharts
+

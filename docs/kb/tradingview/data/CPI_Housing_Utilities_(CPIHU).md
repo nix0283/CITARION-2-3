@@ -1,0 +1,150 @@
+# CPI Housing Utilities (CPIHU)
+
+**URL:** https://www.tradingview.com/support/solutions/43000650939-cpi-housing-utilities-cpihu/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ CPI Housing Utilities (CPIHU) ](/support/solutions/43000650939-cpi-housing-utilities-cpihu/)
+
+# CPI Housing Utilities (CPIHU) 
+ CPI Housing Utilities.
+
+All countries for which *CPIHU* is available are listed below:
+
+- Afghanistan
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Aruba
+- Australia
+- Austria
+- Bahrain
+- Barbados
+- Belgium
+- Belize
+- Benin
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Bulgaria
+- Burkina Faso
+- Burundi
+- Cambodia
+- Cameroon
+- Canada
+- Cape Verde
+- Colombia
+- Congo
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Djibouti
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Estonia
+- Euro Area
+- Fiji
+- Finland
+- France
+- Gambia
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Guatemala
+- Guinea
+- Honduras
+- Iceland
+- India
+- Indonesia
+- Iran
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Ivory Coast
+- Jamaica
+- Japan
+- Jordan
+- Kosovo
+- Kyrgyzstan
+- Latvia
+- Lebanon
+- Lesotho
+- Liberia
+- Libya
+- Lithuania
+- Luxembourg
+- Macau
+- Madagascar
+- Malawi
+- Malaysia
+- Maldives
+- Mali
+- Malta
+- Mauritania
+- Mauritius
+- Mexico
+- Montenegro
+- Morocco
+- Mozambique
+- Myanmar
+- Namibia
+- Netherlands
+- New Caledonia
+- New Zealand
+- Nicaragua
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Panama
+- Paraguay
+- Peru
+- Philippines
+- Portugal
+- Puerto Rico
+- Qatar
+- Rwanda
+- Saudi Arabia
+- Senegal
+- Serbia
+- Seychelles
+- Sierra Leone
+- Singapore
+- Slovakia
+- Slovenia
+- Somalia
+- South Africa
+- South Korea
+- South Sudan
+- Spain
+- Sri Lanka
+- Sweden
+- Switzerland
+- Taiwan
+- Tanzania
+- Thailand
+- Timor-leste
+- Togo
+- Tunisia
+- Turkey
+- Uganda
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Zambia
+- Zimbabwe
+ Previous Previous Corruption Rank (CORR) Next Next CPI Median (CPIM) Launch Supercharts
+

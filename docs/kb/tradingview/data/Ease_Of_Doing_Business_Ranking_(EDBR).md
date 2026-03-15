@@ -1,0 +1,204 @@
+# Ease Of Doing Business Ranking (EDBR)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651001-ease-of-doing-business-ranking-edbr/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Ease Of Doing Business Ranking (EDBR) ](/support/solutions/43000651001-ease-of-doing-business-ranking-edbr/)
+
+# Ease Of Doing Business Ranking (EDBR) 
+ The degree of favorableness of the regulatory environment for doing business, protection of property rights. The lower the value, the more favorable the business environment.
+
+All countries for which *EDBR* is available are listed below:
+
+- Afghanistan
+- Albania
+- Algeria
+- Angola
+- Antigua and Barbuda
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahamas
+- Bahrain
+- Bangladesh
+- Barbados
+- Belarus
+- Belgium
+- Belize
+- Benin
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Burkina Faso
+- Burundi
+- Cambodia
+- Cameroon
+- Canada
+- Cape Verde
+- Central African Republic
+- Chad
+- Chile
+- China
+- Colombia
+- Comoros
+- Congo
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Djibouti
+- Dominica
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Equatorial Guinea
+- Eritrea
+- Estonia
+- Ethiopia
+- Fiji
+- Finland
+- France
+- Gabon
+- Gambia
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Grenada
+- Guatemala
+- Guinea
+- Guinea-Bissau
+- Guyana
+- Haiti
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iran
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Ivory Coast
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kiribati
+- Kosovo
+- Kuwait
+- Kyrgyzstan
+- Laos
+- Latvia
+- Lebanon
+- Lesotho
+- Liberia
+- Libya
+- Lithuania
+- Luxembourg
+- Macedonia
+- Madagascar
+- Malawi
+- Malaysia
+- Maldives
+- Mali
+- Malta
+- Mauritania
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Morocco
+- Mozambique
+- Myanmar
+- Namibia
+- Nepal
+- Netherlands
+- New Zealand
+- Nicaragua
+- Niger
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Panama
+- Papua New Guinea
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Puerto Rico
+- Qatar
+- Republic of the Congo
+- Romania
+- Russia
+- Rwanda
+- Saint Lucia
+- Saint Vincent and the Grenadines
+- Samoa
+- San Marino
+- Sao Tome and Principe
+- Saudi Arabia
+- Senegal
+- Serbia
+- Seychelles
+- Sierra Leone
+- Singapore
+- Slovakia
+- Slovenia
+- Solomon Islands
+- Somalia
+- South Africa
+- South Korea
+- South Sudan
+- Spain
+- Sri Lanka
+- Sudan
+- Suriname
+- Swaziland
+- Sweden
+- Switzerland
+- Syrian Arab Republic
+- Taiwan
+- Tajikistan
+- Tanzania
+- Thailand
+- Timor-leste
+- Togo
+- Tonga
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Vanuatu
+- Venezuela
+- Vietnam
+- Yemen
+- Zambia
+- Zimbabwe
+ Previous Previous Durable Goods Orders Excluding Transportation (DGOET) Next Next Economic Optimism Index (EOI) Launch Supercharts
+

@@ -1,0 +1,182 @@
+# Terrorism Index (TI)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651194-terrorism-index-ti/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Terrorism Index (TI) ](/support/solutions/43000651194-terrorism-index-ti/)
+
+# Terrorism Index (TI) 
+ Global terrorism index ranks countries according to the impact of terrorism from 0 (no impact) to 10 (highest impact).
+
+All countries for which *TI* is available are listed below:
+
+- Afghanistan
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Benin
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Bulgaria
+- Burkina Faso
+- Burundi
+- Cambodia
+- Cameroon
+- Canada
+- Central African Republic
+- Chad
+- Chile
+- China
+- Colombia
+- Congo
+- Costa Rica
+- Croatia
+- Cuba
+- Cyprus
+- Czech Republic
+- Denmark
+- Djibouti
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Equatorial Guinea
+- Eritrea
+- Estonia
+- Ethiopia
+- Finland
+- France
+- Gabon
+- Gambia
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Guatemala
+- Guinea
+- Guinea-Bissau
+- Guyana
+- Haiti
+- Honduras
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iran
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Ivory Coast
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Kuwait
+- Kyrgyzstan
+- Laos
+- Latvia
+- Lebanon
+- Lesotho
+- Liberia
+- Libya
+- Lithuania
+- Macedonia
+- Madagascar
+- Malawi
+- Malaysia
+- Mali
+- Mauritania
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Morocco
+- Mozambique
+- Myanmar
+- Namibia
+- Nepal
+- Netherlands
+- New Zealand
+- Nicaragua
+- Niger
+- Nigeria
+- North Korea
+- Norway
+- Oman
+- Pakistan
+- Palestine
+- Panama
+- Papua New Guinea
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Republic of the Congo
+- Romania
+- Russia
+- Rwanda
+- Saudi Arabia
+- Senegal
+- Serbia
+- Sierra Leone
+- Singapore
+- Slovakia
+- Slovenia
+- Somalia
+- South Africa
+- South Korea
+- South Sudan
+- Spain
+- Sri Lanka
+- Sudan
+- Swaziland
+- Sweden
+- Switzerland
+- Syrian Arab Republic
+- Taiwan
+- Tajikistan
+- Tanzania
+- Thailand
+- Timor-leste
+- Togo
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Turkmenistan
+- Uganda
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Venezuela
+- Vietnam
+- Yemen
+- Zambia
+- Zimbabwe
+ Previous Previous Terms Of Trade (TOT) Next Next Tertiary Industry Index (TII) Launch Supercharts
+

@@ -1,0 +1,196 @@
+# Government Budget (GBP)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651050-government-budget-gbp/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Government Budget (GBP) ](/support/solutions/43000651050-government-budget-gbp/)
+
+# Government Budget (GBP) 
+ Government budget as percent of GDP.
+
+All countries for which *GBP* is available are listed below:
+
+- Afghanistan
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Aruba
+- Australia
+- Austria
+- Azerbaijan
+- Bahamas
+- Bahrain
+- Bangladesh
+- Barbados
+- Belarus
+- Belgium
+- Belize
+- Benin
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Burkina Faso
+- Burundi
+- Cambodia
+- Cameroon
+- Canada
+- Cape Verde
+- Cayman Islands
+- Central African Republic
+- Chad
+- Chile
+- China
+- Colombia
+- Comoros
+- Congo
+- Costa Rica
+- Croatia
+- Cuba
+- Cyprus
+- Czech Republic
+- Denmark
+- Djibouti
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Equatorial Guinea
+- Eritrea
+- Estonia
+- Ethiopia
+- Euro Area
+- Faroe Islands
+- Fiji
+- Finland
+- France
+- Gabon
+- Gambia
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Guatemala
+- Guinea
+- Guinea-Bissau
+- Guyana
+- Haiti
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iran
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Ivory Coast
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Kuwait
+- Kyrgyzstan
+- Laos
+- Latvia
+- Lebanon
+- Lesotho
+- Liberia
+- Libya
+- Lithuania
+- Luxembourg
+- Macedonia
+- Madagascar
+- Malawi
+- Malaysia
+- Maldives
+- Mali
+- Malta
+- Mauritania
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Morocco
+- Mozambique
+- Myanmar
+- Namibia
+- Nepal
+- Netherlands
+- New Zealand
+- Nicaragua
+- Niger
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Palestine
+- Panama
+- Papua New Guinea
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Republic of the Congo
+- Romania
+- Russia
+- Rwanda
+- Sao Tome and Principe
+- Saudi Arabia
+- Senegal
+- Serbia
+- Seychelles
+- Sierra Leone
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sudan
+- Suriname
+- Swaziland
+- Sweden
+- Switzerland
+- Taiwan
+- Tajikistan
+- Tanzania
+- Thailand
+- Timor-leste
+- Togo
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Turkmenistan
+- Uganda
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Venezuela
+- Vietnam
+- Yemen
+- Zambia
+- Zimbabwe
+ Previous Previous Goods Trade Deficit With Non-eu Countries (NEGTB) Next Next Government Budget Value (GBV) Launch Supercharts
+

@@ -1,0 +1,16 @@
+# Other Investments
+
+**URL:** https://www.tradingview.com/support/solutions/43000563649-other-investments/
+
+---
+
+- [ Help Center ](/) - / [ Knowledge base ](/knowledge-base/) - / Financials - / [ Balance Sheet ](/support/folders/43000565036-balance-sheet/) - / [ Other Investments ](/support/solutions/43000563649-other-investments/) # Other Investments What are Other Investments? Other Investments represent [Long Term Investments](https://www.tradingview.com/?solution=43000563639) besides [Note Receivable - Long Term](https://www.tradingview.com/?solution=43000563641) and [Investments in Unconsolidated Subsidiaries](https://www.tradingview.com/?solution=43000563645). Previous Previous Investments in Unconsolidated Subsidiaries Next Next Net Property/Plant/Equipment Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+
+![Image 2](https://static.tradingview.com/static/bundles/look-first-light.74b5bba06f657157cdb4.svg)
+

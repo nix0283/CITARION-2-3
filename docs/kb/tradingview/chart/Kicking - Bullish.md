@@ -1,0 +1,21 @@
+# Kicking - Bullish
+
+**URL:** https://www.tradingview.com/support/solutions/43000583782-kicking-bullish/
+
+---
+
+- [ Help Center ](/) - / [ Knowledge base ](/knowledge-base/) - / Chart - / [ Learn more about candlestick patterns ](/support/folders/43000570503-learn-more-about-candlestick-patterns/) - / [ Kicking - Bullish ](/support/solutions/43000583782-kicking-bullish/) # Kicking - Bullish A bullish Kicking (also known as Kicker) pattern signals a reversal for a new uptrend. The first day candlestick is a [bearish marubozu candlestick](https://www.tradingview.com/chart/?solution=43000583789) with next to no upper or lower shadow and where the price opens at the day’s high and closes at the day’s low. The second day is a [bullish marubozu pattern](https://www.tradingview.com/chart/?solution=43000583786), with next to no upper or lower shadow and where the price opens at the day’s low and closes at the day’s high. Additionally, the second day gaps up extensively and opens above the opening price of the day before. This gap or window, as the Japanese call it, lies between day one and day two’s bullish candlesticks. Previous Previous Kicking - Bearish Next Next Long Lower Shadow - Bullish Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43140656557/original/tUrpFKwXusW4EOp39ce3ouf3jogSme3zsA.png?1594049462)
+
+**Описание:** The image is a **TradingView candlestick chart** displaying a technical analysis pattern called \
+
+
+![Image 2](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+
+![Image 3](https://static.tradingview.com/static/bundles/look-first-light.74b5bba06f657157cdb4.svg)
+

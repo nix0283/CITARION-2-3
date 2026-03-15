@@ -1,0 +1,18 @@
+# Symbol syncing  between tabs
+
+**URL:** https://www.tradingview.com/support/solutions/43000673893-symbol-syncing-between-tabs/
+
+---
+
+- [ Help Center ](/) - / [ Knowledge base ](/knowledge-base/) - / Desktop - / [ Features and configuration ](/support/folders/43000574972-features-and-configuration/) - / [ Symbol syncing between tabs ](/support/solutions/43000673893-symbol-syncing-between-tabs/) # Symbol syncing between tabs Set the same color tag to a few tabs, and they will start following the ticker change made in any of them. You can link not only chart tabs but can also link the screener with a chart. Previous Previous How to open multiple app windows? Next Next How to open a TradingView chart link in Desktop app? Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43384332503/original/gR_h3BVVHbNmjIhL7-Mave3N549P5g0Eag.gif?1673429150)
+
+![Image 2](https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43384334773/original/W73R61q2G8nhwRp91XaK8NnwK1tMPYYVlg.gif?1673429664)
+
+![Image 3](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+

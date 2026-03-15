@@ -1,0 +1,172 @@
+# Military Expenditure (ME)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651122-military-expenditure-me/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Military Expenditure (ME) ](/support/solutions/43000651122-military-expenditure-me/)
+
+# Military Expenditure (ME) 
+ Military spending.
+
+All countries for which *ME* is available are listed below:
+
+- Afghanistan
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Belize
+- Benin
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Burkina Faso
+- Burundi
+- Cambodia
+- Cameroon
+- Canada
+- Cape Verde
+- Central African Republic
+- Chad
+- Chile
+- China
+- Colombia
+- Congo
+- Croatia
+- Cuba
+- Cyprus
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Equatorial Guinea
+- Estonia
+- Ethiopia
+- Fiji
+- Finland
+- France
+- Gabon
+- Gambia
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Guatemala
+- Guinea
+- Guyana
+- Haiti
+- Honduras
+- Hungary
+- India
+- Indonesia
+- Iran
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Ivory Coast
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Kuwait
+- Kyrgyzstan
+- Latvia
+- Lebanon
+- Lesotho
+- Liberia
+- Lithuania
+- Luxembourg
+- Macedonia
+- Madagascar
+- Malawi
+- Malaysia
+- Mali
+- Malta
+- Mauritania
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Morocco
+- Mozambique
+- Myanmar
+- Namibia
+- Nepal
+- Netherlands
+- New Zealand
+- Nicaragua
+- Niger
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Panama
+- Papua New Guinea
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Republic of the Congo
+- Romania
+- Russia
+- Rwanda
+- Saudi Arabia
+- Senegal
+- Serbia
+- Seychelles
+- Sierra Leone
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- South Sudan
+- Spain
+- Sri Lanka
+- Sudan
+- Swaziland
+- Sweden
+- Switzerland
+- Taiwan
+- Tajikistan
+- Tanzania
+- Thailand
+- Timor-leste
+- Togo
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Kingdom
+- United States
+- Uruguay
+- Venezuela
+- Vietnam
+- Zambia
+- Zimbabwe
+ Previous Previous Michigan Inflation Expectations (MIE1Y) Next Next Minimum Wages (MW) Launch Supercharts
+
