@@ -34,7 +34,6 @@ import {
   Signal,
   SignalHigh,
   Trash2,
-  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
