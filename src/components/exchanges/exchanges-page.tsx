@@ -13,6 +13,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,6 +33,8 @@ import {
   Unlink,
   Signal,
   SignalHigh,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -257,14 +260,15 @@ function AccountCard({ account, onToggleActive, onToggleHedgeMode, onDisconnect 
             Hedge Mode
           </Button>
 
-          {/* Disconnect button */}
+          {/* Delete button */}
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7 text-destructive hover:text-destructive"
+            className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10"
             onClick={() => onDisconnect(account.id)}
+            title="Удалить аккаунт"
           >
-            <Unlink className="h-3.5 w-3.5" />
+            <Trash2 className="h-3.5 w-3.5" />
           </Button>
         </div>
       </CardContent>
@@ -733,6 +737,143 @@ function AddAccountDialog({ open, onOpenChange, accountType, onAdd }: AddAccount
   );
 }
 
+// ==================== DELETE ACCOUNT DIALOG ====================
+
+interface DeleteAccountDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  account: ExchangeAccount | null;
+  onConfirm: () => Promise<void>;
+  isDeleting: boolean;
+}
+
+function DeleteAccountDialog({ open, onOpenChange, account, onConfirm, isDeleting }: DeleteAccountDialogProps) {
+  if (!account) return null;
+
+  const accountConfig = ACCOUNT_TYPE_CONFIG[account.accountType];
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-red-500">
+            <AlertTriangle className="h-5 w-5" />
+            Удаление аккаунта
+          </DialogTitle>
+          <DialogDescription className="pt-2">
+            Вы уверены, что хотите удалить этот аккаунт?
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="py-4">
+          {/* Account info */}
+          <div className="p-4 rounded-lg bg-secondary/50 mb-4">
+            <div className="flex items-center gap-3 mb-2">
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                style={{ backgroundColor: SUPPORTED_EXCHANGES.find(e => e.id === account.exchangeId)?.bgColor || "#88888820" }}
+              >
+                <Building2
+                  className="h-4 w-4"
+                  style={{ color: SUPPORTED_EXCHANGES.find(e => e.id === account.exchangeId)?.color || "#888" }}
+                />
+              </div>
+              <div>
+                <p className="font-medium">{account.exchangeName}</p>
+                <p className="text-xs text-muted-foreground capitalize">{account.marketType}</p>
+              </div>
+              <Badge className={cn("ml-auto", accountConfig.bgColor, accountConfig.color)}>
+                {accountConfig.label}
+              </Badge>
+            </div>
+          </div>
+
+          {/* Warning messages based on account type */}
+          {account.accountType === "LIVE" && (
+            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 mb-4">
+              <div className="flex items-start gap-2">
+                <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5 shrink-0" />
+                <div className="text-xs text-red-600 dark:text-red-400">
+                  <p className="font-medium">Внимание!</p>
+                  <p className="mt-1">
+                    Это LIVE аккаунт с реальными средствами. Удаление аккаунта не повлияет на средства на бирже,
+                    но вы потеряете доступ к торговле через платформу.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {account.accountType === "PAPER" && (
+            <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 mb-4">
+              <div className="flex items-start gap-2">
+                <Settings className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+                <div className="text-xs text-blue-600 dark:text-blue-400">
+                  <p className="font-medium">Виртуальный аккаунт</p>
+                  <p className="mt-1">
+                    Будут удалены все виртуальные позиции, ордера и история торговли.
+                    Это действие нельзя отменить.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {account.accountType === "TESTNET" && (
+            <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20 mb-4">
+              <div className="flex items-start gap-2">
+                <AlertTriangle className="h-4 w-4 text-yellow-500 mt-0.5 shrink-0" />
+                <div className="text-xs text-yellow-600 dark:text-yellow-400">
+                  <p className="font-medium">Testnet аккаунт</p>
+                  <p className="mt-1">
+                    API ключи будут удалены из платформы. Тестовые средства на testnet бирже сохранятся.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {account.accountType === "DEMO" && (
+            <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20 mb-4">
+              <div className="flex items-start gap-2">
+                <AlertTriangle className="h-4 w-4 text-purple-500 mt-0.5 shrink-0" />
+                <div className="text-xs text-purple-600 dark:text-purple-400">
+                  <p className="font-medium">Demo аккаунт</p>
+                  <p className="mt-1">
+                    Демо-аккаунт будет отключён от платформы.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={isDeleting}
+          >
+            Отмена
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={onConfirm}
+            disabled={isDeleting}
+          >
+            {isDeleting ? (
+              <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+            ) : (
+              <Trash2 className="h-4 w-4 mr-1" />
+            )}
+            Удалить аккаунт
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ==================== EMPTY STATE COMPONENT ====================
 
 interface EmptyStateProps {
@@ -778,6 +919,9 @@ export function ExchangesPage() {
   const [activeMarketType, setActiveMarketType] = useState<MarketType>("futures");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [dialogAccountType, setDialogAccountType] = useState<AccountType>("LIVE");
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [accountToDelete, setAccountToDelete] = useState<ExchangeAccount | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Fetch accounts
   const fetchAccounts = useCallback(async () => {
@@ -892,21 +1036,35 @@ export function ExchangesPage() {
     toast.success(hedgeMode ? "Hedge Mode включён" : "Hedge Mode отключён");
   };
 
-  // Disconnect
-  const handleDisconnect = async (id: string) => {
-    if (!confirm("Отключить аккаунт?")) return;
+  // Open delete confirmation
+  const openDeleteDialog = (account: ExchangeAccount) => {
+    setAccountToDelete(account);
+    setShowDeleteDialog(true);
+  };
 
+  // Delete account
+  const handleDeleteAccount = async () => {
+    if (!accountToDelete) return;
+
+    setIsDeleting(true);
     try {
-      const response = await fetch(`/api/exchange?id=${id}`, {
+      const response = await fetch(`/api/exchange?id=${accountToDelete.id}`, {
         method: "DELETE",
       });
 
       if (response.ok) {
-        toast.success("Аккаунт отключён");
+        toast.success("Аккаунт успешно удалён");
+        setShowDeleteDialog(false);
+        setAccountToDelete(null);
         fetchAccounts();
+      } else {
+        const data = await response.json();
+        toast.error(data.error || "Ошибка удаления");
       }
     } catch (error) {
-      toast.error("Ошибка отключения");
+      toast.error("Ошибка удаления аккаунта");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -989,7 +1147,7 @@ export function ExchangesPage() {
                         account={account}
                         onToggleActive={handleToggleActive}
                         onToggleHedgeMode={handleToggleHedgeMode}
-                        onDisconnect={handleDisconnect}
+                        onDisconnect={() => openDeleteDialog(account)}
                       />
                     ))}
                   </div>
@@ -1006,6 +1164,15 @@ export function ExchangesPage() {
         onOpenChange={setShowAddDialog}
         accountType={dialogAccountType}
         onAdd={handleAddAccount}
+      />
+
+      {/* Delete Account Dialog */}
+      <DeleteAccountDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        account={accountToDelete}
+        onConfirm={handleDeleteAccount}
+        isDeleting={isDeleting}
       />
     </div>
   );
