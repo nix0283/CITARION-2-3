@@ -408,9 +408,11 @@ Leverage: 10x
 
     case "/close":
       if (args[0]?.toLowerCase() === "all") {
-        const closeResult = await callMainAPI("/api/trade/close-all", "POST", { isDemo: session.mode === "DEMO" });
+        const closeResult = await callMainAPI("/api/trading/unified/close", "POST", {
+          mode: session.mode,
+        });
         await sendMessage(chatId, closeResult.success
-          ? `🚫 *Closed All*\n\nClosed: ${closeResult.closedCount}\nPnL: $${closeResult.totalPnL?.toFixed(2) || "0.00"}`
+          ? `🚫 *Closed All*\n\nClosed: ${closeResult.closed}\nPnL: $${closeResult.totalPnL?.toFixed(2) || "0.00"}`
           : "❌ Failed to close positions"
         );
       } else {
@@ -422,15 +424,28 @@ Leverage: 10x
       // Try to parse as signal
       const signal = parseSignal(text);
       if (signal && signal.entryPrices.length > 0) {
-        const result = await callMainAPI("/api/trade/open", "POST", {
-          ...signal,
-          isDemo: session.mode === "DEMO",
-          exchangeId: session.selectedExchange,
-          amount: 100,
+        // Use Unified Trading API
+        const result = await callMainAPI("/api/trading/unified", "POST", {
+          signal: {
+            symbol: signal.symbol,
+            direction: signal.direction,
+            entryPrices: signal.entryPrices,
+            takeProfits: signal.takeProfits,
+            stopLoss: signal.stopLoss,
+            leverage: signal.leverage,
+            marginMode: "isolated",
+            marketType: signal.marketType,
+          },
+          config: {
+            mode: session.mode,
+            exchangeId: session.selectedExchange,
+            marketType: signal.marketType,
+          },
+          source: "TELEGRAM",
         });
 
         if (result.success) {
-          await sendMessage(chatId, `✅ *Position Opened*\n\n${signal.symbol} ${signal.direction}\nExchange: ${session.selectedExchange}\nMode: ${session.mode}`);
+          await sendMessage(chatId, `✅ *Position Opened*\n\n${signal.symbol} ${signal.direction}\nExchange: ${session.selectedExchange}\nMode: ${session.mode}\nQty: ${result.quantity?.toFixed(4)}`);
         } else {
           await sendMessage(chatId, `❌ Failed: ${result.error || "Unknown error"}`);
         }
@@ -438,11 +453,20 @@ Leverage: 10x
         // Try main API parser
         const parseResult = await callMainAPI("/api/chat/parse-signal", "POST", { message: text });
         if (parseResult.success && parseResult.signal) {
-          const result = await callMainAPI("/api/trade/open", "POST", {
-            ...parseResult.signal,
-            isDemo: session.mode === "DEMO",
-            exchangeId: session.selectedExchange,
-            amount: 100,
+          const result = await callMainAPI("/api/trading/unified", "POST", {
+            signal: {
+              symbol: parseResult.signal.symbol,
+              direction: parseResult.signal.direction,
+              entryPrices: parseResult.signal.entryPrices || [0],
+              takeProfits: parseResult.signal.takeProfits || [],
+              stopLoss: parseResult.signal.stopLoss,
+              leverage: parseResult.signal.leverage || 10,
+            },
+            config: {
+              mode: session.mode,
+              exchangeId: session.selectedExchange,
+            },
+            source: "TELEGRAM",
           });
 
           if (result.success) {

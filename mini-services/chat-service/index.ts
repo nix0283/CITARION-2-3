@@ -470,18 +470,34 @@ async function handleCommand(command: string, session: UserSession): Promise<Com
 // ==================== Signal Execution ====================
 
 async function executeSignal(signal: SignalData, session: UserSession): Promise<CommandResult> {
-  const result = await callMainAPI("/api/trade/open", "POST", {
-    ...signal,
-    isDemo: session.mode === "DEMO",
-    exchangeId: session.selectedExchange,
-    amount: 100,
+  // Use Unified Trading API
+  const result = await callMainAPI("/api/trading/unified", "POST", {
+    signal: {
+      symbol: signal.symbol,
+      direction: signal.direction,
+      entryPrices: signal.entryPrices.length > 0 ? signal.entryPrices : [0],
+      takeProfits: signal.takeProfits,
+      stopLoss: signal.stopLoss,
+      leverage: signal.leverage,
+      marginMode: "isolated",
+      marketType: signal.marketType || "FUTURES",
+    },
+    config: {
+      mode: session.mode === "DEMO" ? "DEMO" : "LIVE",
+      exchangeId: session.selectedExchange,
+      marketType: signal.marketType || "FUTURES",
+    },
+    source: "CHAT",
+    metadata: {
+      sessionId: session.id,
+    },
   });
 
   if (result.success) {
     return {
       command: "execute-signal",
       success: true,
-      message: `✅ **Position Opened**\n\n${signal.symbol} ${signal.direction}\nExchange: ${session.selectedExchange}\nMode: ${session.mode}`,
+      message: `✅ **Position Opened**\n\n${signal.symbol} ${signal.direction}\nExchange: ${session.selectedExchange}\nMode: ${session.mode}\nQuantity: ${result.quantity?.toFixed(4) || 'N/A'}\nEntry: $${result.entryPrice?.toLocaleString() || 'Market'}`,
       data: result,
     };
   }
