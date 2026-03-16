@@ -1,6 +1,6 @@
 # Unified Trading Engine
 
-> Single trading engine for all modes: LIVE, DEMO, TESTNET, PAPER
+> Single trading engine for all modes: LIVE, DEMO, PAPER
 
 ## Overview
 
@@ -8,7 +8,7 @@ The Unified Trading Engine is the central trading system for the entire CITARION
 
 ### Key Features
 
-- **Multi-Mode Support**: LIVE, DEMO, TESTNET, PAPER
+- **Multi-Mode Support**: LIVE, DEMO, PAPER
 - **Multi-Source**: Built-in Chat, Telegram Bot, Manual Trading, Auto Trading
 - **Cornix Signal Format**: Full support for Cornix signal parsing
 - **Signal Filtering**: Configurable validation and scoring
@@ -22,9 +22,10 @@ The Unified Trading Engine is the central trading system for the entire CITARION
 | Mode | Description | Use Case |
 |------|-------------|----------|
 | LIVE | Real trading with real funds | Production trading |
-| DEMO | Simulated trading with virtual funds | Learning, testing |
-| TESTNET | Exchange testnet with test funds | API testing |
+| DEMO | Simulated trading with virtual funds | Learning, testing, API testing |
 | PAPER | Paper trading (simulation) | Strategy development |
+
+> **Note**: TESTNET mode has been merged into DEMO mode. Former TESTNET accounts are now treated as DEMO accounts.
 
 ## API Endpoints
 

@@ -3,6 +3,8 @@
  * 
  * Быстрый переключатель режима торговли для использования
  * в ручной торговле, сигнальной торговле и других компонентах.
+ * 
+ * Note: TESTNET mode has been merged into DEMO mode.
  */
 
 "use client";
@@ -32,7 +34,6 @@ import {
 import { SUPPORTED_EXCHANGES } from "@/lib/exchanges";
 import {
   FlaskConical,
-  TestTube,
   Zap,
   AlertTriangle,
   ChevronDown,
@@ -44,7 +45,6 @@ import { cn } from "@/lib/utils";
 // Mode icons
 const MODE_ICONS: Record<ExchangeTradingMode, typeof FlaskConical> = {
   PAPER: FlaskConical,
-  TESTNET: TestTube,
   DEMO: Zap,
   LIVE: AlertTriangle,
 };

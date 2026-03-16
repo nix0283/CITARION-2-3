@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Moon, Sun, User, LogOut, RefreshCw, Bell, Wallet, ChevronDown, AlertTriangle, TestTube, FlaskConical, Zap, Layers, Check } from "lucide-react";
+import { Moon, Sun, User, LogOut, RefreshCw, Bell, Wallet, ChevronDown, AlertTriangle, FlaskConical, Zap, Layers, Check } from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { formatNumber } from "@/lib/format";
@@ -31,7 +31,6 @@ import { useState } from "react";
 // Mode icons
 const MODE_ICONS: Record<GlobalTradingMode, typeof FlaskConical> = {
   PAPER: FlaskConical,
-  TESTNET: TestTube,
   DEMO: Zap,
   LIVE: AlertTriangle,
   MIXED: Layers,
@@ -43,7 +42,7 @@ const GLOBAL_MODE_CONFIG: Record<GlobalTradingMode, {
   color: string;
   bgColor: string;
   borderColor: string;
-  icon: typeof TestTube;
+  icon: typeof Zap;
   description: string;
 }> = {
   PAPER: {
@@ -53,14 +52,6 @@ const GLOBAL_MODE_CONFIG: Record<GlobalTradingMode, {
     borderColor: "border-blue-500/30",
     icon: FlaskConical,
     description: "Симуляция для всех бирж",
-  },
-  TESTNET: {
-    label: "TESTNET",
-    color: "text-yellow-500",
-    bgColor: "bg-yellow-500/10",
-    borderColor: "border-yellow-500/30",
-    icon: TestTube,
-    description: "Тестовая сеть для всех бирж",
   },
   DEMO: {
     label: "DEMO",

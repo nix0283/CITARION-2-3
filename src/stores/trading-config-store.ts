@@ -4,6 +4,9 @@
  * Глобальное управление режимами торговли для всей платформы.
  * Поддерживает MIXED режим, при котором разные компоненты могут 
  * работать на разных биржах в разных режимах одновременно.
+ * 
+ * Note: TESTNET mode has been merged into DEMO mode.
+ *       Former TESTNET accounts are now treated as DEMO accounts.
  */
 
 import { create } from "zustand";
@@ -14,37 +17,36 @@ import { persist } from "zustand/middleware";
 /**
  * Глобальный режим торговли
  * - PAPER: Полностью симулятивный режим (без реальных API)
- * - TESTNET: Тестовая сеть биржи (требует API ключи testnet)
- * - DEMO: Demo режим на live бирже (требует API ключи с demo правами)
+ * - DEMO: Demo режим (виртуальные средства, симуляция)
  * - LIVE: Реальная торговля (требует API ключи)
  * - MIXED: Смешанный режим - каждый компонент использует свой режим
  */
-export type GlobalTradingMode = "PAPER" | "TESTNET" | "DEMO" | "LIVE" | "MIXED";
+export type GlobalTradingMode = "PAPER" | "DEMO" | "LIVE" | "MIXED";
 
 /**
  * Режим торговли для конкретной биржи
  */
-export type ExchangeTradingMode = "PAPER" | "TESTNET" | "DEMO" | "LIVE";
+export type ExchangeTradingMode = "PAPER" | "DEMO" | "LIVE";
 
 /**
  * Поддерживаемые режимы для бирж
+ * Все биржи поддерживают LIVE, DEMO и PAPER режимы
  */
 export const EXCHANGE_MODE_SUPPORT: Record<string, ExchangeTradingMode[]> = {
-  // Биржи с TESTNET
-  binance: ["LIVE", "TESTNET", "PAPER"],
-  bybit: ["LIVE", "TESTNET", "PAPER"],
-  kucoin: ["LIVE", "TESTNET", "PAPER"],
-  huobi: ["LIVE", "TESTNET", "PAPER"],
-  hyperliquid: ["LIVE", "TESTNET", "PAPER"],
-  bitmex: ["LIVE", "TESTNET", "PAPER"],
-  coinbase: ["LIVE", "TESTNET", "PAPER"],
-  aster: ["LIVE", "TESTNET", "PAPER", "DEMO"],
-
-  // Биржи с DEMO (no testnet, but demo on live)
+  binance: ["LIVE", "DEMO", "PAPER"],
+  bybit: ["LIVE", "DEMO", "PAPER"],
+  kucoin: ["LIVE", "DEMO", "PAPER"],
+  huobi: ["LIVE", "DEMO", "PAPER"],
+  hyperliquid: ["LIVE", "DEMO", "PAPER"],
+  bitmex: ["LIVE", "DEMO", "PAPER"],
+  coinbase: ["LIVE", "DEMO", "PAPER"],
+  aster: ["LIVE", "DEMO", "PAPER"],
   okx: ["LIVE", "DEMO", "PAPER"],
   bitget: ["LIVE", "DEMO", "PAPER"],
   bingx: ["LIVE", "DEMO", "PAPER"],
   blofin: ["LIVE", "DEMO", "PAPER"],
+  gate: ["LIVE", "DEMO", "PAPER"],
+  mexc: ["LIVE", "DEMO", "PAPER"],
 };
 
 /**
@@ -70,22 +72,13 @@ export const TRADING_MODE_INFO: Record<ExchangeTradingMode, TradingModeInfo> = {
     requiresApiKey: false,
     riskLevel: "none",
   },
-  TESTNET: {
-    label: "TESTNET",
-    color: "text-yellow-500",
-    bgColor: "bg-yellow-500/10",
-    borderColor: "border-yellow-500/30",
-    description: "Тестовая сеть биржи, виртуальные средства",
-    requiresApiKey: true,
-    riskLevel: "low",
-  },
   DEMO: {
     label: "DEMO",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
     borderColor: "border-purple-500/30",
-    description: "Демо режим на live бирже",
-    requiresApiKey: true,
+    description: "Демо режим с виртуальными средствами",
+    requiresApiKey: false,
     riskLevel: "low",
   },
   LIVE: {
@@ -213,7 +206,7 @@ export const useTradingConfigStore = create<TradingConfigStore>()(
               exchangeId,
               exchangeType: type,
               mode,
-              isTestnet: mode === "TESTNET",
+              isTestnet: false, // TESTNET merged into DEMO
             },
           },
         }));
@@ -268,7 +261,7 @@ export const useTradingConfigStore = create<TradingConfigStore>()(
 
       // ==================== HELPERS ====================
       getSupportedModes: (exchangeId) => {
-        return EXCHANGE_MODE_SUPPORT[exchangeId] || ["LIVE", "PAPER"];
+        return EXCHANGE_MODE_SUPPORT[exchangeId] || ["LIVE", "DEMO", "PAPER"];
       },
 
       isLiveTrading: () => {

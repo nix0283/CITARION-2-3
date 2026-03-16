@@ -1,11 +1,11 @@
 /**
  * Unified Trading Engine for CITARION Platform
  * 
- * Single trading engine for all modes: LIVE, DEMO, TESTNET, PAPER
+ * Single trading engine for all modes: LIVE, DEMO, PAPER
  * Used by: Built-in Chat, Telegram Bot, Manual Trading, Auto Trading
  * 
  * Features:
- * - Multi-mode support (LIVE/DEMO/TESTNET/PAPER)
+ * - Multi-mode support (LIVE/DEMO/PAPER)
  * - Cornix signal format parsing
  * - Signal filtering and validation
  * - Smart order execution
@@ -15,6 +15,9 @@
  * - Position monitoring
  * - Risk management integration
  * - Multi-exchange support
+ * 
+ * Note: TESTNET mode has been merged into DEMO mode.
+ *       Former TESTNET accounts are now treated as DEMO accounts.
  */
 
 import { db } from '@/lib/db';
@@ -23,7 +26,7 @@ import { priceService } from '@/lib/price-service';
 
 // ==================== TYPES ====================
 
-export type TradingMode = 'LIVE' | 'DEMO' | 'TESTNET' | 'PAPER';
+export type TradingMode = 'LIVE' | 'DEMO' | 'PAPER';
 export type MarketType = 'SPOT' | 'FUTURES';
 export type Direction = 'LONG' | 'SHORT';
 export type OrderSide = 'BUY' | 'SELL';
@@ -920,7 +923,7 @@ export class UnifiedTradingEngine {
     
     if (config?.mode === 'DEMO' || config?.mode === 'PAPER') {
       whereClause.isDemo = true;
-    } else if (config?.mode === 'LIVE' || config?.mode === 'TESTNET') {
+    } else if (config?.mode === 'LIVE') {
       whereClause.isDemo = false;
     }
     
@@ -1099,8 +1102,8 @@ export class UnifiedTradingEngine {
         where: {
           userId,
           exchangeId: config.exchangeId,
-          accountType: config.mode === 'TESTNET' ? 'TESTNET' : 'LIVE',
-          isTestnet: config.mode === 'TESTNET',
+          accountType: 'LIVE',
+          isTestnet: false,
         },
       });
       
@@ -1154,7 +1157,7 @@ export class UnifiedTradingEngine {
           uid: credentials.uid,
         },
         config.marketType === 'SPOT' ? 'spot' : 'futures',
-        config.mode === 'TESTNET'
+        false // TESTNET merged into DEMO - always use production
       );
       
       this.clientCache.set(cacheKey, client);

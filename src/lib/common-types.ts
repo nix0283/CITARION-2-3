@@ -201,8 +201,9 @@ export type MarketType = "SPOT" | "FUTURES" | "INVERSE";
 
 /**
  * Режим торговли
+ * Note: TESTNET mode has been merged into DEMO mode.
  */
-export type TradingMode = "LIVE" | "TESTNET" | "DEMO";
+export type TradingMode = "LIVE" | "DEMO" | "PAPER";
 
 // =============================================================================
 // PRICE TYPES
