@@ -113,3 +113,99 @@ Stage Summary:
 - Former TESTNET accounts are now treated as DEMO accounts
 - All mode selectors updated throughout the application
 - Changes pushed to GitHub dev branch
+
+---
+Task ID: 6
+Agent: full-stack-developer
+Task: Redesign Trading Section with Binance-style UI
+
+Work Log:
+
+### Phase 1: Analysis
+- Analyzed existing trading components:
+  - `trading-form.tsx` (893 lines) - OLD implementation with exchange dropdown and mode buttons
+  - `trading-page.tsx` - NEW implementation with tabs for LIVE/DEMO/PAPER and sub-tabs
+  - `futures-trading-form.tsx` - Futures-specific form with entry orders
+  - `spot-trading-form.tsx` - Spot-specific form with Buy/Sell
+  - `inverse-trading-form.tsx` - Coin-margined trading form
+  - `position-list.tsx` - Position list component
+  - `position-detail-modal.tsx` - Position detail modal
+
+- Analyzed hooks:
+  - `use-accounts.ts` - Account management by mode and market type
+  - `use-positions.ts` - Position fetching with real-time polling
+  - `use-realtime-prices.ts` - Real-time price updates
+
+- Analyzed API endpoints:
+  - `/api/trade/open` - Already supports orderType, price, triggerPrice for entry orders
+  - `/api/trade/close` - Position closing with closeReason support
+  - `/api/account/by-type` - Account filtering by mode and market type
+  - `/api/positions/trading` - Position fetching
+
+### Phase 2: Complete Redesign of trading-form.tsx
+- Completely rewrote the trading form with Binance mobile-style UI:
+  - LIVE (red), DEMO (purple), PAPER (blue) tabs at top level
+  - Futures, Spot, Inverse sub-tabs
+  - Smart account selection (auto-select if single account)
+  - Removed exchange dropdown - accounts are now auto-selected based on mode+market type
+
+### Phase 3: Futures Trading Interface
+- Implemented comprehensive Futures form:
+  - Direction toggle: LONG (green) / SHORT (red)
+  - Order type tabs: Market, Limit, Stop-Limit
+  - Entry price input for Limit/Stop-Limit orders
+  - Trigger price input for Stop-Limit orders
+  - Amount input with percentage quick buttons (25%, 50%, 75%, 100%)
+  - Leverage selector with presets (1x to 125x)
+  - Stop Loss and Take Profit inputs
+  - Position summary with calculated values
+  - Real-time price display
+
+### Phase 4: Spot Trading Interface
+- Implemented Spot form:
+  - Buy/Sell buttons (green/red)
+  - Order type tabs: Market, Limit, Stop-Limit
+  - Amount input with percentage buttons
+  - Total calculation display
+  - Balance display
+
+### Phase 5: Inverse (Coin-Margined) Trading Interface
+- Implemented Inverse form:
+  - Margin currency notice (BTC, ETH, etc.)
+  - Direction toggle: LONG/SHORT
+  - Order type tabs: Market, Limit, Stop-Limit
+  - Amount input in margin currency
+  - Leverage selector
+  - SL/TP inputs
+
+### Phase 6: Positions Card
+- Created integrated positions display:
+  - Position count with LONG/SHORT breakdown
+  - Total unrealized PnL display
+  - Filter tabs: All, LONG, SHORT
+  - Position cards with:
+    - Exchange badge
+    - Symbol, direction, leverage
+    - Entry price
+    - Unrealized PnL
+  - Click to open position detail modal
+
+### Phase 7: Fixed Position Closing
+- Updated `use-positions.ts` hook:
+  - Fixed closePosition function parameters
+  - Changed from `market: true` to `closeReason: "MANUAL"`
+  - Added proper error handling
+
+- Updated `position-detail-modal.tsx`:
+  - Fixed close request body to match API expectations
+  - Added closeReason parameter
+
+Stage Summary:
+- Trading Form: Complete redesign with Binance-style UI
+- Entry Orders: Market, Limit, Stop-Limit all supported
+- Mode Tabs: LIVE (red), DEMO (purple), PAPER (blue)
+- Sub-tabs: Futures, Spot, Inverse
+- Account Selection: Smart auto-selection based on mode+market type
+- Position Closing: Fixed API call parameters
+- Real-time Updates: Polling every 5 seconds for position updates
+- Mobile-First: Touch-friendly buttons (min 44px), responsive layout

@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { BotConfigForm } from "@/components/bots/bot-config-form";
 
 import { TradingForm } from "@/components/trading/trading-form";
+import { TradingPage } from "@/components/trading/trading-page";
 import { StrategyLab } from "@/components/strategy-lab/strategy-lab";
 import { HyperoptPanel } from "@/components/hyperopt/hyperopt-panel";
 import { MLFilteringPanel } from "@/components/ml/ml-filtering-panel";
@@ -332,7 +333,7 @@ function DashboardContent() {
         return <BotConfigForm />;
 
       case "trading":
-        return <TradingForm />;
+        return <TradingPage />;
       case "strategy-lab":
         return <StrategyLab />;
       case "hyperopt":

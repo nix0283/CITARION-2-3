@@ -59,10 +59,12 @@ interface TradeRequest {
   isDemo: boolean;
   accountId?: string;
   exchangeId?: string;
-  orderType?: "market" | "limit";
+  orderType?: "market" | "limit" | "stop_limit";
   price?: number;
+  triggerPrice?: number; // For stop-limit orders
   clientOrderId?: string;
   tradingMode?: TradingMode;
+  marketType?: "futures" | "spot" | "inverse";
 }
 
 interface TradeRequestBody extends TradeRequest {
@@ -88,8 +90,10 @@ const handlePost = async (request: NextRequest, context: AuthContext) => {
       accountId,
       orderType = "market",
       price,
+      triggerPrice,
       clientOrderId,
       tradingMode,
+      marketType = "futures",
     } = body;
 
     // Validate required fields
@@ -116,6 +120,29 @@ const handlePost = async (request: NextRequest, context: AuthContext) => {
         { error: `Leverage must be between 1 and ${maxLeverage} for ${targetExchangeId}` },
         { status: 400 }
       );
+    }
+
+    // Validate order type specific requirements
+    if (orderType === "limit" && (!price || price <= 0)) {
+      return NextResponse.json(
+        { error: "Limit orders require a valid price" },
+        { status: 400 }
+      );
+    }
+
+    if (orderType === "stop_limit") {
+      if (!price || price <= 0) {
+        return NextResponse.json(
+          { error: "Stop-limit orders require a valid limit price" },
+          { status: 400 }
+        );
+      }
+      if (!triggerPrice || triggerPrice <= 0) {
+        return NextResponse.json(
+          { error: "Stop-limit orders require a valid trigger price" },
+          { status: 400 }
+        );
+      }
     }
 
     // Determine trading mode

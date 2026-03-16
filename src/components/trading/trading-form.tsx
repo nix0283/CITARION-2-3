@@ -1,527 +1,518 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useCryptoStore } from "@/stores/crypto-store";
-import {
-  useTradingConfigStore,
-  type ExchangeTradingMode,
-  type TradingSource,
-  TRADING_MODE_INFO,
-} from "@/stores/trading-config-store";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+/**
+ * CITARION Trading Panel - Binance Mobile Style
+ * 
+ * Features:
+ * - LIVE (red), DEMO (purple), PAPER (blue) tabs
+ * - Futures, Spot, Inverse sub-tabs
+ * - Smart account selection (auto-select if single account)
+ * - Entry order types: Market, Limit, Stop-Limit
+ * - Real-time position tracking
+ * - Mobile-first responsive design
+ */
+
+import { useState, useCallback, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Slider } from "@/components/ui/slider";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   TrendingUp,
   TrendingDown,
-  Calculator,
-  Percent,
+  Activity,
   AlertTriangle,
   Building2,
-  Keyboard,
-  FlaskConical,
-  TestTube,
+  Plus,
+  RefreshCw,
   Zap,
-  Check,
-  Activity,
+  FlaskConical,
+  Target,
+  Shield,
+  Gauge,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-// Format number consistently to avoid hydration mismatch
-function formatNumber(num: number): string {
-  return num.toLocaleString("en-US");
-}
+import { useAccounts, TradingMode, MarketType, getExchangeDisplayName, getExchangeBadgeColor } from "@/hooks/use-accounts";
+import { usePositions, TradingPosition } from "@/hooks/use-positions";
+import { PositionDetailModal } from "./position-detail-modal";
 
-const TRADING_PAIRS = [
-  "BTCUSDT",
-  "ETHUSDT",
-  "BNBUSDT",
-  "SOLUSDT",
-  "XRPUSDT",
-  "DOGEUSDT",
+// ============================================
+// Constants
+// ============================================
+
+const MODE_CONFIG: Record<TradingMode, { label: string; color: string; bgColor: string; borderColor: string; description: string }> = {
+  LIVE: {
+    label: "LIVE",
+    color: "text-red-500",
+    bgColor: "bg-red-500/10",
+    borderColor: "border-red-500/30",
+    description: "Real trading with real funds",
+  },
+  DEMO: {
+    label: "DEMO",
+    color: "text-purple-500",
+    bgColor: "bg-purple-500/10",
+    borderColor: "border-purple-500/30",
+    description: "Virtual funds simulation",
+  },
+  PAPER: {
+    label: "PAPER",
+    color: "text-blue-500",
+    bgColor: "bg-blue-500/10",
+    borderColor: "border-blue-500/30",
+    description: "Paper trading for strategies",
+  },
+};
+
+const MARKET_TYPES: { value: MarketType; label: string; description: string }[] = [
+  { value: "futures", label: "Futures", description: "Perpetual contracts with leverage" },
+  { value: "spot", label: "Spot", description: "Direct buy/sell" },
+  { value: "inverse", label: "Inverse", description: "Coin-margined contracts" },
 ];
 
-const LEVERAGE_OPTIONS = [1, 2, 3, 5, 10, 20, 50, 100];
-const ASTER_LEVERAGE_OPTIONS = [1, 2, 3, 5, 10, 20, 50, 100, 200, 500, 1000];
-
-const EXCHANGES = [
-  { id: "binance", name: "Binance", hasTestnet: true, hasDemo: false },
-  { id: "bybit", name: "Bybit", hasTestnet: true, hasDemo: false },
-  { id: "okx", name: "OKX", hasTestnet: false, hasDemo: true },
-  { id: "bitget", name: "Bitget", hasTestnet: false, hasDemo: true },
-  { id: "kucoin", name: "KuCoin", hasTestnet: true, hasDemo: false },
-  { id: "bingx", name: "BingX", hasTestnet: false, hasDemo: true },
-  { id: "huobi", name: "HTX (Huobi)", hasTestnet: true, hasDemo: false },
-  { id: "hyperliquid", name: "HyperLiquid", hasTestnet: true, hasDemo: false },
-  { id: "bitmex", name: "BitMEX", hasTestnet: true, hasDemo: false },
-  { id: "blofin", name: "BloFin", hasTestnet: false, hasDemo: true },
-  { id: "coinbase", name: "Coinbase", hasTestnet: true, hasDemo: false },
-  { id: "aster", name: "Aster DEX", hasTestnet: true, hasDemo: true },
-];
+// ============================================
+// Main Trading Panel Component
+// ============================================
 
 export function TradingForm() {
-  const { account, positions, addPosition, addTrade, marketPrices } =
-    useCryptoStore();
+  // Mode and market type state
+  const [mode, setMode] = useState<TradingMode>("PAPER");
+  const [marketType, setMarketType] = useState<MarketType>("futures");
   
-  // Trading config store
+  // Account management
   const {
-    primaryExchange,
-    setPrimaryExchange,
-    getEffectiveMode,
-    setExchangeMode,
-    getSupportedModes,
-  } = useTradingConfigStore();
+    accounts,
+    selectedAccount,
+    setSelectedAccount,
+    isLoading: accountsLoading,
+    hasMultipleAccounts,
+    hasNoAccount,
+    refetch: refetchAccounts,
+  } = useAccounts({ mode, marketType });
   
-  const source: TradingSource = "manual";
+  // Positions management
+  const {
+    positions,
+    isLoading: positionsLoading,
+    lastUpdated,
+    refetch: refetchPositions,
+    closePosition,
+  } = usePositions({ 
+    mode, 
+    marketType, 
+    accountId: selectedAccount?.id,
+    autoRefresh: true,
+    refreshInterval: 5000,
+  });
   
-  const [exchange, setExchange] = useState(primaryExchange[source]);
+  // Position detail modal
+  const [selectedPosition, setSelectedPosition] = useState<TradingPosition | null>(null);
+  const [showPositionModal, setShowPositionModal] = useState(false);
+  
+  // Handle mode change
+  const handleModeChange = useCallback((newMode: TradingMode) => {
+    setMode(newMode);
+    setSelectedAccount(null);
+  }, [setSelectedAccount]);
+  
+  // Handle market type change
+  const handleMarketTypeChange = useCallback((newType: MarketType) => {
+    setMarketType(newType);
+    setSelectedAccount(null);
+  }, [setSelectedAccount]);
+  
+  // Handle position click
+  const handlePositionClick = useCallback((position: TradingPosition) => {
+    setSelectedPosition(position);
+    setShowPositionModal(true);
+  }, []);
+  
+  // Handle close position
+  const handleClosePosition = useCallback(async (positionId: string) => {
+    const success = await closePosition(positionId);
+    if (success) {
+      toast.success("Position closed successfully");
+      setShowPositionModal(false);
+      setSelectedPosition(null);
+    } else {
+      toast.error("Failed to close position");
+    }
+  }, [closePosition]);
+  
+  // Refresh all data
+  const handleRefresh = useCallback(async () => {
+    await Promise.all([refetchAccounts(), refetchPositions()]);
+    toast.success("Data refreshed");
+  }, [refetchAccounts, refetchPositions]);
+  
+  // Calculate totals
+  const totalPnl = positions.reduce((sum, p) => sum + p.unrealizedPnl, 0);
+  const longCount = positions.filter(p => p.direction === "LONG").length;
+  const shortCount = positions.filter(p => p.direction === "SHORT").length;
+  
+  const modeConfig = MODE_CONFIG[mode];
+
+  return (
+    <div className="flex flex-col h-full gap-4">
+      {/* Header Row */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <h2 className="text-lg font-semibold">Trading</h2>
+          <Badge 
+            variant="outline" 
+            className={cn("text-xs", modeConfig.color, modeConfig.bgColor, modeConfig.borderColor)}
+          >
+            {mode}
+          </Badge>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          {lastUpdated && (
+            <span className="text-xs text-muted-foreground">
+              Updated {lastUpdated.toLocaleTimeString()}
+            </span>
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={handleRefresh}
+          >
+            <RefreshCw className={cn("h-4 w-4", positionsLoading && "animate-spin")} />
+          </Button>
+        </div>
+      </div>
+      
+      {/* Mode Tabs - Top Level */}
+      <div className="flex items-center gap-2">
+        <div className="flex items-center bg-muted/50 rounded-lg p-1">
+          {(Object.keys(MODE_CONFIG) as TradingMode[]).map((m) => {
+            const config = MODE_CONFIG[m];
+            const isActive = mode === m;
+            return (
+              <Button
+                key={m}
+                variant={isActive ? "default" : "ghost"}
+                size="sm"
+                className={cn(
+                  "h-8 text-xs px-4 gap-1.5",
+                  isActive && config.color,
+                  isActive && "bg-background shadow-sm",
+                )}
+                onClick={() => handleModeChange(m)}
+              >
+                {m === "LIVE" && <TrendingUp className="h-3 w-3" />}
+                {m === "DEMO" && <Zap className="h-3 w-3" />}
+                {m === "PAPER" && <FlaskConical className="h-3 w-3" />}
+                {config.label}
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+      
+      {/* Market Type Tabs - Sub Level */}
+      <div className="flex items-center gap-4 border-b border-border">
+        {MARKET_TYPES.map((mt) => {
+          const isActive = marketType === mt.value;
+          return (
+            <button
+              key={mt.value}
+              className={cn(
+                "pb-2 text-sm font-medium transition-colors border-b-2",
+                isActive
+                  ? "border-primary text-foreground"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              )}
+              onClick={() => handleMarketTypeChange(mt.value)}
+            >
+              {mt.label}
+            </button>
+          );
+        })}
+      </div>
+      
+      {/* Account Selection */}
+      {!accountsLoading && !hasNoAccount && (
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground">Account:</span>
+          {hasMultipleAccounts ? (
+            <Select
+              value={selectedAccount?.id || ""}
+              onValueChange={(value) => {
+                const acc = accounts.find(a => a.id === value);
+                setSelectedAccount(acc || null);
+              }}
+            >
+              <SelectTrigger className="h-8 w-[200px]">
+                <SelectValue placeholder="Select account" />
+              </SelectTrigger>
+              <SelectContent>
+                {accounts.map((acc) => (
+                  <SelectItem key={acc.id} value={acc.id}>
+                    <div className="flex items-center gap-2">
+                      <Badge 
+                        variant="outline" 
+                        className={cn("text-[10px] h-5", getExchangeBadgeColor(acc.exchangeId))}
+                      >
+                        {getExchangeDisplayName(acc.exchangeId)}
+                      </Badge>
+                      <span className="text-xs">{acc.exchangeName}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Badge 
+                variant="outline" 
+                className={cn("text-xs", getExchangeBadgeColor(selectedAccount?.exchangeId || ""))}
+              >
+                {getExchangeDisplayName(selectedAccount?.exchangeId || "")}
+              </Badge>
+              <span className="text-sm">{selectedAccount?.exchangeName}</span>
+              {selectedAccount?.balance !== undefined && (
+                <span className="text-xs text-muted-foreground">
+                  ({selectedAccount.balance.toFixed(2)} {selectedAccount.currency})
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+      
+      {/* Main Content Grid */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-0">
+        {/* Trading Form - Left Side */}
+        <div className="lg:col-span-2">
+          {hasNoAccount ? (
+            <NoAccountCard mode={mode} marketType={marketType} />
+          ) : accountsLoading ? (
+            <LoadingCard />
+          ) : (
+            <TradingFormCard
+              mode={mode}
+              marketType={marketType}
+              account={selectedAccount}
+              onOrderSuccess={refetchPositions}
+            />
+          )}
+        </div>
+        
+        {/* Positions List - Right Side */}
+        <div className="lg:col-span-1 min-h-0">
+          <PositionsCard
+            positions={positions}
+            isLoading={positionsLoading}
+            totalPnl={totalPnl}
+            longCount={longCount}
+            shortCount={shortCount}
+            onPositionClick={handlePositionClick}
+            onClosePosition={handleClosePosition}
+          />
+        </div>
+      </div>
+      
+      {/* Position Detail Modal */}
+      {selectedPosition && (
+        <PositionDetailModal
+          position={selectedPosition}
+          open={showPositionModal}
+          onOpenChange={setShowPositionModal}
+          onClose={() => {
+            setShowPositionModal(false);
+            setSelectedPosition(null);
+            refetchPositions();
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+// ============================================
+// No Account Card
+// ============================================
+
+function NoAccountCard({ mode, marketType }: { mode: TradingMode; marketType: MarketType }) {
+  return (
+    <Card className="h-full">
+      <CardContent className="p-6">
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <Building2 className="h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-medium mb-2">No Account Found</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            You don&apos;t have a {mode} account for {marketType} trading.
+          </p>
+          <Button asChild>
+            <a href="/exchanges">
+              <Plus className="h-4 w-4 mr-2" />
+              Create Account
+            </a>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ============================================
+// Loading Card
+// ============================================
+
+function LoadingCard() {
+  return (
+    <Card className="h-full">
+      <CardContent className="p-6">
+        <div className="flex items-center justify-center py-8">
+          <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ============================================
+// Trading Form Card (Market-specific)
+// ============================================
+
+interface TradingFormCardProps {
+  mode: TradingMode;
+  marketType: MarketType;
+  account: any;
+  onOrderSuccess: () => void;
+}
+
+function TradingFormCard({ mode, marketType, account, onOrderSuccess }: TradingFormCardProps) {
+  switch (marketType) {
+    case "futures":
+      return <FuturesForm mode={mode} account={account} onOrderSuccess={onOrderSuccess} />;
+    case "spot":
+      return <SpotForm mode={mode} account={account} onOrderSuccess={onOrderSuccess} />;
+    case "inverse":
+      return <InverseForm mode={mode} account={account} onOrderSuccess={onOrderSuccess} />;
+    default:
+      return null;
+  }
+}
+
+// ============================================
+// Futures Form
+// ============================================
+
+function FuturesForm({ mode, account, onOrderSuccess }: { mode: TradingMode; account: any; onOrderSuccess: () => void }) {
   const [symbol, setSymbol] = useState("BTCUSDT");
   const [direction, setDirection] = useState<"LONG" | "SHORT">("LONG");
-  const [amount, setAmount] = useState("100");
-  const [marginPercent, setMarginPercent] = useState(2);
+  const [orderType, setOrderType] = useState<"market" | "limit" | "stop_limit">("market");
+  const [amount, setAmount] = useState("");
+  const [entryPrice, setEntryPrice] = useState("");
+  const [triggerPrice, setTriggerPrice] = useState("");
   const [leverage, setLeverage] = useState(10);
   const [stopLoss, setStopLoss] = useState("");
   const [takeProfit, setTakeProfit] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
-  
-  // Paper account state
-  const [paperAccountId, setPaperAccountId] = useState<string | null>(null);
-  const [paperBalance, setPaperBalance] = useState(0);
-  const [paperPositions, setPaperPositions] = useState<Array<{
-    id: string;
-    symbol: string;
-    direction: string;
-    quantity: number;
-    entryPrice: number;
-    currentPrice: number;
-    leverage: number;
-    margin: number;
-    unrealizedPnl: number;
-    unrealizedPnlPercent: number;
-    stopLoss: number | null;
-    takeProfit: number | null;
-    liquidationPrice: number | null;
-    openedAt: string;
-  }>>([]);
 
-  // Get current trading mode for the selected exchange
-  const tradingMode = getEffectiveMode(exchange);
-  const supportedModes = getSupportedModes(exchange);
-  const modeInfo = TRADING_MODE_INFO[tradingMode];
-  
-  // Mode icons
-  const MODE_ICONS: Record<ExchangeTradingMode, typeof FlaskConical> = {
-    PAPER: FlaskConical,
-    TESTNET: TestTube,
-    DEMO: Zap,
-    LIVE: AlertTriangle,
-  };
-  
-  const isPaperTrading = tradingMode === "PAPER";
-  const currentPrice = marketPrices[symbol]?.price || 0;
-  const selectedExchange = EXCHANGES.find(e => e.id === exchange);
-  
-  // Fetch PAPER account when in PAPER mode
-  useEffect(() => {
-    if (isPaperTrading) {
-      fetchPaperAccount();
-    }
-  }, [isPaperTrading, exchange]);
-  
-  const fetchPaperAccount = async () => {
-    try {
-      // Get all accounts
-      const response = await fetch("/api/exchange");
-      if (response.ok) {
-        const data = await response.json();
-        // Find PAPER account for selected exchange
-        // PAPER accounts have exchangeType containing "-paper-"
-        const paperAccount = data.accounts?.find(
-          (acc: {exchangeId: string; exchangeType: string; accountType: string}) => 
-            acc.exchangeId === exchange && 
-            (acc.exchangeType?.includes("-paper-") || acc.accountType === "PAPER")
-        );
-        if (paperAccount) {
-          setPaperAccountId(paperAccount.id);
-          // Get full paper account details
-          const detailResponse = await fetch(`/api/paper-trading/account?accountId=${paperAccount.id}`);
-          if (detailResponse.ok) {
-            const detailData = await detailResponse.json();
-            if (detailData.account) {
-              const balances = detailData.account.currentBalances || {};
-              const mainCurrency = detailData.account.initialCurrency || Object.keys(balances)[0] || "USDT";
-              setPaperBalance(balances[mainCurrency] || 0);
-              setPaperPositions(detailData.account.positions || []);
-            }
-          }
-        } else {
-          setPaperAccountId(null);
-          setPaperBalance(0);
-          setPaperPositions([]);
-        }
-      }
-    } catch (error) {
-      console.error("Failed to fetch PAPER account:", error);
-    }
-  };
-  
-  const balance = isPaperTrading ? paperBalance : (account?.virtualBalance?.USDT || 0);
-  
-  // Update primary exchange when exchange changes
-  const handleExchangeChange = (newExchange: string) => {
-    setExchange(newExchange);
-    setPrimaryExchange(source, newExchange);
-  };
-  
-  // Handle mode change
-  const handleModeChange = (mode: ExchangeTradingMode) => {
-    setExchangeMode(exchange, "futures", mode);
-  };
+  const TRADING_PAIRS = ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "DOGEUSDT"];
+  const LEVERAGE_OPTIONS = [1, 2, 3, 5, 10, 20, 50, 75, 100, 125];
 
-  // Calculate position details
-  const positionSize = parseFloat(amount) || 0;
-  const leveragedSize = positionSize * leverage;
-  const marginRequired = positionSize;
-  const estimatedFee = leveragedSize * 0.0004; // 0.04% taker fee
+  // Get current price from market data
+  const currentPrice = 67000; // This would come from real-time price hook
 
-  const handleTrade = async () => {
-    if (positionSize <= 0) {
-      toast.error("Введите сумму сделки");
+  const handleSubmit = async () => {
+    if (!account || !amount) {
+      toast.error("Please fill in all required fields");
       return;
     }
 
-    if (positionSize > balance) {
-      toast.error("Недостаточно средств");
-      return;
-    }
-
-    if (currentPrice <= 0) {
-      toast.error("Не удалось получить текущую цену");
-      return;
-    }
-
-    // Show confirmation dialog
-    setShowConfirmDialog(true);
-  };
-
-  const confirmTrade = async () => {
-    setShowConfirmDialog(false);
     setIsSubmitting(true);
-
     try {
-      // For PAPER mode, use paper-trading API
-      if (isPaperTrading && paperAccountId) {
-        const response = await fetch("/api/paper-trading/orders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            accountId: paperAccountId,
-            symbol,
-            side: direction === "LONG" ? "BUY" : "SELL",
-            direction,
-            orderType: "MARKET",
-            quantity: parseFloat((leveragedSize / currentPrice).toFixed(8)),
-            leverage,
-            stopLoss: stopLoss ? parseFloat(stopLoss) : null,
-            takeProfit: takeProfit ? parseFloat(takeProfit) : null,
-          }),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          
-          if (data.success) {
-            // Update local store for immediate UI feedback
-            const position = {
-              id: data.position?.id || `pos-${Date.now()}`,
-              symbol,
-              direction,
-              totalAmount: leveragedSize / currentPrice,
-              avgEntryPrice: currentPrice,
-              currentPrice,
-              leverage,
-              unrealizedPnl: 0,
-              stopLoss: stopLoss ? parseFloat(stopLoss) : undefined,
-              takeProfit: takeProfit ? parseFloat(takeProfit) : undefined,
-              isDemo: true,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            };
-            addPosition(position);
-
-            const trade = {
-              id: data.order?.id || `trade-${Date.now()}`,
-              symbol,
-              direction,
-              status: "OPEN" as const,
-              entryPrice: currentPrice,
-              amount: positionSize,
-              leverage,
-              pnl: 0,
-              pnlPercent: 0,
-              fee: estimatedFee,
-              isDemo: true,
-              createdAt: new Date().toISOString(),
-            };
-            addTrade(trade);
-
-            toast.success(
-              `PAPER позиция ${direction} открыта: ${symbol}`
-            );
-            
-            // Refresh paper account balance
-            fetchPaperAccount();
-          } else {
-            toast.error(data.error || "Ошибка при открытии позиции");
-          }
-        } else {
-          toast.error("Ошибка при открытии PAPER позиции");
-        }
-        
-        setIsSubmitting(false);
-        return;
-      }
-      
-      // For non-PAPER modes, use standard trade API
-      // Create position
-      const position = {
-        id: `pos-${Date.now()}`,
-        symbol,
-        direction,
-        totalAmount: leveragedSize / currentPrice,
-        avgEntryPrice: currentPrice,
-        currentPrice,
-        leverage,
-        unrealizedPnl: 0,
-        stopLoss: stopLoss ? parseFloat(stopLoss) : undefined,
-        takeProfit: takeProfit ? parseFloat(takeProfit) : undefined,
-        isDemo: tradingMode !== "LIVE",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-
-      // Call API
       const response = await fetch("/api/trade/open", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           symbol,
           direction,
-          amount: positionSize,
+          amount: parseFloat(amount),
           leverage,
-          stopLoss: stopLoss || null,
-          takeProfit: takeProfit || null,
-          isDemo: tradingMode !== "LIVE",
-          exchangeId: exchange,
-          tradingMode,
+          orderType,
+          price: orderType !== "market" ? parseFloat(entryPrice) : undefined,
+          triggerPrice: orderType === "stop_limit" ? parseFloat(triggerPrice) : undefined,
+          stopLoss: stopLoss ? parseFloat(stopLoss) : null,
+          takeProfit: takeProfit ? parseFloat(takeProfit) : null,
+          isDemo: mode !== "LIVE",
+          accountId: account.id,
+          exchangeId: account.exchangeId,
+          tradingMode: mode,
+          marketType: "futures",
         }),
       });
 
+      const data = await response.json();
       if (response.ok) {
-        addPosition(position);
-
-        // Create trade record
-        const trade = {
-          id: `trade-${Date.now()}`,
-          symbol,
-          direction,
-          status: "OPEN" as const,
-          entryPrice: currentPrice,
-          amount: positionSize,
-          leverage,
-          pnl: 0,
-          pnlPercent: 0,
-          fee: estimatedFee,
-          isDemo: tradingMode !== "LIVE",
-          createdAt: new Date().toISOString(),
-        };
-        addTrade(trade);
-
-        toast.success(
-          `Позиция ${direction} открыта: ${symbol} [${tradingMode}]`
-        );
+        toast.success(`${direction} position opened: ${symbol}`);
+        setAmount("");
+        setStopLoss("");
+        setTakeProfit("");
+        onOrderSuccess();
+      } else {
+        toast.error(data.error || "Failed to open position");
       }
     } catch (error) {
-      console.error("Trade error:", error);
-      toast.error("Ошибка при открытии позиции");
+      toast.error("Failed to submit order");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const availableBalance = account?.balance || 10000;
+
   return (
-    <>
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center justify-between text-base">
-            <div className="flex items-center gap-2">
-              <Calculator className="h-5 w-5 text-primary" />
-              Новая сделка
-              <Badge 
-                variant="outline" 
-                className={cn("text-xs ml-2", modeInfo.bgColor, modeInfo.color, modeInfo.borderColor)}
-              >
-                {tradingMode}
-              </Badge>
-            </div>
-            {/* Keyboard shortcuts button - Desktop only */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="hidden md:flex h-7 w-7"
-              onClick={() => setShowKeyboardShortcuts(!showKeyboardShortcuts)}
-              aria-label="Keyboard shortcuts"
-            >
-              <Keyboard className="h-4 w-4" />
-            </Button>
-          </CardTitle>
-          
-          {/* Keyboard shortcuts info */}
-          {showKeyboardShortcuts && (
-            <div className="hidden md:block text-xs text-muted-foreground bg-muted/50 rounded-lg p-2 mt-2">
-              <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                <span><kbd className="px-1 bg-muted rounded">L</kbd> Long</span>
-                <span><kbd className="px-1 bg-muted rounded">S</kbd> Short</span>
-                <span><kbd className="px-1 bg-muted rounded">Enter</kbd> Submit</span>
-                <span><kbd className="px-1 bg-muted rounded">Esc</kbd> Clear</span>
-              </div>
-            </div>
-          )}
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Exchange Selection */}
-          <div className="space-y-2">
-            <Label className="text-xs text-muted-foreground flex items-center gap-1">
-              <Building2 className="h-3 w-3" />
-              Биржа
-            </Label>
-            <Select value={exchange} onValueChange={handleExchangeChange}>
-              <SelectTrigger className="min-h-11">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {EXCHANGES.map((ex) => (
-                  <SelectItem key={ex.id} value={ex.id}>
-                    <span className="flex items-center gap-2">
-                      {ex.name}
-                      {ex.hasDemo && (
-                        <Badge variant="outline" className="text-[10px] h-4 px-1">Demo</Badge>
-                      )}
-                      {ex.hasTestnet && (
-                        <Badge variant="outline" className="text-[10px] h-4 px-1">Testnet</Badge>
-                      )}
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+    <Card className="h-full flex flex-col">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-base">Futures Trading</CardTitle>
+            <CardDescription>Perpetual contracts with leverage</CardDescription>
           </div>
-
-          {/* Trading Mode Quick Select */}
-          <div className="space-y-2">
-            <Label className="text-xs text-muted-foreground">Режим торговли</Label>
-            <div className="flex flex-wrap gap-1">
-              {supportedModes.map((mode) => {
-                const info = TRADING_MODE_INFO[mode];
-                const Icon = MODE_ICONS[mode];
-                const isActive = tradingMode === mode;
-                
-                return (
-                  <Button
-                    key={mode}
-                    variant={isActive ? "default" : "outline"}
-                    size="sm"
-                    className={cn(
-                      "h-8 text-xs px-3",
-                      isActive && info.bgColor,
-                      isActive && info.color,
-                      isActive && "border",
-                      isActive && info.borderColor
-                    )}
-                    onClick={() => handleModeChange(mode)}
-                  >
-                    <Icon className="h-3 w-3 mr-1" />
-                    {mode}
-                    {isActive && <Check className="h-3 w-3 ml-1" />}
-                  </Button>
-                );
-              })}
+          <Badge className={cn("text-xs", MODE_CONFIG[mode].color, MODE_CONFIG[mode].bgColor, MODE_CONFIG[mode].borderColor)}>
+            {mode}
+          </Badge>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden">
+        <ScrollArea className="flex-1 -mx-6 px-6">
+          <div className="space-y-4 pr-4">
+            {/* Symbol Select */}
+            <div className="space-y-2">
+              <label className="text-xs text-muted-foreground">Trading Pair</label>
+              <Select value={symbol} onValueChange={setSymbol}>
+                <SelectTrigger className="h-10">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {TRADING_PAIRS.map((pair) => (
+                    <SelectItem key={pair} value={pair}>
+                      {pair.replace("USDT", "/USDT")}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <p className="text-[10px] text-muted-foreground">{modeInfo.description}</p>
-            
-            {/* PAPER account warning */}
-            {isPaperTrading && !paperAccountId && (
-              <div className="flex items-center gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                <AlertTriangle className="h-4 w-4 text-amber-500" />
-                <div className="text-xs">
-                  <span className="text-amber-600 dark:text-amber-400 font-medium">
-                    Нет PAPER аккаунта для {selectedExchange?.name || exchange}
-                  </span>
-                  <span className="text-muted-foreground block">
-                    Создайте PAPER аккаунт в разделе Биржи
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
 
-          {/* Trading Pair */}
-          <div className="space-y-2">
-            <Label className="text-xs text-muted-foreground">Торговая пара</Label>
-            <Select value={symbol} onValueChange={setSymbol}>
-              <SelectTrigger className="min-h-11">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {TRADING_PAIRS.map((pair) => (
-                  <SelectItem key={pair} value={pair}>
-                    {pair.replace("USDT", "/USDT")}
-                    {marketPrices[pair] && (
-                      <span className="ml-2 text-muted-foreground">
-                        ${formatNumber(marketPrices[pair].price)}
-                      </span>
-                    )}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Direction Toggle */}
-          <div className="space-y-2">
-            <Label className="text-xs text-muted-foreground">Направление</Label>
+            {/* Direction Toggle */}
             <div className="grid grid-cols-2 gap-2">
               <Button
                 type="button"
                 variant={direction === "LONG" ? "default" : "outline"}
-                className={cn(
-                  "h-12 min-h-11 touch-target",
-                  direction === "LONG" &&
-                    "bg-green-500 hover:bg-green-600 text-white"
-                )}
+                className={cn("h-11", direction === "LONG" && "bg-[#0ECB81] hover:bg-[#0ECB81]/90 text-white")}
                 onClick={() => setDirection("LONG")}
               >
                 <TrendingUp className="mr-2 h-4 w-4" />
@@ -530,174 +521,166 @@ export function TradingForm() {
               <Button
                 type="button"
                 variant={direction === "SHORT" ? "default" : "outline"}
-                className={cn(
-                  "h-12 min-h-11 touch-target",
-                  direction === "SHORT" && "bg-red-500 hover:bg-red-600 text-white"
-                )}
+                className={cn("h-11", direction === "SHORT" && "bg-[#F6465D] hover:bg-[#F6465D]/90 text-white")}
                 onClick={() => setDirection("SHORT")}
               >
                 <TrendingDown className="mr-2 h-4 w-4" />
                 SHORT
               </Button>
             </div>
-          </div>
 
-          {/* Amount */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label className="text-xs text-muted-foreground">Сумма (USDT)</Label>
-              <span className="text-xs text-muted-foreground">
-                Доступно: ${formatNumber(balance)}
-              </span>
-            </div>
-            <Input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="100"
-              className="font-mono min-h-11"
-            />
-            <div className="grid grid-cols-4 gap-1">
-              {[25, 50, 75, 100].map((percent) => (
+            {/* Order Type Tabs */}
+            <div className="flex items-center bg-muted/50 rounded-lg p-1">
+              {(["market", "limit", "stop_limit"] as const).map((type) => (
                 <Button
-                  key={percent}
-                  type="button"
-                  variant="outline"
+                  key={type}
+                  variant={orderType === type ? "default" : "ghost"}
                   size="sm"
-                  className="h-8 text-xs min-h-11 touch-target"
-                  onClick={() => setAmount(((balance * percent) / 100).toFixed(2))}
+                  className={cn("flex-1 h-8 text-xs", orderType === type && "bg-background shadow-sm")}
+                  onClick={() => setOrderType(type)}
                 >
-                  {percent}%
+                  {type === "market" ? "Market" : type === "limit" ? "Limit" : "Stop-Limit"}
                 </Button>
               ))}
             </div>
-          </div>
 
-          {/* Margin Percentage */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label className="text-xs text-muted-foreground flex items-center gap-1">
-                <Percent className="h-3 w-3" />
-                Процент маржи
-              </Label>
-              <span className="text-sm font-mono font-medium text-primary">
-                {marginPercent.toFixed(1)}%
-              </span>
-            </div>
-            <Slider
-              value={[marginPercent]}
-              onValueChange={(value) => setMarginPercent(value[0])}
-              min={0.5}
-              max={10}
-              step={0.5}
-              className="w-full"
-            />
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>0.5%</span>
-              <span>10%</span>
-            </div>
-          </div>
+            {/* Entry Price (for Limit/Stop-Limit) */}
+            {orderType !== "market" && (
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground">Entry Price</label>
+                <input
+                  type="number"
+                  value={entryPrice}
+                  onChange={(e) => setEntryPrice(e.target.value)}
+                  placeholder={currentPrice.toFixed(2)}
+                  className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
+                />
+              </div>
+            )}
 
-          {/* Leverage */}
-          <div className="space-y-2">
-            <Label className="text-xs text-muted-foreground">
-              Плечо
-              {exchange === "aster" && (
-                <span className="ml-2 text-[10px] text-amber-500">до 1001x</span>
-              )}
-            </Label>
-            <div className="grid grid-cols-4 sm:grid-cols-8 gap-1">
-              {(exchange === "aster" ? ASTER_LEVERAGE_OPTIONS : LEVERAGE_OPTIONS).map((lev) => (
-                <Button
-                  key={lev}
-                  type="button"
-                  variant={leverage === lev ? "default" : "outline"}
-                  size="sm"
-                  className={cn(
-                    "h-9 text-xs min-h-11 touch-target",
-                    leverage === lev && "bg-primary text-primary-foreground"
-                  )}
-                  onClick={() => setLeverage(lev)}
-                >
-                  {lev}x
-                </Button>
-              ))}
-            </div>
-          </div>
+            {/* Trigger Price (for Stop-Limit) */}
+            {orderType === "stop_limit" && (
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Target className="h-3 w-3" />
+                  Trigger Price
+                </label>
+                <input
+                  type="number"
+                  value={triggerPrice}
+                  onChange={(e) => setTriggerPrice(e.target.value)}
+                  placeholder="Trigger price"
+                  className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
+                />
+              </div>
+            )}
 
-          <Separator className="my-2" />
-
-          {/* Stop Loss / Take Profit */}
-          <div className="grid grid-cols-2 gap-3">
+            {/* Amount */}
             <div className="space-y-2">
-              <Label className="text-xs text-muted-foreground flex items-center gap-1">
-                <AlertTriangle className="h-3 w-3" />
-                Stop Loss
-              </Label>
-              <Input
+              <div className="flex items-center justify-between">
+                <label className="text-xs text-muted-foreground">Amount (USDT)</label>
+                <span className="text-xs text-muted-foreground">
+                  Available: ${availableBalance.toFixed(2)}
+                </span>
+              </div>
+              <input
                 type="number"
-                value={stopLoss}
-                onChange={(e) => setStopLoss(e.target.value)}
-                placeholder="Цена"
-                className="font-mono min-h-11"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="0.00"
+                className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
               />
+              <div className="grid grid-cols-4 gap-1">
+                {[25, 50, 75, 100].map((pct) => (
+                  <Button
+                    key={pct}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-7 text-xs"
+                    onClick={() => setAmount(((availableBalance * pct) / 100).toFixed(2))}
+                  >
+                    {pct}%
+                  </Button>
+                ))}
+              </div>
             </div>
+
+            {/* Leverage */}
             <div className="space-y-2">
-              <Label className="text-xs text-muted-foreground flex items-center gap-1">
-                <Percent className="h-3 w-3" />
-                Take Profit
-              </Label>
-              <Input
-                type="number"
-                value={takeProfit}
-                onChange={(e) => setTakeProfit(e.target.value)}
-                placeholder="Цена"
-                className="font-mono min-h-11"
-              />
+              <div className="flex items-center justify-between">
+                <label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Gauge className="h-3 w-3" />
+                  Leverage
+                </label>
+                <span className="text-sm font-mono font-bold text-primary">{leverage}x</span>
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {LEVERAGE_OPTIONS.slice(0, 8).map((lev) => (
+                  <Button
+                    key={lev}
+                    type="button"
+                    variant={leverage === lev ? "default" : "outline"}
+                    size="sm"
+                    className={cn("h-7 text-xs px-2", leverage === lev && "bg-primary text-primary-foreground")}
+                    onClick={() => setLeverage(lev)}
+                  >
+                    {lev}x
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* SL/TP */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3 text-[#F6465D]" />
+                  Stop Loss
+                </label>
+                <input
+                  type="number"
+                  value={stopLoss}
+                  onChange={(e) => setStopLoss(e.target.value)}
+                  placeholder="Price"
+                  className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Target className="h-3 w-3 text-[#0ECB81]" />
+                  Take Profit
+                </label>
+                <input
+                  type="number"
+                  value={takeProfit}
+                  onChange={(e) => setTakeProfit(e.target.value)}
+                  placeholder="Price"
+                  className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
+                />
+              </div>
             </div>
           </div>
-
-          {/* Position Summary */}
-          <div className="rounded-lg bg-secondary/50 p-3 space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Размер позиции</span>
-              <span className="font-mono">${leveragedSize.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Маржа</span>
-              <span className="font-mono">${marginRequired.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Процент маржи</span>
-              <span className="font-mono text-primary">{marginPercent.toFixed(1)}%</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Комиссия (est.)</span>
-              <span className="font-mono">${estimatedFee.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Цена входа</span>
-              <span className="font-mono">
-                ${formatNumber(currentPrice)}
-              </span>
-            </div>
-          </div>
-
-          {/* Submit Button */}
+        </ScrollArea>
+        
+        {/* Submit Button */}
+        <div className="pt-2 border-t">
           <Button
             className={cn(
-              "w-full h-12 text-base font-medium min-h-11 touch-target",
-              direction === "LONG" && "bg-green-500 hover:bg-green-600",
-              direction === "SHORT" && "bg-red-500 hover:bg-red-600"
+              "w-full h-12 text-base font-medium",
+              direction === "LONG" && "bg-[#0ECB81] hover:bg-[#0ECB81]/90",
+              direction === "SHORT" && "bg-[#F6465D] hover:bg-[#F6465D]/90"
             )}
-            onClick={handleTrade}
-            disabled={isSubmitting || positionSize > balance}
+            onClick={handleSubmit}
+            disabled={isSubmitting || !account}
           >
             {isSubmitting ? (
-              <span className="flex items-center gap-2">
-                <span className="animate-spin">⏳</span>
-                Обработка...
-              </span>
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
             ) : (
               <>
                 {direction === "LONG" ? (
@@ -705,188 +688,659 @@ export function TradingForm() {
                 ) : (
                   <TrendingDown className="mr-2 h-5 w-5" />
                 )}
-                Открыть {direction} [{tradingMode}]
+                Open {direction} {leverage}x
               </>
             )}
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
-      {/* PAPER Positions List */}
-      {isPaperTrading && paperPositions.length > 0 && (
-        <Card className="mt-4">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center justify-between text-base">
-              <div className="flex items-center gap-2">
-                <Activity className="h-5 w-5 text-primary" />
-                Открытые PAPER позиции
+// ============================================
+// Spot Form
+// ============================================
+
+function SpotForm({ mode, account, onOrderSuccess }: { mode: TradingMode; account: any; onOrderSuccess: () => void }) {
+  const [symbol, setSymbol] = useState("BTCUSDT");
+  const [orderType, setOrderType] = useState<"market" | "limit" | "stop_limit">("market");
+  const [amount, setAmount] = useState("");
+  const [price, setPrice] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const TRADING_PAIRS = ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "DOGEUSDT"];
+  const currentPrice = 67000;
+  const availableBalance = account?.balance || 10000;
+
+  const handleBuy = async () => {
+    if (!account || !amount) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/trade/open", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          symbol,
+          direction: "LONG",
+          amount: parseFloat(amount),
+          orderType,
+          price: orderType !== "market" ? parseFloat(price) : undefined,
+          isDemo: mode !== "LIVE",
+          accountId: account.id,
+          exchangeId: account.exchangeId,
+          tradingMode: mode,
+          marketType: "spot",
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(`Buy order placed: ${symbol}`);
+        setAmount("");
+        onOrderSuccess();
+      } else {
+        toast.error(data.error || "Failed to place order");
+      }
+    } catch (error) {
+      toast.error("Failed to submit order");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSell = async () => {
+    if (!account || !amount) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/trade/open", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          symbol,
+          direction: "SHORT",
+          amount: parseFloat(amount),
+          orderType,
+          price: orderType !== "market" ? parseFloat(price) : undefined,
+          isDemo: mode !== "LIVE",
+          accountId: account.id,
+          exchangeId: account.exchangeId,
+          tradingMode: mode,
+          marketType: "spot",
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(`Sell order placed: ${symbol}`);
+        setAmount("");
+        onOrderSuccess();
+      } else {
+        toast.error(data.error || "Failed to place order");
+      }
+    } catch (error) {
+      toast.error("Failed to submit order");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Card className="h-full flex flex-col">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-base">Spot Trading</CardTitle>
+            <CardDescription>Buy and sell crypto directly</CardDescription>
+          </div>
+          <Badge className={cn("text-xs", MODE_CONFIG[mode].color, MODE_CONFIG[mode].bgColor, MODE_CONFIG[mode].borderColor)}>
+            {mode}
+          </Badge>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden">
+        <ScrollArea className="flex-1 -mx-6 px-6">
+          <div className="space-y-4 pr-4">
+            {/* Symbol Select */}
+            <div className="space-y-2">
+              <label className="text-xs text-muted-foreground">Trading Pair</label>
+              <Select value={symbol} onValueChange={setSymbol}>
+                <SelectTrigger className="h-10">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {TRADING_PAIRS.map((pair) => (
+                    <SelectItem key={pair} value={pair}>
+                      {pair.replace("USDT", "/USDT")}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Order Type Tabs */}
+            <div className="flex items-center bg-muted/50 rounded-lg p-1">
+              {(["market", "limit", "stop_limit"] as const).map((type) => (
+                <Button
+                  key={type}
+                  variant={orderType === type ? "default" : "ghost"}
+                  size="sm"
+                  className={cn("flex-1 h-8 text-xs", orderType === type && "bg-background shadow-sm")}
+                  onClick={() => setOrderType(type)}
+                >
+                  {type === "market" ? "Market" : type === "limit" ? "Limit" : "Stop-Limit"}
+                </Button>
+              ))}
+            </div>
+
+            {/* Price (for Limit/Stop-Limit) */}
+            {orderType !== "market" && (
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground">Price (USDT)</label>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder={currentPrice.toFixed(2)}
+                  className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
+                />
               </div>
-              <Badge variant="outline" className="text-xs">
-                {paperPositions.length} поз.
-              </Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="divide-y divide-border">
-              {paperPositions.map((position) => (
-                <div key={position.id} className="p-4 hover:bg-muted/30">
+            )}
+
+            {/* Amount */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs text-muted-foreground">Amount</label>
+                <span className="text-xs text-muted-foreground">
+                  Available: ${availableBalance.toFixed(2)}
+                </span>
+              </div>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="0.00"
+                className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
+              />
+              <div className="grid grid-cols-4 gap-1">
+                {[25, 50, 75, 100].map((pct) => (
+                  <Button
+                    key={pct}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-7 text-xs"
+                    onClick={() => setAmount(((availableBalance * pct) / 100).toFixed(2))}
+                  >
+                    {pct}%
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            {/* Total */}
+            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+              <span className="text-sm text-muted-foreground">Total</span>
+              <span className="font-mono font-medium">
+                ${(parseFloat(amount) * currentPrice).toFixed(2)} USDT
+              </span>
+            </div>
+          </div>
+        </ScrollArea>
+        
+        {/* Submit Buttons */}
+        <div className="pt-2 border-t grid grid-cols-2 gap-2">
+          <Button
+            className="h-12 text-base font-medium bg-[#0ECB81] hover:bg-[#0ECB81]/90"
+            onClick={handleBuy}
+            disabled={isSubmitting || !account}
+          >
+            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Buy"}
+          </Button>
+          <Button
+            className="h-12 text-base font-medium bg-[#F6465D] hover:bg-[#F6465D]/90"
+            onClick={handleSell}
+            disabled={isSubmitting || !account}
+          >
+            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sell"}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ============================================
+// Inverse Form
+// ============================================
+
+function InverseForm({ mode, account, onOrderSuccess }: { mode: TradingMode; account: any; onOrderSuccess: () => void }) {
+  const [symbol, setSymbol] = useState("BTCUSD_PERP");
+  const [direction, setDirection] = useState<"LONG" | "SHORT">("LONG");
+  const [orderType, setOrderType] = useState<"market" | "limit" | "stop_limit">("market");
+  const [amount, setAmount] = useState("");
+  const [entryPrice, setEntryPrice] = useState("");
+  const [triggerPrice, setTriggerPrice] = useState("");
+  const [leverage, setLeverage] = useState(10);
+  const [stopLoss, setStopLoss] = useState("");
+  const [takeProfit, setTakeProfit] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const INVERSE_PAIRS = [
+    { symbol: "BTCUSD_PERP", name: "BTC/USD" },
+    { symbol: "ETHUSD_PERP", name: "ETH/USD" },
+    { symbol: "SOLUSD_PERP", name: "SOL/USD" },
+  ];
+  const LEVERAGE_OPTIONS = [1, 2, 3, 5, 10, 20, 50, 100];
+  const currentPrice = 67000;
+  const marginBalance = account?.balance || 0.1;
+
+  const handleSubmit = async () => {
+    if (!account || !amount) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/trade/open", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          symbol,
+          direction,
+          amount: parseFloat(amount),
+          leverage,
+          orderType,
+          price: orderType !== "market" ? parseFloat(entryPrice) : undefined,
+          triggerPrice: orderType === "stop_limit" ? parseFloat(triggerPrice) : undefined,
+          stopLoss: stopLoss ? parseFloat(stopLoss) : null,
+          takeProfit: takeProfit ? parseFloat(takeProfit) : null,
+          isDemo: mode !== "LIVE",
+          accountId: account.id,
+          exchangeId: account.exchangeId,
+          tradingMode: mode,
+          marketType: "inverse",
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(`${direction} inverse position opened: ${symbol}`);
+        setAmount("");
+        onOrderSuccess();
+      } else {
+        toast.error(data.error || "Failed to open position");
+      }
+    } catch (error) {
+      toast.error("Failed to submit order");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Card className="h-full flex flex-col">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-base">Inverse Futures</CardTitle>
+            <CardDescription>Coin-margined contracts</CardDescription>
+          </div>
+          <Badge className={cn("text-xs", MODE_CONFIG[mode].color, MODE_CONFIG[mode].bgColor, MODE_CONFIG[mode].borderColor)}>
+            {mode}
+          </Badge>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden">
+        <ScrollArea className="flex-1 -mx-6 px-6">
+          <div className="space-y-4 pr-4">
+            {/* Margin Currency Notice */}
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+              <Shield className="h-4 w-4 text-amber-500" />
+              <div className="text-xs text-amber-600 dark:text-amber-400">
+                Margin in BTC • Available: {marginBalance.toFixed(6)} BTC
+              </div>
+            </div>
+
+            {/* Symbol Select */}
+            <div className="space-y-2">
+              <label className="text-xs text-muted-foreground">Contract</label>
+              <Select value={symbol} onValueChange={setSymbol}>
+                <SelectTrigger className="h-10">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {INVERSE_PAIRS.map((pair) => (
+                    <SelectItem key={pair.symbol} value={pair.symbol}>
+                      {pair.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Direction Toggle */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                type="button"
+                variant={direction === "LONG" ? "default" : "outline"}
+                className={cn("h-11", direction === "LONG" && "bg-[#0ECB81] hover:bg-[#0ECB81]/90 text-white")}
+                onClick={() => setDirection("LONG")}
+              >
+                <TrendingUp className="mr-2 h-4 w-4" />
+                LONG
+              </Button>
+              <Button
+                type="button"
+                variant={direction === "SHORT" ? "default" : "outline"}
+                className={cn("h-11", direction === "SHORT" && "bg-[#F6465D] hover:bg-[#F6465D]/90 text-white")}
+                onClick={() => setDirection("SHORT")}
+              >
+                <TrendingDown className="mr-2 h-4 w-4" />
+                SHORT
+              </Button>
+            </div>
+
+            {/* Order Type Tabs */}
+            <div className="flex items-center bg-muted/50 rounded-lg p-1">
+              {(["market", "limit", "stop_limit"] as const).map((type) => (
+                <Button
+                  key={type}
+                  variant={orderType === type ? "default" : "ghost"}
+                  size="sm"
+                  className={cn("flex-1 h-8 text-xs", orderType === type && "bg-background shadow-sm")}
+                  onClick={() => setOrderType(type)}
+                >
+                  {type === "market" ? "Market" : type === "limit" ? "Limit" : "Stop-Limit"}
+                </Button>
+              ))}
+            </div>
+
+            {/* Entry Price */}
+            {orderType !== "market" && (
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground">Entry Price (USD)</label>
+                <input
+                  type="number"
+                  value={entryPrice}
+                  onChange={(e) => setEntryPrice(e.target.value)}
+                  placeholder={currentPrice.toFixed(2)}
+                  className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
+                />
+              </div>
+            )}
+
+            {/* Trigger Price */}
+            {orderType === "stop_limit" && (
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Target className="h-3 w-3" />
+                  Trigger Price
+                </label>
+                <input
+                  type="number"
+                  value={triggerPrice}
+                  onChange={(e) => setTriggerPrice(e.target.value)}
+                  placeholder="Trigger price"
+                  className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
+                />
+              </div>
+            )}
+
+            {/* Amount */}
+            <div className="space-y-2">
+              <label className="text-xs text-muted-foreground">Amount (BTC)</label>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="0.00"
+                className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
+              />
+            </div>
+
+            {/* Leverage */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Gauge className="h-3 w-3" />
+                  Leverage
+                </label>
+                <span className="text-sm font-mono font-bold text-primary">{leverage}x</span>
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {LEVERAGE_OPTIONS.map((lev) => (
+                  <Button
+                    key={lev}
+                    type="button"
+                    variant={leverage === lev ? "default" : "outline"}
+                    size="sm"
+                    className={cn("h-7 text-xs px-2", leverage === lev && "bg-primary text-primary-foreground")}
+                    onClick={() => setLeverage(lev)}
+                  >
+                    {lev}x
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* SL/TP */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3 text-[#F6465D]" />
+                  Stop Loss
+                </label>
+                <input
+                  type="number"
+                  value={stopLoss}
+                  onChange={(e) => setStopLoss(e.target.value)}
+                  placeholder="Price"
+                  className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Target className="h-3 w-3 text-[#0ECB81]" />
+                  Take Profit
+                </label>
+                <input
+                  type="number"
+                  value={takeProfit}
+                  onChange={(e) => setTakeProfit(e.target.value)}
+                  placeholder="Price"
+                  className="w-full h-10 px-3 rounded-md border border-input bg-background font-mono text-sm"
+                />
+              </div>
+            </div>
+          </div>
+        </ScrollArea>
+        
+        {/* Submit Button */}
+        <div className="pt-2 border-t">
+          <Button
+            className={cn(
+              "w-full h-12 text-base font-medium",
+              direction === "LONG" && "bg-[#0ECB81] hover:bg-[#0ECB81]/90",
+              direction === "SHORT" && "bg-[#F6465D] hover:bg-[#F6465D]/90"
+            )}
+            onClick={handleSubmit}
+            disabled={isSubmitting || !account}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                {direction === "LONG" ? (
+                  <TrendingUp className="mr-2 h-5 w-5" />
+                ) : (
+                  <TrendingDown className="mr-2 h-5 w-5" />
+                )}
+                Open {direction} {leverage}x
+              </>
+            )}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ============================================
+// Positions Card
+// ============================================
+
+interface PositionsCardProps {
+  positions: TradingPosition[];
+  isLoading: boolean;
+  totalPnl: number;
+  longCount: number;
+  shortCount: number;
+  onPositionClick: (position: TradingPosition) => void;
+  onClosePosition: (positionId: string) => void;
+}
+
+function PositionsCard({ 
+  positions, 
+  isLoading, 
+  totalPnl, 
+  longCount, 
+  shortCount, 
+  onPositionClick,
+  onClosePosition,
+}: PositionsCardProps) {
+  const [filter, setFilter] = useState<"all" | "LONG" | "SHORT">("all");
+  
+  const filteredPositions = positions.filter(p => 
+    filter === "all" ? true : p.direction === filter
+  );
+
+  return (
+    <Card className="h-full flex flex-col">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CardTitle className="text-base">Open Positions</CardTitle>
+            <Badge variant="outline" className="text-xs">{positions.length}</Badge>
+          </div>
+        </div>
+        
+        {/* Summary */}
+        <div className="flex items-center gap-3 text-xs">
+          <div className="flex items-center gap-1">
+            <TrendingUp className="h-3 w-3 text-[#0ECB81]" />
+            <span>{longCount}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <TrendingDown className="h-3 w-3 text-[#F6465D]" />
+            <span>{shortCount}</span>
+          </div>
+          <Separator className="h-4 mx-1" orientation="vertical" />
+          <div className={cn(
+            "font-mono",
+            totalPnl >= 0 ? "text-[#0ECB81]" : "text-[#F6465D]"
+          )}>
+            {totalPnl >= 0 ? "+" : ""}${totalPnl.toFixed(2)}
+          </div>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="flex-1 flex flex-col gap-3 overflow-hidden p-4 pt-0">
+        {/* Filter */}
+        <div className="flex items-center bg-muted/50 rounded-md p-0.5">
+          {(["all", "LONG", "SHORT"] as const).map((dir) => (
+            <Button
+              key={dir}
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "h-7 text-xs px-2",
+                filter === dir && "bg-background shadow-sm"
+              )}
+              onClick={() => setFilter(dir)}
+            >
+              {dir === "all" ? "All" : dir}
+            </Button>
+          ))}
+        </div>
+        
+        {/* Position List */}
+        <ScrollArea className="flex-1 -mx-4 px-4">
+          {filteredPositions.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <Activity className="h-10 w-10 text-muted-foreground/50 mb-3" />
+              <p className="text-sm text-muted-foreground">No open positions</p>
+            </div>
+          ) : (
+            <div className="space-y-2 pb-4">
+              {filteredPositions.map((position) => (
+                <button
+                  key={position.id}
+                  className="w-full text-left p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors group"
+                  onClick={() => onPositionClick(position)}
+                >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">{position.symbol}</span>
+                      <Badge 
+                        variant="outline" 
+                        className={cn("text-[10px] h-5", getExchangeBadgeColor(position.exchangeId))}
+                      >
+                        {getExchangeDisplayName(position.exchangeId)}
+                      </Badge>
+                      <span className="font-medium text-sm">{position.symbol}</span>
                       <Badge
                         variant="outline"
                         className={cn(
-                          "text-xs",
+                          "text-[10px] h-5",
                           position.direction === "LONG"
-                            ? "text-green-500 border-green-500/30"
-                            : "text-red-500 border-red-500/30"
+                            ? "text-[#0ECB81] border-[#0ECB81]/30"
+                            : "text-[#F6465D] border-[#F6465D]/30"
                         )}
                       >
                         {position.direction}
                       </Badge>
                       <span className="text-xs text-muted-foreground">{position.leverage}x</span>
                     </div>
-                    <div className={cn(
-                      "font-mono text-sm font-medium",
-                      position.unrealizedPnl >= 0 ? "text-green-500" : "text-red-500"
+                  </div>
+                  
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>Entry: ${position.avgEntryPrice.toFixed(2)}</span>
+                    <span className={cn(
+                      "font-mono font-medium",
+                      position.unrealizedPnl >= 0 ? "text-[#0ECB81]" : "text-[#F6465D]"
                     )}>
-                      {position.unrealizedPnl >= 0 ? "+" : ""}{position.unrealizedPnl.toFixed(2)} USDT
-                      <span className="text-xs text-muted-foreground ml-1">
-                        ({position.unrealizedPnlPercent >= 0 ? "+" : ""}{position.unrealizedPnlPercent.toFixed(2)}%)
-                      </span>
-                    </div>
+                      {position.unrealizedPnl >= 0 ? "+" : ""}${position.unrealizedPnl.toFixed(2)}
+                    </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-                    <div>
-                      <span>Размер: </span>
-                      <span className="font-mono">{position.quantity.toFixed(6)}</span>
-                    </div>
-                    <div>
-                      <span>Вход: </span>
-                      <span className="font-mono">${position.entryPrice.toFixed(2)}</span>
-                    </div>
-                    <div>
-                      <span>Маржа: </span>
-                      <span className="font-mono">${position.margin.toFixed(2)}</span>
-                    </div>
-                    <div>
-                      <span>Ликв.: </span>
-                      <span className="font-mono text-amber-500">
-                        ${position.liquidationPrice?.toFixed(2) || "-"}
-                      </span>
-                    </div>
-                  </div>
-                  {(position.stopLoss || position.takeProfit) && (
-                    <div className="flex gap-4 mt-2 text-xs">
-                      {position.stopLoss && (
-                        <span className="text-red-500">
-                          SL: ${position.stopLoss.toFixed(2)}
-                        </span>
-                      )}
-                      {position.takeProfit && (
-                        <span className="text-green-500">
-                          TP: ${position.takeProfit.toFixed(2)}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
+                </button>
               ))}
             </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Confirmation Dialog */}
-      <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              {direction === "LONG" ? (
-                <TrendingUp className="h-5 w-5 text-green-500" />
-              ) : (
-                <TrendingDown className="h-5 w-5 text-red-500" />
-              )}
-              Подтвердите сделку
-            </DialogTitle>
-            <DialogDescription>
-              Проверьте параметры перед открытием позиции
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="space-y-3 py-4">
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <div className="text-muted-foreground">Пара:</div>
-              <div className="font-medium">{symbol}</div>
-              
-              <div className="text-muted-foreground">Направление:</div>
-              <div className={cn(
-                "font-medium",
-                direction === "LONG" ? "text-green-500" : "text-red-500"
-              )}>
-                {direction}
-              </div>
-              
-              <div className="text-muted-foreground">Размер:</div>
-              <div className="font-mono">${positionSize.toFixed(2)}</div>
-              
-              <div className="text-muted-foreground">Плечо:</div>
-              <div className="font-mono">{leverage}x</div>
-              
-              <div className="text-muted-foreground">Позиция:</div>
-              <div className="font-mono">${leveragedSize.toFixed(2)}</div>
-
-              <div className="text-muted-foreground">Процент маржи:</div>
-              <div className="font-mono text-primary">{marginPercent.toFixed(1)}%</div>
-
-              <div className="text-muted-foreground">Цена входа:</div>
-              <div className="font-mono">${formatNumber(currentPrice)}</div>
-              
-              {stopLoss && (
-                <>
-                  <div className="text-muted-foreground">Stop Loss:</div>
-                  <div className="font-mono text-red-500">${stopLoss}</div>
-                </>
-              )}
-              
-              {takeProfit && (
-                <>
-                  <div className="text-muted-foreground">Take Profit:</div>
-                  <div className="font-mono text-green-500">${takeProfit}</div>
-                </>
-              )}
-              
-              <div className="text-muted-foreground">Комиссия:</div>
-              <div className="font-mono">${estimatedFee.toFixed(2)}</div>
-            </div>
-          </div>
-          
-          <DialogFooter className="flex-col sm:flex-row gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setShowConfirmDialog(false)}
-              className="w-full sm:w-auto min-h-11 touch-target"
-            >
-              Отмена
-            </Button>
-            <Button
-              onClick={confirmTrade}
-              className={cn(
-                "w-full sm:w-auto min-h-11 touch-target",
-                direction === "LONG" && "bg-green-500 hover:bg-green-600",
-                direction === "SHORT" && "bg-red-500 hover:bg-red-600"
-              )}
-            >
-              {direction === "LONG" ? (
-                <TrendingUp className="mr-2 h-4 w-4" />
-              ) : (
-                <TrendingDown className="mr-2 h-4 w-4" />
-              )}
-              Подтвердить {direction}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+          )}
+        </ScrollArea>
+      </CardContent>
+    </Card>
   );
 }
+
+// Separator component
+function Separator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("bg-border", className)} {...props} />;
+}
+
+export default TradingForm;

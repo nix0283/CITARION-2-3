@@ -1,0 +1,592 @@
+"use client";
+
+import { useState, useEffect, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Slider } from "@/components/ui/slider";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
+  ChevronDown,
+  Search,
+  X,
+  Calculator,
+  Percent,
+  Gauge,
+  Target,
+  Shield,
+  Zap,
+  Loader2,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import type { TradingMode, TradingAccount } from "@/hooks/use-accounts";
+import { useRealtimePrice } from "@/hooks/use-realtime-prices";
+
+// Common trading pairs
+const TRADING_PAIRS = [
+  { symbol: "BTCUSDT", name: "BTC/USDT", category: "popular" },
+  { symbol: "ETHUSDT", name: "ETH/USDT", category: "popular" },
+  { symbol: "BNBUSDT", name: "BNB/USDT", category: "popular" },
+  { symbol: "SOLUSDT", name: "SOL/USDT", category: "popular" },
+  { symbol: "XRPUSDT", name: "XRP/USDT", category: "popular" },
+  { symbol: "DOGEUSDT", name: "DOGE/USDT", category: "meme" },
+  { symbol: "ADAUSDT", name: "ADA/USDT", category: "layer1" },
+  { symbol: "AVAXUSDT", name: "AVAX/USDT", category: "layer1" },
+  { symbol: "MATICUSDT", name: "MATIC/USDT", category: "layer1" },
+  { symbol: "LINKUSDT", name: "LINK/USDT", category: "defi" },
+  { symbol: "ARBUSDT", name: "ARB/USDT", category: "layer2" },
+  { symbol: "OPUSDT", name: "OP/USDT", category: "layer2" },
+];
+
+// Leverage presets
+const LEVERAGE_PRESETS = [1, 2, 3, 5, 10, 20, 25, 50, 75, 100, 125];
+
+interface FuturesTradingFormProps {
+  mode: TradingMode;
+  account: TradingAccount | null;
+  onOrderSuccess?: () => void;
+}
+
+export function FuturesTradingForm({ mode, account, onOrderSuccess }: FuturesTradingFormProps) {
+  // Trading pair selection
+  const [symbol, setSymbol] = useState("BTCUSDT");
+  const [showPairSelector, setShowPairSelector] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  // Order settings
+  const [direction, setDirection] = useState<"LONG" | "SHORT">("LONG");
+  const [orderType, setOrderType] = useState<"market" | "limit" | "stop_limit">("market");
+  const [amount, setAmount] = useState("");
+  const [entryPrice, setEntryPrice] = useState("");
+  const [stopPrice, setStopPrice] = useState("");
+  const [leverage, setLeverage] = useState(10);
+  const [stopLoss, setStopLoss] = useState("");
+  const [takeProfit, setTakeProfit] = useState("");
+  
+  // Submission state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Get real-time price
+  const priceData = useRealtimePrice(symbol);
+  const currentPrice = priceData?.price || 0;
+  const priceChange = priceData?.change24h || 0;
+  
+  // Filter pairs by search
+  const filteredPairs = useMemo(() => {
+    if (!searchQuery) return TRADING_PAIRS;
+    const query = searchQuery.toLowerCase();
+    return TRADING_PAIRS.filter(
+      p => p.symbol.toLowerCase().includes(query) || p.name.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
+  
+  // Reset entry price when switching to market
+  useEffect(() => {
+    if (orderType === "market") {
+      setEntryPrice("");
+      setStopPrice("");
+    }
+  }, [orderType]);
+  
+  // Calculate position details
+  const amountNum = parseFloat(amount) || 0;
+  const entryPriceNum = parseFloat(entryPrice) || currentPrice;
+  const stopPriceNum = parseFloat(stopPrice) || 0;
+  const stopLossNum = parseFloat(stopLoss) || 0;
+  const takeProfitNum = parseFloat(takeProfit) || 0;
+  
+  const positionSize = amountNum * leverage;
+  const quantity = currentPrice > 0 ? positionSize / currentPrice : 0;
+  const estimatedFee = positionSize * 0.0004; // 0.04% taker fee
+  const liquidationPrice = useMemo(() => {
+    if (!currentPrice || !leverage) return 0;
+    const maintenanceMargin = 0.004; // 0.4%
+    if (direction === "LONG") {
+      return currentPrice * (1 - 1 / leverage + maintenanceMargin);
+    } else {
+      return currentPrice * (1 + 1 / leverage - maintenanceMargin);
+    }
+  }, [currentPrice, leverage, direction]);
+  
+  // Available balance
+  const availableBalance = account?.balance || 0;
+  
+  // Quick amount buttons
+  const handleQuickAmount = (percent: number) => {
+    const amount = (availableBalance * percent) / 100;
+    setAmount(amount.toFixed(2));
+  };
+  
+  // Handle pair selection
+  const handlePairSelect = (pair: typeof TRADING_PAIRS[0]) => {
+    setSymbol(pair.symbol);
+    setShowPairSelector(false);
+    setSearchQuery("");
+  };
+  
+  // Handle order submission
+  const handleSubmit = async () => {
+    // Validation
+    if (!account) {
+      toast.error("No account selected");
+      return;
+    }
+    
+    if (amountNum <= 0) {
+      toast.error("Please enter a valid amount");
+      return;
+    }
+    
+    if (amountNum > availableBalance) {
+      toast.error("Insufficient balance");
+      return;
+    }
+    
+    if (orderType === "limit" && parseFloat(entryPrice) <= 0) {
+      toast.error("Please enter a valid entry price");
+      return;
+    }
+    
+    if (orderType === "stop_limit" && (parseFloat(entryPrice) <= 0 || stopPriceNum <= 0)) {
+      toast.error("Please enter valid trigger and entry prices");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      // For PAPER mode, use paper trading API
+      if (mode === "PAPER") {
+        const response = await fetch("/api/paper-trading/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            accountId: account.id,
+            symbol,
+            side: direction === "LONG" ? "BUY" : "SELL",
+            direction,
+            orderType: orderType.toUpperCase(),
+            quantity: quantity,
+            price: orderType !== "market" ? entryPriceNum : undefined,
+            stopPrice: orderType === "stop_limit" ? stopPriceNum : undefined,
+            leverage,
+            stopLoss: stopLossNum || undefined,
+            takeProfit: takeProfitNum || undefined,
+          }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          toast.success(`${direction} position opened: ${symbol} @ $${currentPrice.toFixed(2)}`);
+          setAmount("");
+          setStopLoss("");
+          setTakeProfit("");
+          onOrderSuccess?.();
+        } else {
+          toast.error(data.error || "Failed to open position");
+        }
+      } else {
+        // For LIVE and DEMO modes
+        const response = await fetch("/api/trade/open", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            symbol,
+            direction,
+            amount: amountNum,
+            leverage,
+            orderType,
+            price: orderType !== "market" ? entryPriceNum : undefined,
+            triggerPrice: orderType === "stop_limit" ? stopPriceNum : undefined,
+            stopLoss: stopLossNum || null,
+            takeProfit: takeProfitNum || null,
+            isDemo: mode === "DEMO",
+            accountId: account.id,
+            exchangeId: account.exchangeId,
+            tradingMode: mode,
+          }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          toast.success(`${direction} position opened: ${symbol}`);
+          setAmount("");
+          setStopLoss("");
+          setTakeProfit("");
+          onOrderSuccess?.();
+        } else {
+          toast.error(data.error || "Failed to open position");
+        }
+      }
+    } catch (error) {
+      console.error("Order error:", error);
+      toast.error("Failed to submit order");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+  return (
+    <Card className="h-full flex flex-col">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-base">Futures Trading</CardTitle>
+            <CardDescription>Perpetual contracts with leverage</CardDescription>
+          </div>
+          <Badge 
+            variant="outline" 
+            className={cn(
+              "text-xs",
+              mode === "LIVE" && "text-red-500 border-red-500/30",
+              mode === "DEMO" && "text-purple-500 border-purple-500/30",
+              mode === "PAPER" && "text-blue-500 border-blue-500/30",
+            )}
+          >
+            {mode}
+          </Badge>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden">
+        <ScrollArea className="flex-1 -mx-6 px-6">
+          <div className="space-y-4 pr-4">
+            {/* Pair Selector */}
+            <div className="space-y-2">
+              <Label className="text-xs text-muted-foreground">Trading Pair</Label>
+              <button
+                className="w-full flex items-center justify-between h-11 px-3 rounded-md border border-input bg-background hover:bg-accent"
+                onClick={() => setShowPairSelector(!showPairSelector)}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">{symbol.replace("USDT", "")}</span>
+                  <span className="text-muted-foreground">/USDT</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-mono">
+                    ${currentPrice.toLocaleString("en-US", { maximumFractionDigits: 2 })}
+                  </span>
+                  <Badge 
+                    variant="outline" 
+                    className={cn(
+                      "text-[10px]",
+                      priceChange >= 0 ? "text-[#0ECB81] border-[#0ECB81]/30" : "text-[#F6465D] border-[#F6465D]/30"
+                    )}
+                  >
+                    {priceChange >= 0 ? "+" : ""}{priceChange.toFixed(2)}%
+                  </Badge>
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                </div>
+              </button>
+              
+              {/* Pair Dropdown */}
+              {showPairSelector && (
+                <div className="absolute z-50 w-[calc(100%-48px)] mt-1 bg-popover border rounded-lg shadow-lg">
+                  <div className="p-2 border-b">
+                    <div className="relative">
+                      <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search pairs..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-8 h-8"
+                      />
+                    </div>
+                  </div>
+                  <ScrollArea className="h-[200px]">
+                    <div className="p-1">
+                      {filteredPairs.map((pair) => (
+                        <button
+                          key={pair.symbol}
+                          className={cn(
+                            "w-full flex items-center justify-between px-2 py-1.5 rounded text-sm hover:bg-accent",
+                            pair.symbol === symbol && "bg-accent"
+                          )}
+                          onClick={() => handlePairSelect(pair)}
+                        >
+                          <span className="font-medium">{pair.name}</span>
+                          {pair.symbol === symbol && (
+                            <Badge variant="outline" className="text-[10px]">Selected</Badge>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </div>
+              )}
+            </div>
+            
+            {/* Price Display */}
+            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+              <div>
+                <div className="text-xs text-muted-foreground">Mark Price</div>
+                <div className="text-xl font-mono font-semibold">
+                  ${currentPrice.toLocaleString("en-US", { maximumFractionDigits: 2 })}
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-xs text-muted-foreground">Spread</div>
+                <div className="text-sm font-mono">
+                  {priceData ? ((priceData.ask - priceData.bid) / currentPrice * 100).toFixed(3) : "0.000"}%
+                </div>
+              </div>
+            </div>
+            
+            {/* Direction Toggle */}
+            <div className="space-y-2">
+              <Label className="text-xs text-muted-foreground">Direction</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  type="button"
+                  variant={direction === "LONG" ? "default" : "outline"}
+                  className={cn(
+                    "h-12",
+                    direction === "LONG" && "bg-[#0ECB81] hover:bg-[#0ECB81]/90 text-white"
+                  )}
+                  onClick={() => setDirection("LONG")}
+                >
+                  <TrendingUp className="mr-2 h-4 w-4" />
+                  LONG
+                </Button>
+                <Button
+                  type="button"
+                  variant={direction === "SHORT" ? "default" : "outline"}
+                  className={cn(
+                    "h-12",
+                    direction === "SHORT" && "bg-[#F6465D] hover:bg-[#F6465D]/90 text-white"
+                  )}
+                  onClick={() => setDirection("SHORT")}
+                >
+                  <TrendingDown className="mr-2 h-4 w-4" />
+                  SHORT
+                </Button>
+              </div>
+            </div>
+            
+            {/* Order Type Tabs */}
+            <div className="space-y-2">
+              <Label className="text-xs text-muted-foreground">Order Type</Label>
+              <Tabs value={orderType} onValueChange={(v) => setOrderType(v as typeof orderType)}>
+                <TabsList className="w-full grid grid-cols-3 h-9">
+                  <TabsTrigger value="market" className="text-xs">Market</TabsTrigger>
+                  <TabsTrigger value="limit" className="text-xs">Limit</TabsTrigger>
+                  <TabsTrigger value="stop_limit" className="text-xs">Stop-Limit</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+            
+            {/* Entry Price (for Limit/Stop-Limit) */}
+            {orderType !== "market" && (
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">Entry Price</Label>
+                <Input
+                  type="number"
+                  value={entryPrice}
+                  onChange={(e) => setEntryPrice(e.target.value)}
+                  placeholder={currentPrice.toFixed(2)}
+                  className="font-mono h-10"
+                />
+              </div>
+            )}
+            
+            {/* Stop Price (for Stop-Limit) */}
+            {orderType === "stop_limit" && (
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Target className="h-3 w-3" />
+                  Trigger Price
+                </Label>
+                <Input
+                  type="number"
+                  value={stopPrice}
+                  onChange={(e) => setStopPrice(e.target.value)}
+                  placeholder="Trigger price"
+                  className="font-mono h-10"
+                />
+              </div>
+            )}
+            
+            {/* Amount Input */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs text-muted-foreground">Amount (USDT)</Label>
+                <span className="text-xs text-muted-foreground">
+                  Available: ${availableBalance.toFixed(2)}
+                </span>
+              </div>
+              <Input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="0.00"
+                className="font-mono h-10"
+              />
+              <div className="grid grid-cols-4 gap-1">
+                {[25, 50, 75, 100].map((percent) => (
+                  <Button
+                    key={percent}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-7 text-xs"
+                    onClick={() => handleQuickAmount(percent)}
+                  >
+                    {percent}%
+                  </Button>
+                ))}
+              </div>
+            </div>
+            
+            {/* Leverage Slider */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Gauge className="h-3 w-3" />
+                  Leverage
+                </Label>
+                <span className="text-sm font-mono font-bold text-primary">
+                  {leverage}x
+                </span>
+              </div>
+              <Slider
+                value={[leverage]}
+                onValueChange={(value) => setLeverage(value[0])}
+                min={1}
+                max={125}
+                step={1}
+                className="w-full"
+              />
+              <div className="flex flex-wrap gap-1">
+                {LEVERAGE_PRESETS.map((lev) => (
+                  <Button
+                    key={lev}
+                    type="button"
+                    variant={leverage === lev ? "default" : "outline"}
+                    size="sm"
+                    className={cn("h-7 text-xs px-2", leverage === lev && "bg-primary text-primary-foreground")}
+                    onClick={() => setLeverage(lev)}
+                  >
+                    {lev}x
+                  </Button>
+                ))}
+              </div>
+            </div>
+            
+            <Separator />
+            
+            {/* Stop Loss / Take Profit */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3 text-[#F6465D]" />
+                  Stop Loss
+                </Label>
+                <Input
+                  type="number"
+                  value={stopLoss}
+                  onChange={(e) => setStopLoss(e.target.value)}
+                  placeholder="Price"
+                  className="font-mono h-10"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Target className="h-3 w-3 text-[#0ECB81]" />
+                  Take Profit
+                </Label>
+                <Input
+                  type="number"
+                  value={takeProfit}
+                  onChange={(e) => setTakeProfit(e.target.value)}
+                  placeholder="Price"
+                  className="font-mono h-10"
+                />
+              </div>
+            </div>
+            
+            {/* Position Summary */}
+            <div className="rounded-lg bg-muted/50 p-3 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Position Size</span>
+                <span className="font-mono">${positionSize.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Quantity</span>
+                <span className="font-mono">{quantity.toFixed(6)}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Est. Fee</span>
+                <span className="font-mono">${estimatedFee.toFixed(4)}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Liq. Price</span>
+                <span className={cn(
+                  "font-mono",
+                  direction === "LONG" ? "text-[#F6465D]" : "text-[#0ECB81]"
+                )}>
+                  ${liquidationPrice.toFixed(2)}
+                </span>
+              </div>
+              {stopLossNum > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">SL Distance</span>
+                  <span className="font-mono text-[#F6465D]">
+                    {Math.abs(((stopLossNum - currentPrice) / currentPrice) * 100).toFixed(2)}%
+                  </span>
+                </div>
+              )}
+              {takeProfitNum > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">TP Distance</span>
+                  <span className="font-mono text-[#0ECB81]">
+                    {Math.abs(((takeProfitNum - currentPrice) / currentPrice) * 100).toFixed(2)}%
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        </ScrollArea>
+        
+        {/* Submit Button - Fixed at bottom */}
+        <div className="pt-2 border-t">
+          <Button
+            className={cn(
+              "w-full h-12 text-base font-medium",
+              direction === "LONG" && "bg-[#0ECB81] hover:bg-[#0ECB81]/90",
+              direction === "SHORT" && "bg-[#F6465D] hover:bg-[#F6465D]/90"
+            )}
+            onClick={handleSubmit}
+            disabled={isSubmitting || !account || amountNum <= 0 || amountNum > availableBalance}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                {direction === "LONG" ? (
+                  <TrendingUp className="mr-2 h-5 w-5" />
+                ) : (
+                  <TrendingDown className="mr-2 h-5 w-5" />
+                )}
+                Open {direction} {leverage}x
+              </>
+            )}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
