@@ -156,12 +156,13 @@ export async function POST(request: NextRequest) {
     // Get current price from price API
     let currentPrice = 0;
     try {
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
       const priceResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL || ""}/api/prices?symbols=${symbol}`
+        `${baseUrl}/api/prices?symbols=${symbol}`
       );
       if (priceResponse.ok) {
         const priceData = await priceResponse.json();
-        currentPrice = priceData.prices?.[symbol] || 0;
+        currentPrice = priceData.prices?.[symbol]?.price || 0;
       }
     } catch (e) {
       console.error("[PaperTrading] Failed to fetch price:", e);

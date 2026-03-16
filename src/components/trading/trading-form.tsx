@@ -43,6 +43,7 @@ import {
   TestTube,
   Zap,
   Check,
+  Activity,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -109,6 +110,22 @@ export function TradingForm() {
   // Paper account state
   const [paperAccountId, setPaperAccountId] = useState<string | null>(null);
   const [paperBalance, setPaperBalance] = useState(0);
+  const [paperPositions, setPaperPositions] = useState<Array<{
+    id: string;
+    symbol: string;
+    direction: string;
+    quantity: number;
+    entryPrice: number;
+    currentPrice: number;
+    leverage: number;
+    margin: number;
+    unrealizedPnl: number;
+    unrealizedPnlPercent: number;
+    stopLoss: number | null;
+    takeProfit: number | null;
+    liquidationPrice: number | null;
+    openedAt: string;
+  }>>([]);
 
   // Get current trading mode for the selected exchange
   const tradingMode = getEffectiveMode(exchange);
@@ -136,13 +153,16 @@ export function TradingForm() {
   
   const fetchPaperAccount = async () => {
     try {
-      // Get all PAPER accounts
-      const response = await fetch("/api/exchange?accountType=PAPER");
+      // Get all accounts
+      const response = await fetch("/api/exchange");
       if (response.ok) {
         const data = await response.json();
         // Find PAPER account for selected exchange
+        // PAPER accounts have exchangeType containing "-paper-"
         const paperAccount = data.accounts?.find(
-          (acc: {exchangeId: string}) => acc.exchangeId === exchange
+          (acc: {exchangeId: string; exchangeType: string; accountType: string}) => 
+            acc.exchangeId === exchange && 
+            (acc.exchangeType?.includes("-paper-") || acc.accountType === "PAPER")
         );
         if (paperAccount) {
           setPaperAccountId(paperAccount.id);
@@ -152,13 +172,15 @@ export function TradingForm() {
             const detailData = await detailResponse.json();
             if (detailData.account) {
               const balances = detailData.account.currentBalances || {};
-              const mainCurrency = Object.keys(balances)[0] || "USDT";
+              const mainCurrency = detailData.account.initialCurrency || Object.keys(balances)[0] || "USDT";
               setPaperBalance(balances[mainCurrency] || 0);
+              setPaperPositions(detailData.account.positions || []);
             }
           }
         } else {
           setPaperAccountId(null);
           setPaperBalance(0);
+          setPaperPositions([]);
         }
       }
     } catch (error) {
@@ -689,6 +711,91 @@ export function TradingForm() {
           </Button>
         </CardContent>
       </Card>
+
+      {/* PAPER Positions List */}
+      {isPaperTrading && paperPositions.length > 0 && (
+        <Card className="mt-4">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center justify-between text-base">
+              <div className="flex items-center gap-2">
+                <Activity className="h-5 w-5 text-primary" />
+                Открытые PAPER позиции
+              </div>
+              <Badge variant="outline" className="text-xs">
+                {paperPositions.length} поз.
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="divide-y divide-border">
+              {paperPositions.map((position) => (
+                <div key={position.id} className="p-4 hover:bg-muted/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{position.symbol}</span>
+                      <Badge
+                        variant="outline"
+                        className={cn(
+                          "text-xs",
+                          position.direction === "LONG"
+                            ? "text-green-500 border-green-500/30"
+                            : "text-red-500 border-red-500/30"
+                        )}
+                      >
+                        {position.direction}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">{position.leverage}x</span>
+                    </div>
+                    <div className={cn(
+                      "font-mono text-sm font-medium",
+                      position.unrealizedPnl >= 0 ? "text-green-500" : "text-red-500"
+                    )}>
+                      {position.unrealizedPnl >= 0 ? "+" : ""}{position.unrealizedPnl.toFixed(2)} USDT
+                      <span className="text-xs text-muted-foreground ml-1">
+                        ({position.unrealizedPnlPercent >= 0 ? "+" : ""}{position.unrealizedPnlPercent.toFixed(2)}%)
+                      </span>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                    <div>
+                      <span>Размер: </span>
+                      <span className="font-mono">{position.quantity.toFixed(6)}</span>
+                    </div>
+                    <div>
+                      <span>Вход: </span>
+                      <span className="font-mono">${position.entryPrice.toFixed(2)}</span>
+                    </div>
+                    <div>
+                      <span>Маржа: </span>
+                      <span className="font-mono">${position.margin.toFixed(2)}</span>
+                    </div>
+                    <div>
+                      <span>Ликв.: </span>
+                      <span className="font-mono text-amber-500">
+                        ${position.liquidationPrice?.toFixed(2) || "-"}
+                      </span>
+                    </div>
+                  </div>
+                  {(position.stopLoss || position.takeProfit) && (
+                    <div className="flex gap-4 mt-2 text-xs">
+                      {position.stopLoss && (
+                        <span className="text-red-500">
+                          SL: ${position.stopLoss.toFixed(2)}
+                        </span>
+                      )}
+                      {position.takeProfit && (
+                        <span className="text-green-500">
+                          TP: ${position.takeProfit.toFixed(2)}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Confirmation Dialog */}
       <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
