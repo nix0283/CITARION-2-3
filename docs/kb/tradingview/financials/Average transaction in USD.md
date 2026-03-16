@@ -1,0 +1,16 @@
+# Average transaction in USD
+
+**URL:** https://www.tradingview.com/support/solutions/43000703309-average-transaction-in-usd/
+
+---
+
+- [ Help Center ](/) - / [ Knowledge base ](/knowledge-base/) - / Financials - / [ Crypto ](/support/folders/43000590536-crypto/) - / [ Average transaction in USD ](/support/solutions/43000703309-average-transaction-in-usd/) # Average transaction in USD What is the "Average transaction in USD"? Mean transaction value of a particular crypto in USD. Why is the "Average Transaction in USD" important? The methodology behind this indicator is similar to the indicator “Number of transactions”. Average Transaction in USD can show the overall activity and liquidity of crypto. An increase in the average transaction in USD is usually a positive sign, since in this case the liquidity of the coin increases and often its price. Decreasing the number of transactions has the opposite effect. How is the "Average transaction in USD" calculated? Average transaction in USD calculated: Total value of transactions in USD / Number of transactions. Previous Previous Average balance in USD Next Next Large transactions Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+
+![Image 2](https://static.tradingview.com/static/bundles/look-first-light.74b5bba06f657157cdb4.svg)
+

@@ -1,0 +1,134 @@
+# Deposit Interest Rate (DIR)
+
+**URL:** https://www.tradingview.com/support/solutions/43000650994-deposit-interest-rate-dir/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Deposit Interest Rate (DIR) ](/support/solutions/43000650994-deposit-interest-rate-dir/)
+
+# Deposit Interest Rate (DIR) 
+ Average interest rate on deposits.
+
+All countries for which *DIR* is available are listed below:
+
+- Albania
+- Algeria
+- Angola
+- Antigua and Barbuda
+- Argentina
+- Armenia
+- Aruba
+- Australia
+- Azerbaijan
+- Bahamas
+- Bangladesh
+- Barbados
+- Belarus
+- Belize
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Cambodia
+- Canada
+- Cape Verde
+- Chile
+- China
+- Colombia
+- Comoros
+- Costa Rica
+- Croatia
+- Czech Republic
+- Dominica
+- Dominican Republic
+- Ecuador
+- Egypt
+- Euro Area
+- Fiji
+- Georgia
+- Grenada
+- Guatemala
+- Guyana
+- Haiti
+- Honduras
+- Hungary
+- Indonesia
+- Israel
+- Jamaica
+- Japan
+- Jordan
+- Kenya
+- Kuwait
+- Kyrgyzstan
+- Lebanon
+- Lesotho
+- Macau
+- Macedonia
+- Madagascar
+- Malaysia
+- Maldives
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Morocco
+- Mozambique
+- Myanmar
+- Namibia
+- New Zealand
+- Nicaragua
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Panama
+- Papua New Guinea
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Qatar
+- Romania
+- Russia
+- Rwanda
+- Saint Lucia
+- Saint Vincent and the Grenadines
+- Samoa
+- Saudi Arabia
+- Serbia
+- Seychelles
+- Sierra Leone
+- Singapore
+- Solomon Islands
+- South Africa
+- South Korea
+- Suriname
+- Swaziland
+- Sweden
+- Switzerland
+- Tajikistan
+- Thailand
+- Timor-leste
+- Tonga
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Kingdom
+- Uruguay
+- Uzbekistan
+- Vanuatu
+- Venezuela
+- Vietnam
+- Zambia
+- Zimbabwe
+ Previous Previous Deposit Growth (DG) Next Next Disposable Personal Income (DPI) Launch Supercharts
+

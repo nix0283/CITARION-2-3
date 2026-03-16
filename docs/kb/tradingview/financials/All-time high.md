@@ -1,0 +1,16 @@
+# All-time high
+
+**URL:** https://www.tradingview.com/support/solutions/43000703625-all-time-high/
+
+---
+
+- [ Help Center ](/) - / [ Knowledge base ](/knowledge-base/) - / Financials - / [ Crypto ](/support/folders/43000590536-crypto/) - / [ All-time high ](/support/solutions/43000703625-all-time-high/) # All-time high What is the “All-time high”? All-time high (ATH) refers to the highest price or value that a particular cryptocurrency has ever reached in its trading history. Why is All-time high important? Market sentiment: The ATH can serve as an indicator of market sentiment. When a cryptocurrency breaks its previous ATH, it suggests that there is strong demand and positive sentiment surrounding that particular asset. It can lead to increased buying pressure and further price appreciation. Resistance levels: After reaching an ATH, cryptocurrencies often encounter resistance as some investors may choose to sell their holdings, taking profits or cutting losses. These resistance levels can act as barriers to further price appreciation, and investors closely watch them to gauge potential price movements. Historical reference: The ATH serves as a historical reference point for traders, analysts, and researchers. It allows them to analyze the past performance of the cryptocurrency, study market trends, and make informed decisions based on historical price movements. Previous Previous GitHub commits Next Next Category Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+
+![Image 2](https://static.tradingview.com/static/bundles/look-first-light.74b5bba06f657157cdb4.svg)
+

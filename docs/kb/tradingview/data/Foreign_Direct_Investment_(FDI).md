@@ -1,0 +1,145 @@
+# Foreign Direct Investment (FDI)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651019-foreign-direct-investment-fdi/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Foreign Direct Investment (FDI) ](/support/solutions/43000651019-foreign-direct-investment-fdi/)
+
+# Foreign Direct Investment (FDI) 
+ Change in foreign direct investment.
+
+All countries for which *FDI* is available are listed below:
+
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Canada
+- Cape Verde
+- Chile
+- China
+- Colombia
+- Costa Rica
+- Croatia
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Estonia
+- Ethiopia
+- Finland
+- France
+- Georgia
+- Germany
+- Greece
+- Guatemala
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iran
+- Ireland
+- Israel
+- Italy
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Kuwait
+- Kyrgyzstan
+- Laos
+- Latvia
+- Lebanon
+- Libya
+- Lithuania
+- Luxembourg
+- Macau
+- Macedonia
+- Malawi
+- Malaysia
+- Maldives
+- Malta
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Morocco
+- Myanmar
+- Namibia
+- Nepal
+- Netherlands
+- New Zealand
+- Nicaragua
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Palestine
+- Panama
+- Papua New Guinea
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Romania
+- Russia
+- Rwanda
+- Saudi Arabia
+- Serbia
+- Seychelles
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sudan
+- Suriname
+- Swaziland
+- Sweden
+- Switzerland
+- Taiwan
+- Thailand
+- Tunisia
+- Turkey
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Venezuela
+- Vietnam
+- Zambia
+ Previous Previous Foreign Bond Investment (FBI) Next Next Foreign Exchange Reserves (FER) Launch Supercharts
+

@@ -1,0 +1,131 @@
+# Gold Reserves (GRES)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651045-gold-reserves-gres/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Gold Reserves (GRES) ](/support/solutions/43000651045-gold-reserves-gres/)
+
+# Gold Reserves (GRES) 
+ Volume of gold reserves.
+
+All countries for which *GRES* is available are listed below:
+
+- Afghanistan
+- Albania
+- Algeria
+- Argentina
+- Armenia
+- Aruba
+- Australia
+- Austria
+- Azerbaijan
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Bolivia
+- Bosnia and Herzegovina
+- Brazil
+- Bulgaria
+- Burundi
+- Cambodia
+- Cameroon
+- Canada
+- Chile
+- China
+- Colombia
+- Cyprus
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Estonia
+- Euro Area
+- Fiji
+- Finland
+- France
+- Germany
+- Ghana
+- Greece
+- Guatemala
+- Haiti
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iraq
+- Ireland
+- Italy
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kuwait
+- Kyrgyzstan
+- Latvia
+- Lebanon
+- Libya
+- Lithuania
+- Luxembourg
+- Macedonia
+- Malaysia
+- Malta
+- Mauritius
+- Mexico
+- Mongolia
+- Morocco
+- Mozambique
+- Myanmar
+- Nepal
+- Netherlands
+- Nicaragua
+- Nigeria
+- Oman
+- Pakistan
+- Papua New Guinea
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Romania
+- Russia
+- Saudi Arabia
+- Serbia
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Suriname
+- Sweden
+- Switzerland
+- Syrian Arab Republic
+- Taiwan
+- Tajikistan
+- Thailand
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Venezuela
+- Yemen
+ Previous Previous Gold Production (GP) Next Next Goods Trade Balance (GTB) Launch Supercharts
+

@@ -1,0 +1,135 @@
+# GDP From Construction (GDPC)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651026-gdp-from-construction-gdpc/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ GDP From Construction (GDPC) ](/support/solutions/43000651026-gdp-from-construction-gdpc/)
+
+# GDP From Construction (GDPC) 
+ GDP from construction.
+
+All countries for which *GDPC* is available are listed below:
+
+- Afghanistan
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Azerbaijan
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Belize
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Cambodia
+- Cameroon
+- Canada
+- Cape Verde
+- Chile
+- China
+- Colombia
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Ecuador
+- Egypt
+- El Salvador
+- Estonia
+- Finland
+- France
+- Gambia
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Guatemala
+- Guinea
+- Honduras
+- Hong Kong
+- Hungary
+- India
+- Indonesia
+- Ireland
+- Israel
+- Italy
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Laos
+- Latvia
+- Lesotho
+- Malawi
+- Malaysia
+- Maldives
+- Mauritius
+- Mexico
+- Mongolia
+- Morocco
+- Mozambique
+- Namibia
+- Nepal
+- Netherlands
+- New Zealand
+- Nicaragua
+- Nigeria
+- North Korea
+- Norway
+- Oman
+- Pakistan
+- Palestine
+- Panama
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Romania
+- Russia
+- Rwanda
+- Saudi Arabia
+- Serbia
+- Seychelles
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sweden
+- Taiwan
+- Tajikistan
+- Tanzania
+- Thailand
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Vietnam
+- Zambia
+ Previous Previous GDP From Agriculture (GDPA) Next Next GDP From Manufacturing (GDPMAN) Launch Supercharts
+

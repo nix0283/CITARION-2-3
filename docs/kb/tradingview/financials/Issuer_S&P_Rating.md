@@ -1,0 +1,55 @@
+# Issuer S&P Rating
+
+**URL:** https://www.tradingview.com/support/solutions/43000734026-issuer-s-p-rating/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Financials 
+- / [ Bonds ](/support/folders/43000594677-bonds/)
+- / [ Issuer S&P Rating ](/support/solutions/43000734026-issuer-s-p-rating/)
+
+# Issuer S&P Rating 
+
+#### What is the Issuer S&P rating?
+ The issuer credit rating provided by Standard & Poor's (S&P) measures the likelihood that an issuer will meet its debt obligations on time. There are two main types of ratings:
+
+*Long-term rating* — Analyze an issuer's ability to meet financial obligations over a period longer than one year. A high long-term rating indicates a strong financial condition of the issuer and a low probability of default, making it attractive for long-term investors.
+
+*Short-term rating* — Assesses an issuer's ability to cover debt obligations within the next year. The short-term rating is important for evaluating the company’s current liquidity and operational stability, helping creditors and market participants determine the risk of short-term investments.
+
+#### Why are S&P ratings important?
+
+S&P credit ratings help investors assess the risk associated with investing in an issuer's debt obligations. High ratings reduce borrowing costs and improve credit terms, making the issuer more attractive for investment. Low ratings increase the cost of capital and signal higher risks, which is crucial for making informed investment decisions.
+
+#### Long-term rating scale:
+
+Investment grade:
+
+- AAA — Extremely strong capacity to meet financial commitments. Highest Rating.
+- AA+, AA, AA- — Very strong capacity to meet financial commitments.
+- A+, A, A- — Strong capacity to meet financial commitments, but somewhat susceptible to adverse environments or circumstances.
+- BBB+, BBB, BBB- — Adequate capacity to meet financial commitments but more subject to adverse economic conditions. BBB- is the lowest investment grade by market participants.
+
+Speculative grade:
+
+- BB+ — The highest speculative grade by market participants.
+- BB — Less vulnerable in the near term but faces major ongoing uncertainties.
+- B+, B, B- — More vulnerable to adverse environments but has the capacity to meet financial commitments.
+- CCC+, CCC, CCC-, CC, C — Vulnerable and dependent on favorable environments to meet commitments. C indicates a bankruptcy petition has been filed or similar action taken but commitments are still being paid.
+- D — Default.
+- NR — Not rated.
+
+#### Short-term ratings scale:
+
+- A-1+ — Highest Rating. The capacity to meet financial commitments is extremely strong.
+- A-1 — The capacity to meet financial commitments is strong.
+- A-2 — Somewhat susceptible to adverse environments or changes of circumstances. Capacity to meet financial commitments is satisfactory.
+- A-3 — Adequate protection. Adverse environments or changes of circumstances are more likely to weaken the capacity to meet financial commitments.
+- B-1, B, B-2, B-3 — Vulnerable with significant speculative characteristics. Major uncertainties which could result in inadequate capacity to meet commitments.
+- C — Vulnerable to nonpayment and dependent on favorable environments.
+- SD — Selective default.
+- NR — Not rated.
+ Previous Previous Paid amount Next Next S&P Rating Launch Supercharts
+

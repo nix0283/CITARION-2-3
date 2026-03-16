@@ -1,0 +1,90 @@
+# Pending due to Binance Futures Trading Rules Violation
+
+**URL:** https://help.cornix.io/en/articles/6124684-pending-due-to-binance-futures-trading-rules-violation
+
+**Created:** 2026-03-03T12:01:01+00:00
+
+---
+
+Pending due to Binance Futures Trading Rules Violation | Cornix Help Center- - - - - - :root{--body-bg: rgb(255, 255, 255);
+--body-image: none;
+--body-bg-rgb: 255, 255, 255;
+--body-border: rgb(230, 230, 230);
+--body-primary-color: #1a1a1a;
+--body-secondary-color: #737373;
+--body-reaction-bg: rgb(242, 242, 242);
+--body-reaction-text-color: rgb(64, 64, 64);
+--body-toc-active-border: #737373;
+--body-toc-inactive-border: #f2f2f2;
+--body-toc-inactive-color: #737373;
+--body-toc-active-font-weight: 400;
+--body-table-border: rgb(204, 204, 204);
+--body-color: hsl(0, 0%, 0%);
+--footer-bg: rgb(255, 255, 255);
+--footer-image: none;
+--footer-border: rgb(230, 230, 230);
+--footer-color: hsl(211, 10%, 61%);
+--header-bg: none;
+--header-image: url(https://downloads.intercomcdn.com/i/o/wrsw0nb0/663084/8cd5c29e4b01ccfff3d54c7bd01a/bcb02057784c6c6a633cd138e02ffe33.jpg);
+--header-color: hsl(242, 64%, 18%);
+--collection-card-bg: rgb(242, 242, 255);
+--collection-card-image: none;
+--collection-card-color: hsl(201, 97%, 41%);
+--card-bg: rgb(255, 255, 255);
+--card-border-color: rgb(230, 230, 230);
+--card-border-inner-radius: 8px;
+--card-border-radius: 10px;
+--card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+--search-bar-border-radius: 10px;
+--search-bar-width: 100%;
+--ticket-blue-bg-color: #dce1f9;
+--ticket-blue-text-color: #334bfa;
+--ticket-green-bg-color: #d7efdc;
+--ticket-green-text-color: #0f7134;
+--ticket-orange-bg-color: #ffebdb;
+--ticket-orange-text-color: #b24d00;
+--ticket-red-bg-color: #ffdbdb;
+--ticket-red-text-color: #df2020;
+--header-height: 245px;
+--header-subheader-background-color: #000000;
+--header-subheader-font-color: #FFFFFF;
+--content-block-bg: rgb(255, 255, 255);
+--content-block-image: none;
+--content-block-color: hsl(0, 0%, 10%);
+--content-block-button-bg: rgb(51, 75, 250);
+--content-block-button-image: none;
+--content-block-button-color: hsl(0, 0%, 100%);
+--content-block-button-radius: 6px;
+--content-block-margin: 0;
+--content-block-width: auto;
+--primary-color: hsl(242, 64%, 18%);
+--primary-color-alpha-10: hsla(242, 64%, 18%, 0.1);
+--primary-color-alpha-60: hsla(242, 64%, 18%, 0.6);
+--text-on-primary-color: #ffffff}Skip to main content
+DashboardAnnouncements ChannelEnglish
+English
+DashboardAnnouncements ChannelEnglish
+English
+Search for articles...
+- All Collections
+- Errors & Notifications
+- Order / Trade Statuses
+- Pending due to Binance Futures Trading Rules Violation
+# Pending due to Binance Futures Trading Rules Violation
+Written by Hadar Cornix Updated over 3 years ago
+If a pending order is marked with this status, that means that you violated the Binance Futures Trading Rules limitations, most likely for violating the small orders limitation, which means you exceeded the number allowed by Binance Future for small orders (below 50$).
+
+In this case, the exchange will place a temporary ban on your account (the ban duration may change in accordance with different parameters). For more information about Binance Futures Trading Rules please visit Binance Announcements.
+
+As long as an order has this status, it means we are waiting for the limitation to be removed from the exchange side and are trying to place the order on the exchange.
+
+In order to avoid violation of this limitation, you can either increase your trade size or lower the number of orders in each trade, in order to reduce the number of orders below 50$.
+Did this answer your question?😞😐😃Cornix Help Center-
+-
+-
+-
+Intercom
+We run on Intercom
+window.intercomSettings = {"app_id":"wrsw0nb0","article_id":"6124684","anonymous_id":"631da9a6-8fe9-4ebc-8cac-35c68ec03317"};
+(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/wrsw0nb0';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s, x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+\n\n---\n\n## Изображения\n\n### Изображение 1\n\n![Image 1](https://downloads.intercomcdn.com/i/o/wrsw0nb0/663085/66f657d34c477c0cb5e0ad55a357/811b89d422741a7d1e34bcfcff4f39f0.png)\n\n**URL:** https://downloads.intercomcdn.com/i/o/wrsw0nb0/663085/66f657d34c477c0cb5e0ad55a357/811b89d422741a7d1e34bcfcff4f39f0.png\n\n**Описание:** The screenshot displays the Cornix trading bot’s logo, featuring a stylized dark blue crow holding a small yellow object (likely a coin) in its beak, perched on a curved line above the bold, dark blue text “cornix” (with a dot accent on the “i”). The design is clean and minimalist, emphasizing the brand’s name and bird mascot against a white background.\n\n---\n\n### Изображение 2\n\n![Image 2](https://static.intercomassets.com/avatars/5322994/square_128/IMG-20230206-WA0000_%281%29-1678375300.jpeg)\n\n**URL:** https://static.intercomassets.com/avatars/5322994/square_128/IMG-20230206-WA0000_%281%29-1678375300.jpeg\n\n**Описание:** The screenshot shows a Cornix trading bot interface with a clean, modern design. Key UI elements include a navigation bar (likely for bot settings, strategies, or account management), a central dashboard displaying trading metrics (e.g., profit/loss, trade history), and action buttons (e.g., "Start Bot," "Pause," "Edit Strategy") for controlling automated trading. The layout emphasizes clarity, with sections for real-time performance tracking and strategy configuration.\n\n---\n\n

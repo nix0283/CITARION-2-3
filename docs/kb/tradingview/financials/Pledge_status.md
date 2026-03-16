@@ -1,0 +1,46 @@
+# Pledge status
+
+**URL:** https://www.tradingview.com/support/solutions/43000728525-pledge-status/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Financials 
+- / [ Bonds ](/support/folders/43000594677-bonds/)
+- / [ Pledge status ](/support/solutions/43000728525-pledge-status/)
+
+# Pledge status 
+ Pledge status refers to the priority level of a specific asset or collateral that is used to secure a loan or a bond. In the context of corporate bonds, pledge status indicates the level of security that a particular asset provides to bondholders in case of default by the issuing company. Assets with a higher pledge status are typically considered more secure and have a higher likelihood of being recovered in the event of bankruptcy or liquidation.
+
+Understanding the pledge status of assets backing a corporate bond is crucial as it directly impacts the level of risk associated with the investment. Bonds with assets of higher pledge status provide greater security and may offer lower yields as a result. On the other hand, bonds with assets of lower pledge status may carry higher risk but offer potentially higher returns.
+
+#### First mortgage
+
+First mortgage pledge status refers to debt that is secured by a first priority lien on specific real estate property. First mortgage debt holders have the primary claim on the property in case of default, providing a high level of security for the debt. First mortgage loans are typically considered lower risk due to the priority position of the lien on the underlying property.
+
+#### Secured
+
+Secured pledge status indicates that a bond or loan is backed by specific collateral or assets that serve as security for the debt. Secured debt has a claim on designated assets in the event of default, providing a layer of protection for investors. 
+
+The collateral backing secured debt helps mitigate risk for investors by providing recourse to specific assets in case of non-payment by the issuer.
+
+#### Secured 1st lien
+
+Secured 1st lien pledge status denotes debt that has a first priority claim on specified collateral or assets in the event of default. Secured 1st lien debt holders have the first right to the designated assets ahead of other creditors in the event of liquidation or bankruptcy. 
+
+This priority position enhances the security of the debt and reduces the risk for investors holding secured 1st lien obligations.
+
+#### Secured 2nd lien
+
+Secured 2nd lien pledge status represents a debt that has a secondary claim on collateral or assets after secured 1st lien debt holders in the event of default. Secured 2nd lien debt holders have a subordinate position to 1st lien creditors but rank ahead of unsecured creditors in the creditor hierarchy. 
+
+Secured 2nd lien debt carries higher risk compared to 1st lien debt but offers greater security than unsecured debt.
+
+#### Unsecured
+
+Unsecured pledge status refers to a situation where a bond or loan is not backed by specific collateral or assets. Unsecured debt does not have a claim on specific assets in the event of default and relies on the issuer's general creditworthiness for repayment. 
+
+Investors holding unsecured debt are considered general creditors and may have a lower priority in the event of bankruptcy or liquidation.
+ Previous Previous Inflation protection Next Next Credit parent Launch Supercharts
+

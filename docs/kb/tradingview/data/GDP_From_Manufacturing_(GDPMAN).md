@@ -1,0 +1,135 @@
+# GDP From Manufacturing (GDPMAN)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651027-gdp-from-manufacturing-gdpman/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ GDP From Manufacturing (GDPMAN) ](/support/solutions/43000651027-gdp-from-manufacturing-gdpman/)
+
+# GDP From Manufacturing (GDPMAN) 
+ GDP from manufacturing.
+
+All countries for which *GDPMAN* is available are listed below:
+
+- Afghanistan
+- Albania
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Azerbaijan
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Belize
+- Benin
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Burkina Faso
+- Cambodia
+- Canada
+- Cape Verde
+- Chile
+- China
+- Colombia
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Ecuador
+- Egypt
+- El Salvador
+- Estonia
+- Ethiopia
+- Finland
+- France
+- Gambia
+- Georgia
+- Germany
+- Ghana
+- Guatemala
+- Guinea
+- Honduras
+- Hong Kong
+- Hungary
+- India
+- Indonesia
+- Ireland
+- Israel
+- Italy
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Laos
+- Latvia
+- Lesotho
+- Liberia
+- Malawi
+- Malaysia
+- Maldives
+- Mauritius
+- Mexico
+- Mongolia
+- Morocco
+- Mozambique
+- Namibia
+- Nepal
+- Netherlands
+- New Zealand
+- Nicaragua
+- Nigeria
+- North Korea
+- Norway
+- Oman
+- Pakistan
+- Palestine
+- Panama
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Romania
+- Russia
+- Rwanda
+- Saudi Arabia
+- Serbia
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sweden
+- Taiwan
+- Tajikistan
+- Tanzania
+- Thailand
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Vietnam
+- Zambia
+ Previous Previous GDP From Construction (GDPC) Next Next GDP From Mining (GDPMIN) Launch Supercharts
+

@@ -1,0 +1,118 @@
+# Asset class: Commodities
+
+**URL:** https://www.tradingview.com/support/solutions/43000717974-asset-class-commodities/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Financials 
+- / [ ETF ](/support/folders/43000592471-etf/)
+- / [ Asset class: Commodities ](/support/solutions/43000717974-asset-class-commodities/)
+
+# Asset class: Commodities 
+
+#### Commodities: Categories, Focuses, and Niches
+ The fund is specifically designed to track the returns available within the commodity sector. The commodity sector consists of exchange-traded physical goods or contracts regarding the physical goods.
+
+Commodity ETFs categorize investments based on the product's primary use, distinguishing specific commodities within various sectors. 
+
+#### Category
+
+Commodity categories must describe a well-recognized sector of the exchange-traded commodities market.
+
+*Agriculture* – plants or animals, or parts thereof, used primarily for producing food or fabrics
+
+*Energy* – products or byproducts that relate to the generation of power.
+
+*Industrial metals *– metals whose primary function is in industrial use.
+
+*Precious metals* – metals with high market value due to rarity, including gold, silver, palladium, and platinum.
+
+#### Focus
+
+The function of Focus within Commodities is to modify Category. A focus description must differentiate products within the Commodity market Sectors.
+
+Any fund without modifications to the Category will carry the Focus designation, Broad Market.
+
+A Focus-level descriptor should be as specific as is needed to describe the commodity exactly. Therefore, a fund that tracks only corn prices will have the Focus descriptor of Corn and not Grains, whereas a fund that tracks corn, wheat, and soybeans will carry the Focus descriptor of Grains, not Corn.
+
+#### Niche
+
+The function of Niche is to describe the investment strategy the fund uses to gain exposure to the commodity it tracks.
+
+The following are the Commodity Niche descriptors and their definitions:
+
+*Physically held* – the fund is directly exposed to the spot price of the tracked commodity, either by holding the commodity itself or, in the case of certain ETNs, promising the return of spot gold or ETFs that track spot gold.
+
+*Front-month* – the fund takes a long position in the soonest-to-expire futures contracts whose settlement price depends on the closing spot price of the commodity tracked. This designation includes funds that will take a long position in the next soonest-to-expire futures contracts as part of its rolling process to avoid taking delivery of the underlying commodity.
+
+*Laddered* – the fund takes a long position in a series of futures contracts across many or most of the available tenors without regard to the term structure of the curve at the time of the roll.
+
+*Optimized* – the fund uses a dynamic rules-based process to select futures contracts to achieve a stated goal, typically to reduce contango.
+
+*Variable* – the fund varies its method of exposure to the underlying commodities.
+
+*Extended-term *– the fund follows a fixed schedule that is not exclusively front-month, holding only one contract per commodity at a time.
+ Category Focus Niche Agriculture
+ Broad market
+
+Broad maturities
+
+Extended term
+
+Front month
+
+Intermediate
+
+Laddered
+
+Optimized
+
+Physically held
+
+Variable
+ Cocoa
+ Coffee
+ Corn
+ Cotton
+ Grains
+ Lean hogs
+ Live cattle
+ Livestock
+ Softs
+ Soybean oil
+ Soybeans
+ Sugar
+ Wheat
+ Broad market
+ Broad market
+ Broad market ex agriculture
+ Energy
+ Broad market
+ Carbon credits
+ Crude oil
+ Energy, Electricity
+ Gasoline
+ Heating oil
+ Natural gas
+ Petroleum
+ Industrial metals
+ Aluminium
+ Broad market
+ Copper
+ Lead
+ Nickel
+ Tin
+ Zinc
+ Metals
+ Broad market
+ Precious metals
+ Broad market
+ Gold
+ Palladium
+ Platinum
+ Rhodium
+ Silver
+ Previous Previous Asset class: Fixed Income Next Next Asset сlass: Currency Launch Supercharts
+

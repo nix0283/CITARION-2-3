@@ -1,0 +1,16 @@
+# Ownership form
+
+**URL:** https://www.tradingview.com/support/solutions/43000728516-ownership-form/
+
+---
+
+- [ Help Center ](/) - / [ Knowledge base ](/knowledge-base/) - / Financials - / [ Bonds ](/support/folders/43000594677-bonds/) - / [ Ownership form ](/support/solutions/43000728516-ownership-form/) # Ownership form Ownership form is the legal structure or arrangement through which individuals or entities hold ownership rights to assets or investments. The ownership form determines the rights, responsibilities, and liabilities associated with owning a particular asset. Understanding the ownership form is important for determining rights, responsibilities, and potential tax implications associated with owning assets. Bearer Bearer ownership form refers to securities that are owned by whoever holds the physical certificate or document, known as a bearer instrument. Bearer securities do not have the owner's name registered on them, and ownership is transferred by delivering the physical certificate. The bearer has the right to claim ownership and receive payments associated with the security. Bearer depository receipt Bearer depository receipt ownership form represents an ownership interest in a security held by a depository on behalf of the bearer. Bearer depository receipts are issued by depository institutions to represent ownership of underlying securities, providing a convenient way for investors to hold and trade securities without handling physical certificates. Bearer / Registered Bearer/Registered ownership form allows the security to be held either in bearer form or registered form. In bearer/registered ownership, the security can be transferred by physical delivery (bearer) or by registration of ownership with the issuer or a registrar (registered). This hybrid form provides flexibility in how ownership is transferred and managed. New global note New global note ownership form refers to a type of security issued in global form, where ownership is recorded electronically rather than through physical certificates. New global notes are typically held in book-entry form by a central securities depository, facilitating efficient trading and settlement processes. Registered Registered ownership form indicates that the security is registered in the name of the owner with the issuer or a registrar. Registered securities have the owner's name recorded on the security, and ownership is transferred through official registration processes. Registered ownership provides clarity on ownership and facilitates communication between the issuer and the investor. Registered depository receipt Registered depository receipt ownership form represents an ownership interest in a security held by a depository on behalf of the registered owner. Registered depository receipts are issued by depository institutions to represent ownership of underlying securities, with the owner's name registered with the depository. Registered depository receipts offer investors a secure and convenient way to hold and trade securities. Previous Previous Sinking fund Next Next Redemption type Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+
+![Image 2](https://static.tradingview.com/static/bundles/look-first-light.74b5bba06f657157cdb4.svg)
+

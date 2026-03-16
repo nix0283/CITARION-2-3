@@ -1,0 +1,147 @@
+# Money Supply M1 (M1)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651126-money-supply-m1-m1/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Money Supply M1 (M1) ](/support/solutions/43000651126-money-supply-m1-m1/)
+
+# Money Supply M1 (M1) 
+ Money supply M2.
+
+All countries for which *M1* is available are listed below:
+
+- Albania
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahamas
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Belize
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Canada
+- Cape Verde
+- Chile
+- China
+- Colombia
+- Comoros
+- Congo
+- Croatia
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Equatorial Guinea
+- Estonia
+- Euro Area
+- Finland
+- France
+- Gambia
+- Georgia
+- Germany
+- Greece
+- Guatemala
+- Guinea
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kuwait
+- Kyrgyzstan
+- Latvia
+- Lebanon
+- Lesotho
+- Liberia
+- Libya
+- Lithuania
+- Luxembourg
+- Macau
+- Macedonia
+- Malawi
+- Malaysia
+- Maldives
+- Malta
+- Mexico
+- Moldova
+- Mongolia
+- Morocco
+- Namibia
+- Netherlands
+- New Caledonia
+- New Zealand
+- Nicaragua
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Romania
+- Russia
+- Rwanda
+- Sao Tome and Principe
+- Saudi Arabia
+- Serbia
+- Seychelles
+- Sierra Leone
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sudan
+- Swaziland
+- Sweden
+- Switzerland
+- Taiwan
+- Tajikistan
+- Tanzania
+- Thailand
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Venezuela
+- Vietnam
+- Zimbabwe
+ Previous Previous Money Supply M0 (M0) Next Next Money Supply M2 (M2) Launch Supercharts
+

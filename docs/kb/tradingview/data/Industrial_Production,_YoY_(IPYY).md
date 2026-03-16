@@ -1,0 +1,133 @@
+# Industrial Production, YoY (IPYY)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651079-industrial-production-yoy-ipyy/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Industrial Production, YoY (IPYY) ](/support/solutions/43000651079-industrial-production-yoy-ipyy/)
+
+# Industrial Production, YoY (IPYY) 
+ Annual change in industrial production.
+
+All countries for which *IPYY* is available are listed below:
+
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Belarus
+- Belgium
+- Benin
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Bulgaria
+- Burkina Faso
+- Burundi
+- Cameroon
+- Canada
+- Chad
+- Chile
+- China
+- Colombia
+- Congo
+- Costa Rica
+- Croatia
+- Cuba
+- Cyprus
+- Czech Republic
+- Denmark
+- El Salvador
+- Estonia
+- Euro Area
+- Fiji
+- Finland
+- France
+- Georgia
+- Germany
+- Greece
+- Guinea-Bissau
+- Hong Kong
+- Hungary
+- India
+- Indonesia
+- Iran
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Ivory Coast
+- Japan
+- Jordan
+- Kazakhstan
+- Kosovo
+- Kyrgyzstan
+- Latvia
+- Lithuania
+- Luxembourg
+- Macau
+- Macedonia
+- Malaysia
+- Mali
+- Malta
+- Mauritania
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Morocco
+- Mozambique
+- Netherlands
+- New Zealand
+- Niger
+- Nigeria
+- Norway
+- Pakistan
+- Palestine
+- Panama
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Romania
+- Russia
+- Rwanda
+- Saudi Arabia
+- Senegal
+- Serbia
+- Seychelles
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sweden
+- Switzerland
+- Taiwan
+- Tajikistan
+- Thailand
+- Togo
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Ukraine
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Venezuela
+- Vietnam
+ Previous Previous Industrial Production, MoM (IPMM) Next Next Industrial Sentiment (IS) Launch Supercharts
+

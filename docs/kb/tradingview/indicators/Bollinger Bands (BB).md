@@ -1,0 +1,114 @@
+# Bollinger Bands (BB)
+
+**URL:** https://www.tradingview.com/support/solutions/43000501840-bollinger-bands-bb/
+
+---
+
+- [ Help Center ](/) - / [ Knowledge base ](/knowledge-base/) - / Indicators - / [ Built-in Indicators ](/support/folders/43000587405-built-in-indicators/) - / [ Bollinger Bands (BB) ](/support/solutions/43000501840-bollinger-bands-bb/) # Bollinger Bands (BB) Definition [Bollinger Bands (BB)](https://www.tradingview.com/scripts/bollingerbands/) are a widely popular technical analysis instrument created by John Bollinger in the early 1980’s. Bollinger Bands consist of a band of three lines which are plotted in relation to security prices. The line in the middle is usually a Simple Moving Average (SMA) set to a period of 20 days (The type of trend line and period can be changed by the trader; however a 20 day moving average is by far the most popular). The SMA then serves as a base for the Upper and Lower Bands. The Upper and Lower Bands are used as a way to measure volatility by observing the relationship between the Bands and price. Typically the Upper and Lower Bands are set to two standard deviations away from the SMA (The Middle Line); however the number of standard deviations can also be adjusted by the trader. History Bollinger Bands (BB) were created in the early 1980’s by financial trader, analyst and teacher John Bollinger. The indicator filled a need to visualize changes in volatility which is of course dynamic, however at the time of the Bollinger Band’s creation, volatility was seen as static. Calculation There are three bands when using Bollinger Bands Middle Band – 20 Day Simple Moving Average Upper Band – 20 Day Simple Moving Average + (Standard Deviation x 2) Lower Band – 20 Day Simple Moving Average - (Standard Deviation x 2) The basics The Bollinger Bands indicator is an oscillator meaning that it operates between or within a set range of numbers or parameters. As previously mentioned, the standard parameters for Bollinger Bands are a 20 day period with standard deviations 2 steps away from price above and below the SMA line. Essentially Bollinger Bands are a way to measure and visualize volatility. As volatility increases, the wider the bands become. Likewise, as volatility decreases, the gap between bands narrows. What is done with this information is up to the trader but there are a few different patterns that one should look for when using Bollinger Bands. What to look for High/Low Prices One thing that must be understood about Bollinger Bands is that they provide a relative definition of high and low . Prices are almost always within the band. Therefore, when prices move up near the upper band or even break through the upper band, many traders would see that security as being overbought . This would preset a possible selling opportunity . Of course the opposite would also be true. When prices move down near the lower band or even break through the lower band, that security may be seen as oversold and a buying opportunity may be at hand. Cycling Between Expansion and Contraction Volatility can generally be seen as a cycle. Typically periods of time with low volatility and steady or sideways prices (known as contraction) are followed by period of expansion. Expansion is a period of time characterized by high volatility and moving prices. Periods of expansion are then generally followed by periods of contraction. It is a cycle in which traders can be better prepared to navigate by using Bollinger Bands because of the indicators ability to monitor ever changing volatility. Price Action Confirmations - Because of Bollinger Bands ability to display a critically important metric (changes in volatility), the indicator is often used in conjunction with other indicators in order to perform some advanced technical analysis. A good example of this is using Bollinger Bands (oscillating) with a Trend Line (not oscillating). As the example below shows, having the two different types of indicators in agreement can add a level of confidence that the price action is moving as expected. - Another good example is using Bollinger Bands to confirm some classic chart patterns such as W-Bottoms. Bollinger often used Bollinger Bands to confirm the existence of W-Bottoms which are a classic chart pattern classified by Arthur Merrill. In order for the Bollinger Bands to confirm the W-Bottom’s existence, the following four conditions must take place. - A reaction low forms which may (but not always) break through the Lower Band of the Bollinger Band but it will at least be near it. - Price move back around the SMA (The Middle Band). - A second drop in price creates a lower low than the initial reaction low in condition 1 however; the second, new low does not break through the Lower Band. - A strong move brings price back towards the Middle Band. A breakthrough of a resistance line created by the move in condition 2 may signify a potential breakout. Walking the Bands Of course, just like with any indicator, there are exceptions to every rule and plenty of examples where what is expected to happen, does not happen. Previously, it was mentioned that price breaking above the Upper Band or breaking below the Lower band could signify a selling or buying opportunity respectively. However this is not always the case. “Walking the Bands” can occur in either a strong uptrend or a strong downtrend. During a strong uptrend, there may be repeated instances of price touching or breaking through the Upper Band. Each time that this occurs, it is not a sell signal, it is a result of the overall strength of the move. Likewise during a strong downtrend there may be repeated instances of price touching or breaking through the Lower Band. Each time that this occurs, it is not a buy signal, it is a result of the overall strength of the move. Keep in mind that instances of “Walking the Bands” will only occur in strong, defined uptrends or downtrends. Summary Bollinger Bands have now been around for three decades and are still one of the most popular technical analysis indicators on the market. That really says a lot about their usefulness and effectiveness. When used properly and in the proper perspective, Bollinger Bands can give a trader great insight into one of the greatest areas of importance which is shifts in volatility. Traders should of course be aware that Bollinger Bands are not unlike any other indicator in the sense that they are not perfect. A shift in volatility does not always mean the same thing. Knowledge of the causes of these things comes from experimentation and a great deal of experience. Bollinger Bands should be used in conjunction with additional indicators or methods in order to get a better understanding of the ever changing landscape of the market. Ultimately the more pieces of the puzzle that are put together, the more confidence should be instilled in the trader. Inputs Length The time period to be used in calculating the SMA which creates the base for the Upper and Lower Bands. 20 days is the default. Basis MA Type Determines the type of Moving Average that is applied to the basis plot line. Source Determines what data from each bar will be used in calculations. Close is the default. StdDev The number of Standard Deviations away from the SMA that the Upper and Lower Bands should be. 2 is the default. Offset Changing this number will move the Bollinger Bands either Forwards or Backwards relative to the current market. 0 is the default. TIMEFRAME Specifies the timeframe that the indicator is calculated on. This option allows calculating BB based on a data from another timeframe, e.g. having BB calculated on 1H chart be displayed on a 5m chart. Wait for timeframe closes Specifies the behavior when the indicator's timeframe is higher than the chart's. When 'Wait for timeframe closes' is checked, higher timeframe values only come in and are interconnected on the chart when the higher timeframe completes. Style Basis Can toggle the visibility of the Basis as well as the visibility of a price line showing the actual current price of the Basis. Can also select the Basis' color, line thickness and line style. Upper Can toggle the visibility of the Upper Band as well as the visibility of a price line showing the actual current price of the Upper Band. Can also select the Upper Band's color, line thickness and line style. Lower Can toggle the visibility of the Lower Band as well as the visibility of a price line showing the actual current price of the Lower Band. Can also select the Lower Band's color, line thickness and line style. Background Toggles the visibility of a Background color within the Bands. Can also change the Color itself as well as the opacity. Previous Previous BBTrend Next Next Bollinger Bands %b (%b) Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43582442226/original/XtDZd3pIOkcfXJhH3zYVl4Ltiuf07sdt1Q.png?1758720772)
+
+**Описание:** This TradingView chart displays Apple Inc. (NASDAQ) on a 1-day timeframe, with a **Bollinger Bands (BB)** indicator configuration panel open.  
+
+### Top Bar:  
+- **Left**: “AAPL” (symbol), “1D” (timeframe), and price data: *O255.22 H255.74 L254.42* (open, high, low).  
+- **Middle**: Icons for *Indicators* (dropdown), *Alert*, *Replay*, and navigation arrows.  
+- **Right**: *TradingView* logo, timeframes (M, M, S), and *Publish* button.  
+
+
+### Left Toolbar (Vertical):  
+Icons for drawing tools (trendline, Fibonacci, text, etc.), chart type (candlestick), and other functions (e.g., lock, globe, trash).  
+
+
+### Main Chart Area:  
+- **Candlestick Chart**: Green/red candles show price action.  
+- **Bollinger Bands**: Three lines (blue = middle band, red = upper, green = lower) based on the SMA.  
+
+
+### Indicator Panel (Center):  
+Configures Bollinger Bands with tabs: *Inputs* (active), *Style*, *Visibility*.  
+- **Inputs**:  
+  - *Length*: 20 (period for SMA).  
+  - *Basis MA Type*: SMA (dropdown).  
+  - *Source*: Close (price source).  
+  - *StdDev*: 2 (standard deviation for bands).  
+  - *Offset*: 0 (band shift).  
+  - *Timeframe*: Chart (dropdown, for calculation).  
+  - Checkboxes: *Wait for timeframe closes*, *Inputs in status line*.  
+- **Buttons**: *Defaults* (dropdown), *Cancel*, *Ok* (apply changes).  
+
+
+### Right Sidebar:  
+Icons for *Notes*, *Clock* (time), *Depth* (order book), *Chat*, and other tools (e.g., target, calendar).  
+
+
+### Bottom:  
+- **Timeframe Selector**: 1D, 5D, 1M, etc. (current: 1D).  
+- **Date Range**: Sep 21–Oct 17.  
+- **Time/Status**: *09:32:11 UTC-4*, *ADJ* (adjusted data).  
+- **Tabs**: *Pine Editor* (for scripts), *Trading Panel*.  
+
+
+The panel allows customization of Bollinger Bands parameters, while the chart visualizes price with the indicator applied.
+
+
+![Image 2](https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43582442298/original/4LufPH7FQL69mDaB3aLGfAvDI0h3Xlx4Og.png?1758720789)
+
+**Описание:** This TradingView screenshot displays a **1-day (1D) candlestick chart for Apple Inc. (NASDAQ: AAPL)** with a **Bollinger Bands (BB) indicator settings panel** open. Here’s a detailed breakdown:  
+
+
+### **Top Toolbar**  
+- **Left**: Zoom controls (magnifying glass), time frame selector (D = 1 day), and indicator menu (labeled “Indicators”).  
+- **Middle**: Alert, Replay, and navigation arrows (back/forward).  
+- **Right**: TradingView logo, time zone (M/M/S), sync, theme, chart type, screenshot, and “Publish” button.  
+
+
+### **Chart Header**  
+- **Symbol/Time Frame**: “Apple Inc · 1D · NASDAQ” (1-day candlestick chart).  
+- **Price Data**: Open (O) 255.22, High (H) 255.74, Low (L) 254.28.  
+- **Indicator Label**: “BB 20 SMA close 2” (Bollinger Bands with 20-period SMA, 2 standard deviations).  
+
+
+### **Bollinger Bands (BB) Settings Panel**  
+A modal window titled “BB” with three tabs: *Inputs* (selected), *Style*, *Visibility*.  
+
+#### **Inputs Tab**  
+- **Checkboxes**:  
+  - *Basis* (blue line, enabled), *Upper* (red line, enabled), *Lower* (green line, enabled), *Background* (gray pattern, enabled).  
+- **Color/Style Controls**: Color swatches (blue/red/green/gray) and line style icons (solid/dashed/wavy) for each band.  
+- **Output Values**:  
+  - *Precision*: Dropdown (set to “Default”).  
+  - *Labels on price scale* (enabled), *Values in status line* (enabled).  
+- **Buttons**: “Defaults” (dropdown), “Cancel”, “Ok”.  
+
+
+### **Chart Area**  
+- **Candlesticks**: Green (up) and red (down) bars show price action.  
+- **Bollinger Bands**: Blue (middle, SMA), red (upper), green (lower) lines.  
+- **Price Scale (Right)**: Y-axis with values from 192.00 to 264.00.  
+
+
+### **Bottom Toolbar**  
+- **Time Frame Buttons**: 1D, 5D, 1M, 3M, 6M, YTD, 1Y, 5Y, “All” (all time frames).  
+- **Date Range**: X-axis with dates (Sep 21–Oct 17).  
+- **Timestamp**: “09:32:19 UTC-4” (current time).  
+- **Additional Tabs**: “Pine Editor” (for custom scripts) and “Trading Panel”.  
+
+
+### **Left Sidebar**  
+Icons for drawing tools (trendline, Fibonacci, text), chart types, and other features (e.g., lock, globe, trash).  
+
+
+### **Right Sidebar**  
+Icons for notes, clock (time), depth (order book), chat, and other utilities.  
+
+
+This layout is typical of TradingView’s interface, allowing users to customize indicators, analyze price trends, and manage chart settings.
+
+
+![Image 3](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+

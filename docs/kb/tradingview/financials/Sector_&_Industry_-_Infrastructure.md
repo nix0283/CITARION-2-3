@@ -1,0 +1,126 @@
+# Sector & Industry - Infrastructure
+
+**URL:** https://www.tradingview.com/support/solutions/43000724518-sector-industry-infrastructure/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Financials 
+- / [ Overview ](/support/folders/43000590139-overview/)
+- / [ Sector & Industry - Infrastructure ](/support/solutions/43000724518-sector-industry-infrastructure/)
+
+# Sector & Industry - Infrastructure 
+ According to the *FactSet Industries and Economic Sectors* classification, the *Infrastructure* category comprises sectors that provide the foundational facilities, systems, and services necessary for the functioning of the economy and society. This category includes industries such as transportation (air freight, airlines, trucking, railroads, marine shipping), utilities (electric, gas, water, alternative power generation), finance (banks, insurance, real estate), and communications (telecommunications, wireless).
+ Sector
+ Industry
+ Summary
+ Transportation
+ Air Freight/Couriers
+ companies that provide air cargo transportation and parcel delivery services
+ Airlines
+
+companies that provide air transportation of passengers, both scheduled (regular routes) and non-scheduled (no regular routes)
+ Trucking
+
+companies that provide full-truckload and less-than-truckload ground transportation and logistics services
+
+Railroads
+
+companies that provide line-haul and short-line rail transportation of passenger and freight, and related services
+
+Marine Shipping
+
+companies that provide maritime transportation of passengers and cargo, and its associated services
+
+Other Transportation
+
+companies that provide transportation and related services. Companies that provide only warehousing and/or related services, which are not classified elsewhere, are also classified in this industry
+ Utilities
+
+Electric Utilities
+
+companies that are engaged in generating, transmitting, and distributing electric energy to residential and non-residential customers
+
+Gas Distributors
+
+companies that operate gas distribution systems and/or arrange the sale of gas over gas distribution systems operated by others to residential and non-residential markets
+
+Water Utilities
+
+companies that operate water treatment plants and/or water supply systems
+
+Alternative Power Generation
+
+companies that are engaged in the operation of power facilities that convert non-conventional forms of energy into electric energy
+ Finance
+
+Major Banks
+
+companies engaged in accepting demand and other deposits and making commercial and consumer loans. Companies categorized in this industry generally cross regional boundaries and have a major presence in the banking industry
+
+Regional Banks
+
+companies engaged in accepting demand and other deposits and making commercial and consumer loans. Companies categorized in this industry operate in their respective local markets
+
+Savings Banks
+
+companies that accept time deposits make mortgage and real estate loans and invest in high-grade securities. Foreign companies that follow similar local guidelines or are designated as such are included in this industry
+
+Finance/Rental/Leasing
+
+companies that either provide tangible goods to consumers for a specific time period in return for payment or that originate, buy, sell, and service various types of loans and lending products
+
+Investment Banks/Brokers
+
+companies that provide security brokerage, securities underwriting, advisory services, and other corporate financial services
+
+Investment Managers
+ companies that manage assets for others on a fee or commission basis
+
+Financial Conglomerates
+
+companies that provide a mixture of financial, insurance, and banking services. Companies in this industry group generally have a major presence in more than one of the fore-mentioned segments
+
+Property/Casualty Insurance
+
+companies that underwrite insurance and reinsurance policies that protect policyholders against property loss
+
+Multi-Line Insurance
+
+companies that underwrite insurance and reinsurance policies that protect policyholders against loss in several segments (life, title, accident, health, property, etc.) within the insurance industry
+
+Life/Health Insurance
+
+companies that underwrite annuities and insurance policies that protect policyholders against loss of life and underwrite health and medical insurance
+
+Specialty Insurance
+
+companies that provide insurance policies for items not classified elsewhere
+
+Insurance Brokers/Services
+
+companies that act as agents in selling annuities and insurance policies and/or provide other miscellaneous services to the insurance segment
+
+Real Estate Development
+
+companies that own, develop, lease, and manage properties of land
+
+Real Estate Investment Trusts
+
+companies based in the United States that manage real estate portfolios and distribute 95% of their net earnings to shareholders annually. Foreign companies that follow similar local guidelines or are designated as such are included in this industry
+ Communications
+
+Major Telecommunications
+
+companies that operate, maintain, and/or provide voice and data transport services based on multiple transmission (fixed line, digital subscriber line (DSL) technology, competitive local exchange carriers (CLEC), Internet-based communication services, wireless, etc.) technologies
+
+Specialty Telecommunications
+
+companies that operate, maintain, and/or provide voice and data transport services based on a single transmission (fixed-line, digital subscriber line (DSL) technology, Internet-based communication services, etc.) technology, and/or cover a specific market (facilities-based, competitive local exchange carriers (CLEC), etc.). Companies that provide services to the telecommunication industry are also included in this industry
+
+Wireless Telecommunications
+
+companies that provide wireless antenna- or satellite-based telecommunication services.
+ Previous Previous Sector & Industry - Services Next Next Sector & Industry - Miscellaneous Launch Supercharts
+

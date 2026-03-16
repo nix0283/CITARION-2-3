@@ -1,0 +1,69 @@
+# Strategy publishing rules
+
+**URL:** https://www.tradingview.com/support/solutions/43000764681-strategy-publishing-rules/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / Strategies 
+- / [ I'd like to know more about strategies ](/support/folders/43000549427-i-d-like-to-know-more-about-strategies/)
+- / [ Strategy publishing rules ](/support/solutions/43000764681-strategy-publishing-rules/)
+
+# Strategy publishing rules 
+ Strategies on TradingView are a powerful tool to test trading ideas on historical data. To ensure published results are useful for traders, they must be honest, transparent, and based on realistic conditions. These rules explain how to publish strategies in a way that makes their results easier to interpret.
+
+#### Parameter selection 
+
+Authors are responsible for selecting parameters that:
+
+- Reflect real-world trading conditions
+- Match the markets their strategy is designed for
+- Produce realistic results
+
+Parameter recommendations are suggestions only and may not apply to all markets. Authors are free to use their own parameter values, but they must explain their choices in the script description. This helps traders better understand and interpret the results.
+
+#### Commissions 
+
+- Commissions must be enabled for the chosen instrument type
+- A zero-commission setup is only acceptable if clearly justified in the description
+- Strategies without commissions or with unrealistic cost assumptions will not be approved
+
+#### Dataset size 
+
+- Minimum requirement: Strategies must be tested on at least 100 trades
+- Context matters: 100 trades on weekly data carry more weight than 100 trades on minute data. On shorter timeframes, more trades are required for results to be considered reliable
+
+#### Reliability and fairness 
+
+All strategies are reviewed to ensure results are not misleading. Moderation checks include:
+
+- Adequate capital usage (disabling margin or other manipulations that inflate results are not allowed)
+- No repainting or techniques that artificially boost performance
+- Consistency between the stated purpose of the strategy and the published outcomes
+
+Strategies with a caution status cannot be published.
+
+#### Compliance with community rules 
+
+All published strategies must also comply with the[ House Rules](https://www.tradingview.com/house-rules/):
+
+- No advertising in code or descriptions
+- Only original content — plagiarism is not allowed
+- Clear and informative descriptions
+
+#### Author tips 
+
+- Always explain your parameter choices in the description
+- Adapt your setup to the market and timeframe your strategy is built for
+- Avoid exaggerated claims or misleading information
+
+Also read:
+
+- [Strategy alerts](https://www.tradingview.com/support/solutions/43000481368-strategy-alerts/)
+- [Script publishing rules](https://www.tradingview.com/support/solutions/43000590599-script-publishing-rules/).
+- [TradingView social network](https://www.tradingview.com/support/solutions/43000761245-tradingview-social-network/)
+- [Paper Trading — main functionality](https://www.tradingview.com/support/solutions/43000516466-paper-trading-main-functionality/)
+- [How to trade on TradingView](https://www.tradingview.com/support/solutions/43000756695-how-to-trade-on-tradingview/)
+ Previous Previous TradingView Strategy Tester: How to start Next Next BarUpDn Strategy Launch Supercharts
+

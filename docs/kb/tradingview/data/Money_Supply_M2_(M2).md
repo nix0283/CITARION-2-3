@@ -1,0 +1,151 @@
+# Money Supply M2 (M2)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651127-money-supply-m2-m2/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Money Supply M2 (M2) ](/support/solutions/43000651127-money-supply-m2-m2/)
+
+# Money Supply M2 (M2) 
+ Money supply M3.
+
+All countries for which *M2* is available are listed below:
+
+- Afghanistan
+- Albania
+- Angola
+- Argentina
+- Armenia
+- Austria
+- Azerbaijan
+- Bahamas
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Belize
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Brunei
+- Bulgaria
+- Burundi
+- Canada
+- Cape Verde
+- Chile
+- China
+- Colombia
+- Comoros
+- Congo
+- Costa Rica
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Equatorial Guinea
+- Estonia
+- Euro Area
+- Finland
+- France
+- Gambia
+- Georgia
+- Germany
+- Greece
+- Guatemala
+- Guyana
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Ivory Coast
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kuwait
+- Kyrgyzstan
+- Laos
+- Latvia
+- Lebanon
+- Lesotho
+- Liberia
+- Libya
+- Lithuania
+- Luxembourg
+- Macau
+- Macedonia
+- Malawi
+- Malaysia
+- Maldives
+- Malta
+- Mexico
+- Moldova
+- Mongolia
+- Morocco
+- Namibia
+- Netherlands
+- New Caledonia
+- Nicaragua
+- Niger
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Romania
+- Russia
+- Rwanda
+- Sao Tome and Principe
+- Saudi Arabia
+- Senegal
+- Serbia
+- Seychelles
+- Sierra Leone
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sudan
+- Swaziland
+- Sweden
+- Switzerland
+- Taiwan
+- Tajikistan
+- Tanzania
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Venezuela
+- Vietnam
+- Zimbabwe
+ Previous Previous Money Supply M1 (M1) Next Next Money Supply M3 (M3) Launch Supercharts
+

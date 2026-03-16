@@ -1,0 +1,158 @@
+# Types of transactions and how to add them
+
+**URL:** https://www.tradingview.com/support/solutions/43000756013-types-of-transactions-and-how-to-add-them/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / Portfolio 
+- / [ Transaction Management ](/support/folders/43000598046-transaction-management/)
+- / [ Types of transactions and how to add them ](/support/solutions/43000756013-types-of-transactions-and-how-to-add-them/)
+
+# Types of transactions and how to add them 
+
+#### Asset transactions: buy and sell 
+ Two types of transactions are used to add assets to the portfolio:
+
+- Buy — acquisition of supported asset types using cash. Increases the quantity of the selected asset in the portfolio.
+- Decreases the amount of available cash in the portfolio by the transaction amount.
+
+Note: If a buy transaction leads to a negative cash balance, the system will automatically detect this situation and suggest compensating for the deficit with a cash deposit transaction.
+
+- Sell — the reverse operation, where assets are exchanged for cash. Decreases the position in the asset.
+- Increases the amount of available cash in the portfolio proportionally to the transaction value.
+
+ Note: In the current implementation, margin instruments are not supported, including short selling. Selling assets not present in the portfolio is technically possible but will distort the calculated portfolio metrics and won't reflect the specific nature of such positions.
+
+To add a transaction for an asset, click the Add transaction button in the top-right corner of the portfolio page.
+ If there are no asset transactions in the portfolio, the system will prompt you to add the first transaction on all tabs. 
+
+#### Supported asset types: 
+
+- Stocks
+
+- Funds
+
+- Forex
+
+- Crypto 
+
+#### The asset transaction form includes the following fields: 
+
+- Side — transaction direction: buy or sell.
+
+- Symbol — instrument. Opens a symbol search for supported assets. If you attempt to manually enter an unsupported instrument, a notification will indicate that this asset type is not supported.
+
+- Date — transaction date. Only dates after the instrument’s trading start date are allowed. If the specified date precedes the trading start date, the calculation for this position will begin from the first trading day of the instrument on the selected exchange.
+
+- Price — the price at which the transaction was executed.
+
+- Quantity — the number of units bought/sold. Must be entered in actual units, even if the asset is traded in lots.
+
+- Commission — the transaction fee. Can be 0. Affects the asset’s return calculation and total transaction value.
+
+- Notes — transaction comment. Optional field, up to 128 characters. 
+
+#### Cash transaction 
+
+Cash transactions reflect the movement of funds. They affect the total portfolio value and the base from which performance is calculated. Three types are supported:
+
+- Deposit — a transaction representing the inflow of funds to the account. It increases the amount of free cash available for trading instruments. Note: If free cash is insufficient, asset transactions can still be made, but performance and valuation calculations may be inaccurate. It is recommended to maintain sufficient capital via deposit transactions.
+
+- Withdrawal — a transaction representing the outflow of funds from the account. It decreases the amount of free cash available for trading instruments.
+
+- Taxes and fees — an expense transaction for paying taxes or fees. It decreases the amount of free cash available for trading instruments and reduces performance.
+
+Note: Withdrawal and Taxes and fees operations are possible even with no available funds, which may lead to a negative cash balance and distort calculations.
+
+To add a cash transaction, click the dropdown menu to the right of Add transaction in the top-right corner of the portfolio page and select the appropriate type of cash transaction.
+
+#### The cash transaction form includes the following fields: 
+
+- Date — transaction date. Any date up to the current day can be selected.
+
+- Amount — the amount of funds in the portfolio currency.
+
+- Notes — transaction comment. Optional field, up to 128 characters. 
+
+Note: If the Cash indicator becomes negative, the system will automatically detect this and suggest compensating for it via a deposit transaction. You can learn more about this in the [Why did my Cash become negative?](https://www.tradingview.com/support/solutions/43000756136/) Help Center article.
+
+#### Dividend transaction 
+
+Dividend transactions reflect the dynamics of dividend payments for a given asset. They affect realized gains and all related metrics, and are also considered in calculations for the asset to which they are applied.
+
+#### The dividend transaction form includes the following fields: 
+
+- Symbol — the instrument for which the dividend is being added.
+
+- Date — the transaction date. Any date up to the current day can be selected.
+
+- Total Dividend — the dividend amount in the instrument's currency.
+
+- Notes — an optional comment for the transaction, up to 128 characters.
+
+Note: In addition to manual entry, the system can automatically detect when a dividend needs to be added. For more details, see the article [Dividend Tips](https://www.tradingview.com/support/solutions/43000764910/).
+
+Adding a dividend transaction for an asset that has no associated trade transactions will increase the number of unique holdings in your portfolio. To view this asset switch on Display sold toggle This change will be taken into account when calculating portfolio limits, so it should be considered accordingly.
+
+#### Links: 
+
+- [How to add transactions via file import](https://www.tradingview.com/support/solutions/43000756014/)
+- [How to delete or edit transactions](https://www.tradingview.com/support/solutions/43000756015/) 
+ Previous Previous TradingView Portfolios: track your assets, know your trades Next Next How to add transactions via file import Launch Supercharts
+
+---
+
+## Изображения
+
+### Изображение 1
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43558624636/original/ePH-uXsMPfyIno3eh4MULouLQSZCNPBjqA.png?1747654273
+
+**Описание:**
+
+This image shows a **TradingView portfolio management interface** displaying details for an \
+
+---
+
+### Изображение 2
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43558624896/original/V0NY_VqUZxtCDG0TdfJr2HWnOOvWzL565Q.png?1747654339
+
+**Описание:**
+
+This image shows a **TradingView portfolio management interface** (specifically the \
+
+---
+
+### Изображение 3
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43558625024/original/KsvDWZ3c5sU-PaD2YXxgcbEanIA_R_Phiw.png?1747654380
+
+**Описание:**
+
+This image displays the **\
+
+---
+
+### Изображение 4
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43558625132/original/6qn4rcksw2wiXjgIyEF26HXLxz3Ux10IhA.png?1747654407
+
+**Описание:**
+
+This is a **\
+
+---
+
+### Изображение 5
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43582202087/original/cCjAsE40VPsxK_lohsjI6wJztBn3ipz6yQ.png?1758631497
+
+**Описание:**
+
+This image shows a **dropdown menu** from the TradingView interface, specifically focused on the **\
+
+---
+

@@ -1,0 +1,134 @@
+# Social Security Rate For Companies (SSRC)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651188-social-security-rate-for-companies-ssrc/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Social Security Rate For Companies (SSRC) ](/support/solutions/43000651188-social-security-rate-for-companies-ssrc/)
+
+# Social Security Rate For Companies (SSRC) 
+ Social security rate for companies.
+
+All countries for which *SSRC* is available are listed below:
+
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahamas
+- Bahrain
+- Barbados
+- Belarus
+- Belgium
+- Bolivia
+- Bosnia and Herzegovina
+- Brazil
+- Bulgaria
+- Cameroon
+- Canada
+- Chad
+- China
+- Colombia
+- Congo
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Ecuador
+- Egypt
+- El Salvador
+- Equatorial Guinea
+- Estonia
+- Fiji
+- Finland
+- France
+- Gabon
+- Germany
+- Greece
+- Guatemala
+- Guinea
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Ivory Coast
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Kuwait
+- Laos
+- Latvia
+- Lebanon
+- Libya
+- Lithuania
+- Luxembourg
+- Madagascar
+- Malaysia
+- Malta
+- Mauritania
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Morocco
+- Mozambique
+- Netherlands
+- New Zealand
+- Norway
+- Panama
+- Papua New Guinea
+- Paraguay
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Republic of the Congo
+- Romania
+- Russia
+- Rwanda
+- Saint Lucia
+- Saudi Arabia
+- Serbia
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Sweden
+- Switzerland
+- Taiwan
+- Tajikistan
+- Thailand
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Arab Emirates
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Venezuela
+- Vietnam
+- Zambia
+ Previous Previous Social Security Rate (SSR) Next Next Social Security Rate For Employees (SSRE) Launch Supercharts
+

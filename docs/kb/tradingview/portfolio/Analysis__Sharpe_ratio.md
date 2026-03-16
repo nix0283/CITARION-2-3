@@ -1,0 +1,108 @@
+# Analysis: Sharpe ratio
+
+**URL:** https://www.tradingview.com/support/solutions/43000756107-analysis-sharpe-ratio/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Portfolio 
+- / [ Analysis ](/support/folders/43000598045-analysis/)
+- / [ Analysis: Sharpe ratio ](/support/solutions/43000756107-analysis-sharpe-ratio/)
+
+# Analysis: Sharpe ratio 
+
+#### Definition: 
+ The Sharpe Ratio, developed by Nobel laureate William Sharpe in 1966, measures investment efficiency through the lens of risk. It shows how much excess return (above the risk-free rate) a portfolio generates per unit of risk (volatility) taken.
+
+#### Interpretation: 
+
+When comparing the benchmark and portfolio values, it is important to understand that we are assessing the level of risk. The closer the value is to zero, the less the return justifies the risk.
+
+#### Example: 
+
+Portfolio:
+
+- Risk Free Rate (RFR) = 2%
+- 2025-01-01 deposit of 1000
+- 2025-03-03 purchase of NASDAQ:AAPL (qty:1, price: 190, commission: 0)
+- 2025-04-11 Sharpe Ratio calculation date. Last price of AAPL = 198.15
+
+Sharpe ratio portfolio 0.029%:
+
+- Barely exceeded the risk-free rate (2% annualized)
+- The return hardly compensates for the risk
+
+Sharpe ratio benchmark -1.396%:
+
+- Negative return. Unacceptable level of risk
+
+Note: It is important to take into account the short-term nature of the period used, chosen for simplification of the calculation.
+
+It is generally accepted that a value above 1 is considered optimal, indicating that the risk is justified by the return.
+You can refer to the standard interpretation or compare the portfolio’s Sharpe Ratio against the benchmark’s.
+
+#### Calculation: 
+
+Sharpe Ratio = (Rp − RFR) / SD
+
+- Rp (Return of portfolio) — portfolio performance in percentage, calculated monthly over the period using the TWR method
+
+- RFR (Risk Free Rate) — taken from the portfolio settings. Since the annual rate is set in the settings, it must be converted to the period rate before the calculation
+
+- SD (standard deviation of portfolio returns) — standard deviation of all performance values over the period
+
+Example of Sharpe Ratio calculation from interpretation:
+
+- Monthly RFR calculation: 2 / 12 = 0.167%
+- Rp calculation: Performance per period: January: 0
+- February: 0
+- March: 3.2% (obtained from: pv on March 31 → ((1032.13 − 1000) / 1000) * 100 )
+- April: -2.3% (obtained from: ((1008.15 − 1032.13) / 1032.13) * 100 )
+
+Rp = (0 + 0 + 3.2 − 2.3) / 4 = 0.225
+
+- SD calculation:
+
+Squared deviations from the mean:
+
+- January: (0 − 0.225)² = 0.05
+- February: (0 − 0.225)² = 0.05
+- March: (3.2 − 0.225)² = 8.85
+- April: (−2.3 − 0.225)² = 6.37
+
+Variance: (0.05 + 0.05 + 8.85 + 6.37) / 4 = 3.83
+
+SD: √3.83 = 1.957%
+
+Sharpe Ratio calculation: SR = (Rp − RFR) / SD = (0.225 − 0.167) / 1.957 = 0.029%
+
+Reference Pine Script:
+
+ Pine Script® // @version= 6 
+ indicator ( "Sharpe Ratio example" ) 
+ sharpeRatio ( array < float > returnsArray , series float annualBenchmark ) => 
+ numberOfperiods = 12 
+ if barstate.islast 
+ float fixedPeriodReturn = annualBenchmark / numberOfperiods 
+ float standardDev = returnsArray . stdev () 
+ float avgReturn = returnsArray . avg () 
+ float result = ( avgReturn - fixedPeriodReturn ) / standardDev 
+
+ array < float > arr = array.from ( 0 , 0 , 3.2 , -2.3 ) 
+ float sharpe = sharpeRatio ( arr , 2 ) 
+ plot ( sharpe , precision = 3 ) 
+ Expand 8 lines 
+#### Note: 
+ If all transactions were made in the current month relative to the Sharpe Ratio calculation date, the indicator will not be calculated, as there is no completed calendar month.
+
+Also read:
+
+[](https://docs.google.com/document/d/1u2dUsRmZoVcMrtu0KeHntAjIRbBW-Hke6LsYXyG77r4/edit?tab=t.0)
+
+- [Analysis: Sortino ratio](https://www.tradingview.com/support/solutions/43000756110/) 
+- [Original Pine script from TV library](https://www.tradingview.com/script/oOgZRqiM-RiskMetrics/) 
+- [General about Sharpe](https://www.tradingview.com/support/solutions/43000681694-risk-performance-ratios-sharpe-ratio/)
+
+ Previous Previous Analysis: Beta Next Next Analysis: Sortino ratio Launch Supercharts
+
