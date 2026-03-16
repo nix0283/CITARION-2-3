@@ -88,19 +88,28 @@ AUTO TRADE ───────────────────────
 Laboratory remains separate with its own Paper Trading Engine for auto-trading strategies.
 
 ---
-Task ID: 4
+
+Task ID: 5
 Agent: Main
-Task: Recreate dev branch from origin/main
+Task: Merge TESTNET mode into DEMO mode
 
 Work Log:
-- Deleted old dev branch (was created from Initial commit)
-- Created new dev branch from origin/main (contains all previous work)
-- Added Unified Trading Engine files
-- Updated Chat Service and Telegram Service
-- Created documentation
+- Updated TradingMode type: `LIVE | DEMO | PAPER` (removed TESTNET)
+- Updated files:
+  - `src/lib/trading/unified-engine.ts` - Updated mode type and logic
+  - `src/stores/trading-config-store.ts` - Removed TESTNET from mode selectors
+  - `src/components/trading/quick-mode-selector.tsx` - Removed TESTNET option
+  - `src/components/layout/header.tsx` - Updated mode selector (3 modes instead of 4)
+  - `src/lib/common-types.ts` - Updated TradingMode type
+  - `src/components/exchanges/exchanges-page.tsx` - Updated account types (LIVE, DEMO, PAPER)
+  - `src/lib/exchange/types.ts` - Updated TradingMode type
+  - `docs/trading/UNIFIED_TRADING_ENGINE.md` - Updated documentation
 
 Stage Summary:
-- dev branch: Now properly based on origin/main with full history
-- All previous work preserved (PAPER trading, fixes, etc.)
-- New Unified Trading Engine added on top
-
+- Trading Modes: Now 3 modes instead of 4
+  - LIVE: Real trading with real funds
+  - DEMO: Virtual funds simulation (merged with TESTNET)
+  - PAPER: Paper trading for strategy development
+- Former TESTNET accounts are now treated as DEMO accounts
+- All mode selectors updated throughout the application
+- Changes pushed to GitHub dev branch
