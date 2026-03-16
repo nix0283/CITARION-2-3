@@ -42,6 +42,9 @@ async function handleGet(request: NextRequest, context: AuthContext) {
       );
     }
     
+    // Use authenticated user or fallback to default
+    const userId = context?.userId || (await getDefaultUser()).id;
+    
     // Map mode to account type
     let accountType: "REAL" | "DEMO" | undefined;
     let isTestnet: boolean | undefined;
@@ -69,7 +72,7 @@ async function handleGet(request: NextRequest, context: AuthContext) {
       isTestnet?: boolean;
       isActive: boolean;
     } = {
-      userId: context.userId,
+      userId,
       exchangeType: marketType,
       isActive: true,
     };
@@ -83,13 +86,16 @@ async function handleGet(request: NextRequest, context: AuthContext) {
     }
     
     // For PAPER mode, we look for paper trading accounts
-    // These are stored in the PaperAccount table
+    // These are stored in the PaperAccount table (linked to Account)
     if (mode === "PAPER") {
       // Get PAPER accounts from PaperAccount table
+      // Note: exchangeType is on the Account table, not PaperAccount
       const paperAccounts = await db.paperAccount.findMany({
         where: {
-          userId: context.userId,
-          exchangeType: marketType,
+          account: {
+            userId,
+            exchangeType: marketType,
+          },
         },
         include: {
           account: true,
@@ -97,33 +103,33 @@ async function handleGet(request: NextRequest, context: AuthContext) {
       });
       
       const accounts: AccountResponse[] = paperAccounts.map((pa) => {
-        // Parse balance
-        let balance = 0;
-        let currency = "USDT";
+        // Parse balance from currentBalances JSON
+        let balance = pa.initialBalanceAmount || 10000;
+        let currency = pa.initialBalanceCurrency || "USDT";
         
         if (pa.currentBalances) {
           try {
             const balances = JSON.parse(pa.currentBalances);
             const currencies = Object.keys(balances);
             if (currencies.length > 0) {
-              currency = pa.initialCurrency || currencies[0];
-              balance = balances[currency] || 0;
+              currency = pa.initialBalanceCurrency || currencies[0];
+              balance = balances[currency] || pa.initialBalanceAmount || 10000;
             }
           } catch {
-            // Ignore parse errors
+            // Use defaults if parsing fails
           }
         }
         
         return {
-          id: pa.id,
-          exchangeId: pa.exchangeId,
-          exchangeName: pa.account?.exchangeName || pa.exchangeId,
+          id: pa.accountId, // Use the actual account ID for trading operations
+          exchangeId: pa.account?.exchangeId || "binance",
+          exchangeName: pa.account?.exchangeName || pa.account?.exchangeId || "Binance",
           exchangeType: marketType,
           accountType: "PAPER",
           virtualBalance: pa.currentBalances,
           isActive: true,
           isTestnet: false,
-          hedgeMode: false,
+          hedgeMode: pa.hedgeMode || false,
           lastSyncAt: null,
           balance,
           currency,
@@ -183,4 +189,12 @@ async function handleGet(request: NextRequest, context: AuthContext) {
   }
 }
 
-export const GET = withAuth(handleGet);
+// Export without auth for demo mode compatibility
+export async function GET(request: NextRequest) {
+  // Fallback to default user for demo mode
+  const defaultUser = await getDefaultUser();
+  return handleGet(request, {
+    userId: defaultUser.id,
+    authType: "session",
+  });
+}

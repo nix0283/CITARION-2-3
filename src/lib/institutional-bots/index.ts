@@ -7,6 +7,13 @@
 // Types and interfaces
 export * from './types';
 
+// Bot Classes
+export { SpectrumBot } from './spectrum-bot';
+export { ReedBot } from './reed-bot';
+export { ArchitectBot } from './architect-bot';
+export { EquilibristBot } from './equilibrist-bot';
+export { KronBot } from './kron-bot';
+
 // Bot Engines
 export { SpectrumEngine, getSpectrumEngine, type SpectrumConfig } from './spectrum-engine';
 export { ReedEngine, getReedEngine, type ReedConfig } from './reed-engine';

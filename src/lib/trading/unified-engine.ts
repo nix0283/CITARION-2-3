@@ -4,6 +4,8 @@
  * Single trading engine for all modes: LIVE, DEMO, PAPER
  * Used by: Built-in Chat, Telegram Bot, Manual Trading, Auto Trading
  * 
+ * Updated: Fixed import for cachedPriceService (v2)
+ * 
  * Features:
  * - Multi-mode support (LIVE/DEMO/PAPER)
  * - Cornix signal format parsing
@@ -22,7 +24,7 @@
 
 import { db } from '@/lib/db';
 import { credentialManager } from '@/lib/api-keys/credential-manager';
-import { priceService } from '@/lib/price-service';
+import { cachedPriceService } from '@/lib/price-service';
 
 // ==================== TYPES ====================
 
@@ -58,6 +60,9 @@ export interface ParsedSignal {
   riskPercent?: number;
   trailingConfig?: TrailingStopConfig;
   rawText?: string;
+  // Entry order type for manual trading
+  entryOrderType?: OrderType;
+  triggerPrice?: number;
 }
 
 export interface TrailingStopConfig {
@@ -109,6 +114,9 @@ export interface TradeRequest {
   config: TradingConfig;
   source: SignalSource;
   metadata?: Record<string, unknown>;
+  // Entry order options
+  entryOrderType?: OrderType;
+  triggerPrice?: number;
 }
 
 export interface TradeResult {
@@ -619,7 +627,7 @@ export class UnifiedTradingEngine {
   }
   
   async executeTrade(request: TradeRequest): Promise<TradeResult> {
-    const { signal, config, source, userId, accountId } = request;
+    const { signal, config, source, userId, accountId, entryOrderType, triggerPrice } = request;
     const warnings: string[] = [];
     
     try {
@@ -684,7 +692,9 @@ export class UnifiedTradingEngine {
         currentPrice,
         config,
         client,
-        account
+        account,
+        entryOrderType || 'MARKET',
+        triggerPrice
       );
       
       if (!orderResult.success) {
@@ -1180,7 +1190,7 @@ export class UnifiedTradingEngine {
         if (ticker?.last) return ticker.last;
       }
       
-      const price = await priceService.getPrice(symbol, exchangeId);
+      const price = await cachedPriceService.getPrice(symbol, exchangeId);
       if (price) return price;
       
       return null;
@@ -1249,15 +1259,43 @@ export class UnifiedTradingEngine {
     currentPrice: number,
     config: TradingConfig,
     client: IExchangeClient | null,
-    account: { id: string; isDemo: boolean }
+    account: { id: string; isDemo: boolean },
+    orderType: OrderType = 'MARKET',
+    triggerPrice?: number
   ): Promise<OrderResult> {
+    const side = signal.direction === 'LONG' ? 'buy' : 'sell';
+    const entryPrice = signal.entryPrices[0] || currentPrice;
+    
+    // For PAPER/DEMO mode - simulate order execution
     if (!client || account.isDemo) {
+      // For limit/stop-limit orders, create pending position
+      if (orderType === 'LIMIT' || orderType === 'STOP_LIMIT') {
+        return {
+          success: true,
+          order: {
+            id: `demo-order-${Date.now()}`,
+            symbol: signal.symbol,
+            side: side as 'buy' | 'sell',
+            type: orderType.toLowerCase(),
+            status: 'new', // Pending
+            price: entryPrice,
+            avgPrice: entryPrice,
+            quantity,
+            filledQuantity: 0, // Not filled yet
+            fee: 0,
+            feeCurrency: 'USDT',
+            createdAt: new Date(),
+          },
+        };
+      }
+      
+      // Market order - executed immediately
       return {
         success: true,
         order: {
           id: `demo-${Date.now()}`,
           symbol: signal.symbol,
-          side: signal.direction === 'LONG' ? 'buy' : 'sell',
+          side: side as 'buy' | 'sell',
           type: 'market',
           status: 'filled',
           price: currentPrice,
@@ -1271,18 +1309,66 @@ export class UnifiedTradingEngine {
       };
     }
     
-    const side = signal.direction === 'LONG' ? 'buy' : 'sell';
+    // Live trading - send order to exchange
+    const clientOrderId = `citarion-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
-    return await client.createOrder({
-      symbol: signal.symbol,
-      side,
-      type: 'market',
-      quantity,
-      leverage: signal.leverage,
-      marginMode: signal.marginMode,
-      positionSide: signal.direction.toLowerCase() as 'long' | 'short',
-      clientOrderId: `citarion-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-    });
+    // Handle different order types
+    switch (orderType) {
+      case 'LIMIT':
+        return await client.createOrder({
+          symbol: signal.symbol,
+          side,
+          type: 'limit',
+          quantity,
+          price: entryPrice,
+          leverage: signal.leverage,
+          marginMode: signal.marginMode,
+          positionSide: signal.direction.toLowerCase() as 'long' | 'short',
+          clientOrderId,
+          timeInForce: 'GTC',
+        });
+        
+      case 'STOP_LIMIT':
+        return await client.createOrder({
+          symbol: signal.symbol,
+          side,
+          type: 'stop_limit',
+          quantity,
+          price: entryPrice,
+          stopPrice: triggerPrice || entryPrice,
+          leverage: signal.leverage,
+          marginMode: signal.marginMode,
+          positionSide: signal.direction.toLowerCase() as 'long' | 'short',
+          clientOrderId,
+          timeInForce: 'GTC',
+        });
+        
+      case 'STOP_MARKET':
+        return await client.createOrder({
+          symbol: signal.symbol,
+          side,
+          type: 'stop_market',
+          quantity,
+          stopPrice: triggerPrice || entryPrice,
+          leverage: signal.leverage,
+          marginMode: signal.marginMode,
+          positionSide: signal.direction.toLowerCase() as 'long' | 'short',
+          clientOrderId,
+        });
+        
+      case 'MARKET':
+      default:
+        return await client.createOrder({
+          symbol: signal.symbol,
+          side,
+          type: 'market',
+          quantity,
+          leverage: signal.leverage,
+          marginMode: signal.marginMode,
+          positionSide: signal.direction.toLowerCase() as 'long' | 'short',
+          clientOrderId,
+        });
+    }
   }
   
   private async createPositionRecord(

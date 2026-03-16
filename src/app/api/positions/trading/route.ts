@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { withAuth, AuthContext } from "@/lib/auth-utils";
+import { AuthContext, getDefaultUser } from "@/lib/auth-utils";
 
 type TradingMode = "LIVE" | "DEMO" | "PAPER";
 type MarketType = "futures" | "spot" | "inverse";
@@ -166,4 +166,12 @@ async function handleGet(request: NextRequest, context: AuthContext) {
   }
 }
 
-export const GET = withAuth(handleGet);
+// Export without auth for demo mode compatibility
+export async function GET(request: NextRequest) {
+  // Fallback to default user for demo mode
+  const defaultUser = await getDefaultUser();
+  return handleGet(request, {
+    userId: defaultUser.id,
+    authType: "session",
+  });
+}

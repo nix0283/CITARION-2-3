@@ -188,3 +188,22 @@ export {
   type EnhancedSignal,
   type MLPipelineConfig,
 } from './ml-signal-pipeline';
+
+// ML Signal Filter
+export {
+  // Main class
+  MLSignalFilter,
+  
+  // Singleton functions
+  getMLSignalFilter,
+  resetMLSignalFilter,
+  
+  // Constants
+  DEFAULT_ML_FILTER_CONFIG,
+  
+  // Types
+  type SignalForFiltering,
+  type FilteredSignal,
+  type MLFilterConfig,
+  type MLFilterStats,
+} from './ml-signal-filter';

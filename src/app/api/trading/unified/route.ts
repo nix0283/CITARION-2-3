@@ -31,6 +31,9 @@ interface TradeRequest {
   };
   source: SignalSource;
   metadata?: Record<string, unknown>;
+  // Entry order options
+  entryOrderType?: 'MARKET' | 'LIMIT' | 'STOP_LIMIT' | 'STOP_MARKET';
+  triggerPrice?: number;
 }
 
 export async function POST(request: NextRequest) {
@@ -107,6 +110,8 @@ export async function POST(request: NextRequest) {
       config,
       source: body.source,
       metadata: body.metadata,
+      entryOrderType: body.entryOrderType,
+      triggerPrice: body.triggerPrice,
     });
     
     return NextResponse.json(result);

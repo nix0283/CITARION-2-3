@@ -9,7 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getTwoFactorAuthService } from '@/lib/auth/two-factor-auth';
 import { db } from '@/lib/db';
-import { auth } from '@/lib/auth-utils';
+import { withAuth, AuthContext } from '@/lib/auth-utils';
 
 // ==================== TYPES ====================
 
@@ -49,12 +49,9 @@ type RequestBody = SetupRequest | VerifyRequest | EnableRequest | DisableRequest
  * GET /api/auth/2fa
  * Get 2FA status
  */
-export async function GET(request: NextRequest) {
+async function handleGet(request: NextRequest, context: AuthContext) {
   try {
-    const userId = await auth.getUserId(request);
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const userId = context.userId;
 
     const user = await db.user.findUnique({ where: { id: userId } });
     if (!user) {
@@ -74,16 +71,15 @@ export async function GET(request: NextRequest) {
   }
 }
 
+export const GET = withAuth(handleGet);
+
 /**
  * POST /api/auth/2fa
  * Handle 2FA actions based on 'action' field
  */
-export async function POST(request: NextRequest) {
+async function handlePost(request: NextRequest, context: AuthContext) {
   try {
-    const userId = await auth.getUserId(request);
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const userId = context.userId;
 
     const body: RequestBody = await request.json();
     const { action } = body;
@@ -107,6 +103,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Request failed' }, { status: 500 });
   }
 }
+
+export const POST = withAuth(handlePost);
 
 // ==================== HANDLERS ====================
 
