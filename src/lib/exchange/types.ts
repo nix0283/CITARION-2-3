@@ -66,10 +66,12 @@ export type TimeInForce = "GTC" | "IOC" | "FOK" | "GTX" | "POST_ONLY";
 /**
  * Trading mode determines how orders are executed
  * - LIVE: Real trading with actual funds
- * - TESTNET: Dedicated testnet environment (separate endpoints, separate registration)
- * - DEMO: Simulation mode within production API (special headers/symbols/balance)
+ * - DEMO: Simulation mode with virtual funds (merged TESTNET into DEMO)
+ * 
+ * Note: TESTNET mode has been merged into DEMO mode.
+ * Former TESTNET accounts are now treated as DEMO accounts.
  */
-export type TradingMode = "LIVE" | "TESTNET" | "DEMO";
+export type TradingMode = "LIVE" | "DEMO";
 
 /**
  * Testnet configuration for exchanges with dedicated test environments

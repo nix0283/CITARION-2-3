@@ -40,7 +40,7 @@ import { toast } from "sonner";
 
 // ==================== TYPES ====================
 
-type AccountType = "LIVE" | "DEMO" | "TESTNET" | "PAPER";
+type AccountType = "LIVE" | "DEMO" | "PAPER";
 type MarketType = "futures" | "spot" | "inverse";
 
 interface ExchangeAccount {
@@ -81,11 +81,11 @@ const SUPPORTED_EXCHANGES = [
 ];
 
 // Exchanges available for each account type
+// Note: TESTNET has been merged into DEMO
 const EXCHANGES_BY_ACCOUNT_TYPE: Record<AccountType, string[]> = {
   LIVE: ["binance", "bybit", "okx", "bitget", "bingx"],
-  DEMO: ["okx", "bitget", "bingx"], // Only OKX, Bitget, BingX have demo mode
-  TESTNET: ["binance", "bybit"], // Only Binance and Bybit have testnet
-  PAPER: ["binance", "bybit", "okx", "bitget", "bingx"], // All exchanges for simulation
+  DEMO: ["binance", "bybit", "okx", "bitget", "bingx"], // All exchanges for demo/simulation
+  PAPER: ["binance", "bybit", "okx", "bitget", "bingx"], // All exchanges for paper trading
 };
 
 // Get filtered exchanges for account type
@@ -120,13 +120,7 @@ const ACCOUNT_TYPE_CONFIG: Record<AccountType, { label: string; color: string; b
     label: "DEMO",
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
-    description: "Демо режим биржи",
-  },
-  TESTNET: {
-    label: "TESTNET",
-    color: "text-yellow-500",
-    bgColor: "bg-yellow-500/10",
-    description: "Тестовая сеть",
+    description: "Демо режим с виртуальными средствами",
   },
   PAPER: {
     label: "PAPER",
@@ -466,12 +460,7 @@ function AddAccountDialog({ open, onOpenChange, accountType, onAdd }: AddAccount
               </div>
               {accountType === "DEMO" && (
                 <p className="text-xs text-muted-foreground">
-                  Демо-режим поддерживается только на OKX, Bitget и BingX
-                </p>
-              )}
-              {accountType === "TESTNET" && (
-                <p className="text-xs text-muted-foreground">
-                  Тестовая сеть доступна только на Binance и Bybit
+                  Демо режим с виртуальными средствами для безопасного тестирования
                 </p>
               )}
             </div>
@@ -818,20 +807,6 @@ function DeleteAccountDialog({ open, onOpenChange, account, onConfirm, isDeletin
             </div>
           )}
 
-          {account.accountType === "TESTNET" && (
-            <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20 mb-4">
-              <div className="flex items-start gap-2">
-                <AlertTriangle className="h-4 w-4 text-yellow-500 mt-0.5 shrink-0" />
-                <div className="text-xs text-yellow-600 dark:text-yellow-400">
-                  <p className="font-medium">Testnet аккаунт</p>
-                  <p className="mt-1">
-                    API ключи будут удалены из платформы. Тестовые средства на testnet бирже сохранятся.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
           {account.accountType === "DEMO" && (
             <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20 mb-4">
               <div className="flex items-start gap-2">
@@ -839,7 +814,7 @@ function DeleteAccountDialog({ open, onOpenChange, account, onConfirm, isDeletin
                 <div className="text-xs text-purple-600 dark:text-purple-400">
                   <p className="font-medium">Demo аккаунт</p>
                   <p className="mt-1">
-                    Демо-аккаунт будет отключён от платформы.
+                    Демо-аккаунт будет отключён от платформы. Виртуальные средства сохранятся.
                   </p>
                 </div>
               </div>
@@ -894,10 +869,8 @@ function EmptyState({ accountType, onAddClick }: EmptyStateProps) {
       <p className="text-sm text-muted-foreground mb-4 max-w-sm">
         {accountType === "PAPER" 
           ? "Создайте виртуальный аккаунт для симуляции торговли"
-          : accountType === "TESTNET"
-          ? "Подключитесь к тестовой сети для безопасного тестирования"
           : accountType === "DEMO"
-          ? "Используйте демо-режим биржи для обучения"
+          ? "Используйте демо-режим с виртуальными средствами для обучения"
           : "Добавьте API ключи биржи для начала торговли"
         }
       </p>
@@ -939,7 +912,7 @@ export function ExchangesPage() {
             exchangeId: acc.exchangeId as string,
             exchangeName: acc.exchangeName as string,
             marketType,
-            accountType: acc.isTestnet ? "TESTNET" : acc.accountType === "DEMO" ? "DEMO" : acc.accountType === "PAPER" ? "PAPER" : "LIVE",
+            accountType: acc.accountType === "PAPER" ? "PAPER" : acc.accountType === "DEMO" ? "DEMO" : "LIVE",
             isActive: acc.isActive as boolean,
             hedgeMode: false, // TODO: add to schema
             apiKey: acc.apiKey as string,
@@ -993,7 +966,7 @@ export function ExchangesPage() {
         apiKey: data.apiKey || null,
         apiSecret: data.apiSecret || null,
         apiPassphrase: data.passphrase || null,
-        isTestnet: dialogAccountType === "TESTNET",
+        isTestnet: false, // TESTNET merged into DEMO
         accountType: apiAccountType,
         initialBalanceCurrency: data.initialBalanceCurrency,
         initialBalanceAmount: data.initialBalanceAmount,
@@ -1106,10 +1079,10 @@ export function ExchangesPage() {
         </div>
       </div>
 
-      {/* Main Tabs: LIVE, DEMO, TESTNET, PAPER */}
+      {/* Main Tabs: LIVE, DEMO, PAPER */}
       <div className="pt-4">
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AccountType)}>
-          <TabsList className="grid w-full grid-cols-4 mb-4">
+          <TabsList className="grid w-full grid-cols-3 mb-4">
             {Object.entries(ACCOUNT_TYPE_CONFIG).map(([type, config]) => (
               <TabsTrigger key={type} value={type} className="text-xs sm:text-sm">
                 <span className={cn("hidden sm:inline", config.color)}>{config.label}</span>
@@ -1119,7 +1092,7 @@ export function ExchangesPage() {
           </TabsList>
 
           {/* Content for each account type */}
-          {(["LIVE", "DEMO", "TESTNET", "PAPER"] as AccountType[]).map((accountType) => (
+          {(["LIVE", "DEMO", "PAPER"] as AccountType[]).map((accountType) => (
             <TabsContent key={accountType} value={accountType} className="mt-0">
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-4">
