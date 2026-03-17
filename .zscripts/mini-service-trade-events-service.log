@@ -1,0 +1,38 @@
+[trade-events-service] Installing dependencies...
+bun install v1.3.10 (30e609e0)
+Resolving dependencies
+Resolved, downloaded and extracted [34]
+Saved lockfile
+
++ socket.io@4.8.3
+
+22 packages installed [788.00ms]
+[trade-events-service] Running bun run dev...
+$ bun --hot index.ts
+Trade Events Service running on port 3003
+CORS allowed origins: http://localhost:3000, http://localhost:3001, http://127.0.0.1:3000, http://127.0.0.1:3001
+Trade Events Service initialized
+Features:
+  - Real-time trade event broadcasting
+  - Event confirmation with timeout & retry
+  - User/account-based filtering
+  - Event history & statistics
+  - Health check endpoint
+46 |     }
+47 |   }
+48 |   let er;
+49 |   if (args.length > 0)
+50 |     er = args[0];
+51 |     throw er;
+                 ^
+error: Failed to start server. Is port 3003 in use?
+      at emitError (node:events:51:13)
+46 |     }
+47 |   }
+48 |   let er;
+49 |   if (args.length > 0)
+50 |     er = args[0];
+51 |     throw er;
+                 ^
+error: Failed to start server. Is port 3004 in use?
+      at emitError (node:events:51:13)

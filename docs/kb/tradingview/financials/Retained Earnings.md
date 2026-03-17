@@ -1,0 +1,16 @@
+# Retained Earnings
+
+**URL:** https://www.tradingview.com/support/solutions/43000563867-retained-earnings/
+
+---
+
+- [ Help Center ](/) - / [ Knowledge base ](/knowledge-base/) - / Financials - / [ Balance Sheet ](/support/folders/43000565036-balance-sheet/) - / [ Retained Earnings ](/support/solutions/43000563867-retained-earnings/) # Retained Earnings What are Retained Earnings? Retained Earnings represent the accumulated residual earnings of the company, since inception, which have not been distributed to shareholders or allocated to a specific reserve. Previous Previous Common Equity, Total Next Next Paid in Capital Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+
+![Image 2](https://static.tradingview.com/static/bundles/look-first-light.74b5bba06f657157cdb4.svg)
+

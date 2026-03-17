@@ -1,0 +1,137 @@
+# How to protect your account
+
+**URL:** https://www.tradingview.com/support/solutions/43000582277-how-to-protect-your-account/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / [ How to protect your account ](/support/solutions/43000582277-how-to-protect-your-account/)
+
+# How to protect your account 
+ TradingView cares about you, your security, and your privacy.
+
+But your safety depends on you first and foremost.
+
+**CONTENTS:**
+
+- [Measures you can take to protect your account](#Measures)
+- [Popular hacker schemes to be aware of](#Schemes)
+- [Official TradingView platforms](#Platforms)
+- [Official TradingView social media](#Medias)
+- [Important tools for your safety](#Tools)
+- [If you've lost access to your account](#Lost)
+
+#### Measures you can take to protect your account 
+
+That's why we recommend you take the following steps to protect your account:
+
+- **Set a unique password:** You can use password managers in your web browser, operating systems, or special applications and services
+- **Use special signs:** Characters like #, /, <, % are important and make it much more difficult for both humans and machines to guess your password
+- **Use long passwords:** Make your password at least 12 characters long
+- **Do not use common sequences:** Alphabetical order and neighboring keyboard keys, such as "qwerty1234," "1abc23xyz," etc.
+- **Use two-factor authentication (2FA):** Even if your password is stolen, an attacker will not be able to access your account.
+- **Save your 2FA backup codes:** In case you lose access to your 2FA authentication app, they will help you regain access to your account. Learn[ how to configure 2FA](https://www.tradingview.com/?solution=43000572460) to keep your account protected
+
+**! Important:** Change your password immediately if you know your account, email, or password has been breached. Then check your mailbox — we always contact you if someone logs into your account from a new device.
+
+#### Popular hacker schemes to be aware of 
+
+No matter how well-protected you are, hackers may try to trick you. Here are some of the most popular tactics they use:
+
+- **Phishing websites:** Use only the official sources provided
+- **Advertisements in search results:** If you see a label like "Sponsored" near any website claiming to be our partner, distributor, etc. — avoid it and [contact the TradingView Support team](https://www.tradingview.com/support/tickets/)
+- **"TradingView official" impersonators:** The more insistent they are, the more likely they're scammers. We never pressure you into anything
+- **"****Happy" letters, messages, and phone calls:** We contact only our users. If you are not a TradingView member, you will not receive any communication from us. For users, check[ your social notifications settings](https://www.tradingview.com/settings/#social-notifications) — we send only emails you're subscribed to and respond to the questions you've submitted through our [support form](https://www.tradingview.com/support/tickets/)
+- **Requests to download a "special" app or install a program:** Trust only the TradingView resources provided in this article
+
+#### Official TradingView platforms 
+
+We know that many scammers impersonate our distributors, pretend to represent us, or claim to have different forms of partnerships with us.
+
+Beware of accessing and downloading 3rd-party resources and software, claiming to be from us or our partners, distributors, etc. Especially, when they suggest you "limited offers" or something "special."
+
+Our platform is available only on:
+
+- Website: [https://www.tradingview.com](https://www.tradingview.com/)
+- Mobile apps: [https://www.tradingview.com/mobile/](https://www.tradingview.com/mobile/)
+- Desktop app: [https://www.tradingview.com/desktop/](https://www.tradingview.com/desktop/)
+
+#### Official TradingView social media 
+
+To avoid getting hooked and scammed, trust only our official sources and social media.
+
+You can find them at the bottom part of our website.
+
+These are the primary sources you can find all the information about us:
+
+- TradingView Blog: [https://www.tradingview.com/blog/](https://www.tradingview.com/blog/)
+- YouTube: [https://www.youtube.com/@TradingView](https://www.youtube.com/@TradingView)
+- X: [https://x.com/tradingview/](https://x.com/tradingview/)
+- Facebook: [https://www.facebook.com/tradingview/](https://www.facebook.com/tradingview/)
+- Instagram: [https://www.instagram.com/tradingview/](https://www.instagram.com/tradingview/)
+- LinkedIn: [https://www.linkedin.com/company/tradingview/](https://www.linkedin.com/company/tradingview/)
+- Telegram:[ https://t.me/tradingview/](https://t.me/tradingview/)
+- TikTok:[ https://www.tiktok.com/@tradingview](https://www.tiktok.com/@tradingview)
+- Reddit:[ https://www.reddit.com/r/TradingView/](https://www.reddit.com/r/TradingView/)
+
+#### Important tools for your safety 
+
+We recommend utilizing the following tools to keep your account secure:
+
+- [Firefox Monitor](https://monitor.firefox.com/)
+- [haveibeenpwned.com](https://haveibeenpwned.com/)
+- Antivirus software
+
+If you see an intruder:
+
+- [Terminate all active sessions](https://www.tradingview.com/settings/#active-sessions)
+- [Change your password](https://www.tradingview.com/settings/#account-settings)
+- [Enable 2FA](https://www.tradingview.com/settings/#account-settings)
+
+#### If you've lost access to your account 
+
+In such an undesirable circumstance, we recommend you take the following steps:
+
+- [Learn how to recover your account](https://www.tradingview.com/support/solutions/43000619597-account-recovery/)
+- Recover it
+- [Protect it with the security steps from this article](#Measures)
+
+#### The bottom line 
+
+We hope this guide helps you secure your account so you can enjoy financial analysis, trading, and investing with peace of mind.
+
+Please share this article with others, who may also benefit from it.
+
+From our side, we do everything possible to keep your account safeguarded and protected.
+
+However, no one can protect you better than you.
+
+Your security is in your own hands.
+
+— Team TradingView
+
+Also read:
+
+- [How to configure 2FA](https://www.tradingview.com/support/solutions/43000572460-how-to-configure-two-factor-authentication-to-my-tradingview-account/)
+- [How to recover your account](https://www.tradingview.com/support/solutions/43000619597-account-recovery/)
+ Previous Previous I’ve changed my phone / phone number, do I need to reconfigure two-factor authentication for my TradingView account Next Next How frequently do I need to change my password? Launch Supercharts
+
+---
+
+## Изображения
+
+### Изображение 1
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43563876841/original/0m2e0649PLm__j_o6Y82jBjDvOEmO8uAsQ.png?1750054712
+
+**Описание:**
+
+This image shows the **TradingView website footer and navigation interface**, displaying a comprehensive menu structure with various sections for market data, tools, community, and business solutions. Here’s a detailed breakdown:
+
+
+### **Top Navigation Bar**
+- **TradingView Logo**: Left-aligned, with \
+
+---
+

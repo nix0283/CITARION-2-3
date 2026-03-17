@@ -1,0 +1,133 @@
+# How to get help/support on TradingView?
+
+**URL:** https://www.tradingview.com/support/solutions/43000698097-how-to-get-help-support-on-tradingview/
+
+---
+
+- [ Help Center ](/)
+- / [ How to get help/support on TradingView? ](/support/folders/43000589976-how-to-get-help-support-on-tradingview/)
+- / 
+- / [ How to get help/support on TradingView? ](/support/folders/43000589976-how-to-get-help-support-on-tradingview/)
+- / [ How to get help/support on TradingView? ](/support/solutions/43000698097-how-to-get-help-support-on-tradingview/)
+
+# How to get help/support on TradingView? 
+ Here's a short guide for you on how to get help on TradingView.
+
+#### General overview:
+ Issue type Where to get help 
+General questions
+
+[Knowledge base](https://www.tradingview.com/support/knowledge-base/) or [AI-powered Chat assistant](https://www.tradingview.com/support/chat-assistant/)
+
+You couldn’t find a solution to your problem in the Help Center.
+
+**Tip:** remember that you have to be a user with a paid plan in order to get in touch with the team. If you are a free user, check [this page](https://www.tradingview.com/?solution=43000590947), please.
+
+Our Chat assistant will offer you an option to create a Support ticket. 
+
+Pine-related inquiries
+
+[PineCoders](https://www.pinecoders.com/)
+
+You were hacked or have lost access to your account.
+
+[Account Recovery form](https://www.tradingview.com/account-recovery/)*
+
+You are charged but do not recognize the payment.
+
+**Tip:** Check your [Billing history page](https://www.tradingview.com/settings/#billing-history) first.
+
+[Payment Search form](https://www.tradingview.com/payment-search/)*
+
+ *All forms containing requests unrelated to the primary topic will be ignored. **Account Recovery and Payment Search forms are addressed by our agents via email only - one of the few exceptions when the team contacts you not in a Support Ticket. We encourage you to check your inbox once in a while and cooperate with the agent so that we could help. 
+***Note:*** The support team normally doesn't provide help in direct messages on the platform, on social media, or via phone or email. 
+
+Most users receive automatically generated messages, invoices, or newsletters from TradingView (from *hello@email.tradingview.com*, for example, or other addresses). Please * do not reply * to them, as these email addresses are unmonitored.
+ Other useful links: 
+**Topic**
+
+**Where to get help**
+
+Report a vulnerability
+
+[Bug Bounty Program](https://www.tradingview.com/bounty/)
+
+More about Partner Program
+
+[Partner Program](https://www.tradingview.com/referral-program/)
+
+More about widgets
+
+[Market Widget](https://www.tradingview.com/widget/)
+
+More about advertising
+
+[Advertise](https://www.tradingview.com/advertising-info/)
+
+More about open roles/careers
+
+[Careers](https://www.tradingview.com/careers/)
+
+More info is always here for you - just scroll down to the bottom of the website and look for what you need there.
+
+**Friendly reminder:** Please be precise and concise when sending a request to the team, and try to choose the correct issue type for your problem. Note that we do not provide automated replies as well as live chat help, as the team are no robots, and it might take us some time to review your request and give a comprehensive reply. Also, the team doesn't normally work on weekends. We appreciate your understanding.
+
+Happy trading!
+ Previous Previous Why is my account banned due to suspicious activity? Next Next How do I change my password? Launch Supercharts
+
+---
+
+## Изображения
+
+### Изображение 1
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43582148363/original/JFa9EPSLlsOtpOjXLJkeKgLJws5DruwD-g.png?1758617431
+
+**Описание:**
+
+The image displays a **feedback interface** (not a TradingView chart interface) from a platform, likely a help or support section. Here’s a detailed breakdown of all elements:  
+
+
+### 1. Core Question & Feedback Buttons  
+- **Text**: *“Was I able to answer your question?”*  
+  This is a prompt asking for user feedback on the helpfulness of a prior response.  
+
+- **Button 1: “Yes”**  
+  - Style: Light gray background, black text, rounded corners.  
+  - Purpose: Confirms the answer was satisfactory (triggers a positive feedback action).  
+
+- **Button 2: “No, I still need help”**  
+  - Style: Light gray background, black text, rounded corners (similar to “Yes” but highlighted by a blue arrow).  
+  - Purpose: Indicates the answer was insufficient; likely opens a new support channel (e.g., chat, form) or redirects to more help.  
+
+
+### 2. Navigation/Action Button  
+- **Icon Button (Left of Text Input)**  
+  - Style: White background, black arrow (curved, like a “back” or “refresh” icon).  
+  - Purpose: Likely a *back* or *reload* action (e.g., return to a prior screen, refresh the query).  
+
+
+### 3. Text Input Field  
+- **Placeholder Text**: *“Type your query here…”*  
+  - Style: Light gray border, light gray placeholder text.  
+  - Purpose: Allows users to enter a new question or follow-up query (e.g., for further assistance).  
+
+
+### 4. Submit Button (Right of Text Input)  
+- **Icon Button**  
+  - Style: Black background, white upward arrow (send/submit icon).  
+  - Purpose: Submits the typed query (sends the new question to the support system).  
+
+
+### 5. Disclaimer Text  
+- **Text**: *“Answers are generated by AI and may contain inaccuracies. Check our knowledge base for in-depth materials.”*  
+  - Style: Small, gray text.  
+  - Purpose: Informs users that responses are AI-generated (not human) and directs them to a knowledge base for detailed info.  
+  - **Link**: *“knowledge base”* (blue, underlined) → Clickable link to the platform’s knowledge base.  
+
+
+### Context Note  
+This is **not a TradingView chart interface** (which typically shows price charts, indicators, or order panels). Instead, it’s a *support/feedback widget* (common on websites/apps) for evaluating AI-generated answers and seeking further help. The blue arrow emphasizes the “No, I still need help” button, guiding users to request additional assistance.
+
+---
+

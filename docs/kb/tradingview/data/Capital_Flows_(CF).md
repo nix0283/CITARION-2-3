@@ -1,0 +1,136 @@
+# Capital Flows (CF)
+
+**URL:** https://www.tradingview.com/support/solutions/43000650944-capital-flows-cf/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Capital Flows (CF) ](/support/solutions/43000650944-capital-flows-cf/)
+
+# Capital Flows (CF) 
+ International capital flows.
+
+All countries for which *CF* is available are listed below:
+
+- Albania
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Bolivia
+- Bosnia and Herzegovina
+- Brazil
+- Bulgaria
+- Canada
+- Cape Verde
+- Chile
+- China
+- Colombia
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Estonia
+- Euro Area
+- Finland
+- France
+- Gambia
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Guatemala
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Ireland
+- Israel
+- Italy
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Kuwait
+- Latvia
+- Lebanon
+- Libya
+- Lithuania
+- Luxembourg
+- Macau
+- Macedonia
+- Malawi
+- Malaysia
+- Maldives
+- Malta
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Morocco
+- Mozambique
+- Namibia
+- Netherlands
+- New Zealand
+- Nicaragua
+- Niger
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Panama
+- Papua New Guinea
+- Paraguay
+- Philippines
+- Poland
+- Portugal
+- Puerto Rico
+- Qatar
+- Russia
+- Rwanda
+- Saudi Arabia
+- Senegal
+- Serbia
+- Seychelles
+- Singapore
+- Slovakia
+- Slovenia
+- South Korea
+- Spain
+- Sudan
+- Suriname
+- Sweden
+- Switzerland
+- Taiwan
+- Tanzania
+- Tunisia
+- Turkey
+- Uganda
+- Ukraine
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Vietnam
+- Zambia
+ Previous Previous Capacity Utilization (CU) Next Next Car Production (CAP) Launch Supercharts
+

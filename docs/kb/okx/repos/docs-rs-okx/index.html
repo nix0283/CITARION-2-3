@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="docs.rs 0.0.0 (a68728e7 2026-03-08 )"><link rel="canonical" href="https://docs.rs/crate/okx-rs/latest" /><link rel="stylesheet" href="/-/static/vendored.css?0-0-0-a68728e7-2026-03-08" media="all" />
+        <link rel="stylesheet" href="/-/static/style.css?0-0-0-a68728e7-2026-03-08" media="all" />
+        <link rel="stylesheet" href="/-/static/font-awesome.css?0-0-0-a68728e7-2026-03-08" media="all" />
+
+        <link rel="search" href="/-/static/opensearch.xml" type="application/opensearchdescription+xml" title="Docs.rs" />
+
+        <title>okx-rs 0.1.1 - Docs.rs</title><script nonce="gYTg00Pflcsro/zyQsdWRpok8+ts5okTXMtoidMzOxWXIQTy">(function() {
+    function applyTheme(theme) {
+        if (theme) {
+            document.documentElement.dataset.docsRsTheme = theme;
+        }
+    }
+
+    window.addEventListener("storage", ev => {
+        if (ev.key === "rustdoc-theme") {
+            applyTheme(ev.newValue);
+        }
+    });
+
+    // see ./storage-change-detection.html for details
+    window.addEventListener("message", ev => {
+        if (ev.data && ev.data.storage && ev.data.storage.key === "rustdoc-theme") {
+            applyTheme(ev.data.storage.value);
+        }
+    });
+
+    applyTheme(window.localStorage.getItem("rustdoc-theme"));
+})();</script><script defer type="text/javascript" nonce="gYTg00Pflcsro/zyQsdWRpok8+ts5okTXMtoidMzOxWXIQTy" src="/-/static/menu.js?0-0-0-a68728e7-2026-03-08"></script>
+        <script defer type="text/javascript" nonce="gYTg00Pflcsro/zyQsdWRpok8+ts5okTXMtoidMzOxWXIQTy" src="/-/static/index.js?0-0-0-a68728e7-2026-03-08"></script>
+    </head>
+
+    <body class="">
+<div class="nav-container">
+    <div class="container">
+        <div class="pure-menu pure-menu-horizontal" role="navigation" aria-label="Main navigation">
+            <form action="/releases/search"
+                  method="GET"
+                  id="nav-search-form"
+                  class="landing-search-form-nav  ">
+
+                
+                <a href="/" class="pure-menu-heading pure-menu-link docsrs-logo" aria-label="Docs.rs">
+                    <span title="Docs.rs"><span class="fa fa-solid fa-cubes " aria-hidden="true"></span></span>
+                    <span class="title">Docs.rs</span>
+                </a><ul class="pure-menu-list">
+    <script id="crate-metadata" type="application/json">
+        
+        {
+            "name": "okx-rs",
+            "version": "0.1.1"
+        }
+    </script><li class="pure-menu-item">
+            <a href="/crate/okx-rs/latest" class="pure-menu-link crate-name" title="Unofficial Rust Library for the OKX V5 API">
+                <span class="fa fa-solid fa-cube " aria-hidden="true"></span>
+                <span class="title">okx-rs-0.1.1</span>
+            </a>
+        </li><li class="pure-menu-item pure-menu-has-children">
+                <a href="#" class="pure-menu-link" aria-label="Platform">
+                    <span class="fa fa-solid fa-gears " aria-hidden="true"></span>
+                    <span class="title">Platform</span>
+                </a>
+
+                
+                <ul class="pure-menu-children" id="platforms" data-url="/crate/okx-rs/latest/menus/platforms/"><li class="pure-menu-item">
+            <a href="/okx-rs/latest/aarch64-apple-darwin/okx_rs/" class="pure-menu-link" data-fragment="retain" rel="">aarch64-apple-darwin</a>
+        </li><li class="pure-menu-item">
+            <a href="/okx-rs/latest/i686-pc-windows-msvc/okx_rs/" class="pure-menu-link" data-fragment="retain" rel="">i686-pc-windows-msvc</a>
+        </li><li class="pure-menu-item">
+            <a href="/okx-rs/latest/x86_64-pc-windows-msvc/okx_rs/" class="pure-menu-link" data-fragment="retain" rel="">x86_64-pc-windows-msvc</a>
+        </li><li class="pure-menu-item">
+            <a href="/okx-rs/latest/okx_rs/" class="pure-menu-link" data-fragment="retain" rel="">x86_64-unknown-linux-gnu</a>
+        </li></ul>
+            </li><li class="pure-menu-item">
+                <a href="/crate/okx-rs/latest/features" title="Browse available feature flags of okx-rs-0.1.1" class="pure-menu-link">
+                    <span class="fa fa-solid fa-flag " aria-hidden="true"></span>
+                    <span class="title">Feature flags</span>
+                </a>
+            </li>
+        
+    
+</ul><div class="spacer"></div>
+                
+                
+
+<ul class="pure-menu-list">
+                    <li class="pure-menu-item pure-menu-has-children">
+                        <a href="#" class="pure-menu-link" aria-label="docs.rs">docs.rs</a>
+                        <ul class="pure-menu-children aligned-icons"><li class="pure-menu-item"><a class="pure-menu-link" href="/about"><span class="fa fa-solid fa-circle-info " aria-hidden="true"></span> About docs.rs</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/badges"><span class="fa fa-brands fa-fonticons " aria-hidden="true"></span> Badges</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/builds"><span class="fa fa-solid fa-gears " aria-hidden="true"></span> Builds</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/metadata"><span class="fa fa-solid fa-table " aria-hidden="true"></span> Metadata</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/redirections"><span class="fa fa-solid fa-road " aria-hidden="true"></span> Shorthand URLs</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/download"><span class="fa fa-solid fa-download " aria-hidden="true"></span> Download</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/about/rustdoc-json"><span class="fa fa-solid fa-file-code " aria-hidden="true"></span> Rustdoc JSON</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="/releases/queue"><span class="fa fa-solid fa-gears " aria-hidden="true"></span> Build queue</a></li><li class="pure-menu-item"><a class="pure-menu-link" href="https://foundation.rust-lang.org/policies/privacy-policy/#docs.rs" target="_blank"><span class="fa fa-solid fa-shield-halved " aria-hidden="true"></span> Privacy policy</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="pure-menu-list"><li class="pure-menu-item pure-menu-has-children">
+                        <a href="#" class="pure-menu-link" aria-label="Rust">Rust</a>
+                        <ul class="pure-menu-children">
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://www.rust-lang.org/" target="_blank">Rust website</a></li>
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/book/" target="_blank">The Book</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/std/" target="_blank">Standard Library API Reference</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/rust-by-example/" target="_blank">Rust by Example</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/cargo/guide/" target="_blank">The Cargo Guide</a></li>
+
+                            <li class="pure-menu-item"><a class="pure-menu-link" href="https://doc.rust-lang.org/nightly/clippy" target="_blank">Clippy Documentation</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <div id="search-input-nav">
+                    <label for="nav-search">
+                        <span class="fa fa-solid fa-magnifying-glass " aria-hidden="true"></span>
+                    </label>
+
+                    
+                    
+                    <input id="nav-search" name="query" type="text" aria-label="Find crate by search query" tabindex="-1"
+                        placeholder="Find crate"
+                        >
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    
+    <div class="docsrs-package-container">
+        <div class="container">
+            <div class="description-container">
+                
+
+                
+                <h1 id="crate-title">
+                    okx-rs 0.1.1
+                    <span id="clipboard" class="svg-clipboard" title="Copy crate name and version information"></span>
+                </h1>
+
+                
+                <div class="description">Unofficial Rust Library for the OKX V5 API</div>
+
+
+                <div class="pure-menu pure-menu-horizontal">
+                    <ul class="pure-menu-list">
+                        
+                        <li class="pure-menu-item"><a href="/crate/okx-rs/latest"
+                                class="pure-menu-link pure-menu-active">
+                                <span class="fa fa-solid fa-cube " aria-hidden="true"></span>
+                                <span class="title"> Crate</span>
+                            </a>
+                        </li>
+
+                        
+                        <li class="pure-menu-item">
+                            <a href="/crate/okx-rs/latest/source/"
+                                class="pure-menu-link">
+                                <span class="fa fa-regular fa-folder-open " aria-hidden="true"></span>
+                                <span class="title"> Source</span>
+                            </a>
+                        </li>
+
+                        
+                        <li class="pure-menu-item">
+                            <a href="/crate/okx-rs/latest/builds"
+                                class="pure-menu-link">
+                                <span class="fa fa-solid fa-gears " aria-hidden="true"></span>
+                                <span class="title"> Builds</span>
+                            </a>
+                        </li>
+
+                        
+                        <li class="pure-menu-item">
+                            <a href="/crate/okx-rs/latest/features"
+                               class="pure-menu-link">
+                                <span class="fa fa-solid fa-flag " aria-hidden="true"></span>
+                                <span class="title">Feature flags</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div><a href="/okx-rs/latest/okx_rs/" class="doc-link">
+                    <span class="fa fa-solid fa-book " aria-hidden="true"></span> Documentation
+                </a></div>
+    </div>
+<div class="container package-page-container">
+        <div class="pure-g">
+            <div class="pure-u-1 pure-u-sm-7-24 pure-u-md-5-24">
+                <div class="pure-menu package-menu">
+                    <ul class="pure-menu-list">
+                            
+                            
+                            <li class="pure-menu-heading">Coverage</li>
+                            <li class="pure-menu-item text-center"><b>34.43%</b><br>
+                                <span class="documented-info"><b>428</b> out of <b>1243</b> items documented</span><span class="documented-info"><b>0</b> out of <b>206</b> items with examples</span></li><li class="pure-menu-heading">Size</li>
+                            <li class="pure-menu-item">
+                                <span class="documented-info">Source code size: 282.69 kB
+                                    <span class="size" tabindex=0><span class="fa fa-solid fa-circle-info " aria-hidden="true"></span><span class="info">This is the summed size of all the files inside the crates.io package for this release.</span>
+                                    </span>
+                                </span>
+                            </li><li class="pure-menu-item">
+                                    <span class="documented-info">Documentation size: 57.71 MB
+                                        <span class="size" tabindex=0><span class="fa fa-solid fa-circle-info " aria-hidden="true"></span><span class="info">This is the summed size of all files generated by rustdoc for all configured targets</span>
+                                        </span>
+                                    </span>
+                                </li><li class="pure-menu-heading">Ø build duration</li><li class="pure-menu-item">
+                                    <span class="documented-info">this release: 1m 21s
+                                        <span class="size" tabindex=0><span class="fa fa-solid fa-circle-info " aria-hidden="true"></span><span class="info">Average build duration of <b>successful</b> builds.</span>
+                                        </span>
+                                    </span>
+                                </li><li class="pure-menu-item">
+                                    <span class="documented-info">all releases: 1m 21s
+                                        <span class="size" tabindex=0><span class="fa fa-solid fa-circle-info " aria-hidden="true"></span><span class="info">Average build duration of <b>successful</b> builds in releases after 2024-10-23.</span>
+                                        </span>
+                                    </span>
+                                </li><li class="pure-menu-heading">Links</li>
+                        <li class="pure-menu-item">
+                                <a href="https://github.com/roytang121/okx-rs/" class="pure-menu-link">
+                                    
+                                    <span class="fa fa-solid fa-code-branch " aria-hidden="true"></span>
+                                        
+                                            roytang121/okx-rs
+                                        
+                                        <br>
+                                        <span class="fa fa-solid fa-star left-margin" aria-hidden="true"></span> 31
+                                        <span class="fa fa-solid fa-code-branch " aria-hidden="true"></span> 20
+                                        <span class="fa fa-solid fa-circle-exclamation " aria-hidden="true"></span> 1
+
+                                    </a>
+                            </li>
+                        <li class="pure-menu-item">
+                            <a href="https://crates.io/crates/okx-rs" class="pure-menu-link"
+                                title="See okx-rs on crates.io">
+                                <span class="fa fa-solid fa-cube " aria-hidden="true"></span> crates.io
+                            </a>
+                        </li>
+
+                        <li class="pure-menu-heading">Dependencies</li>
+                        <li class="pure-menu-item">
+                            <div class="pure-menu pure-menu-scrollable sub-menu">
+                                <ul class="pure-menu-list">
+                                    
+                                    <li class="pure-menu-item"><a href="/crate/anyhow/^1" class="pure-menu-link">
+                anyhow ^1
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/base64/^0.13" class="pure-menu-link">
+                base64 ^0.13
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/chrono/^0.4.38" class="pure-menu-link">
+                chrono ^0.4.38
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/const_format/^0.2" class="pure-menu-link">
+                const_format ^0.2
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/digest/^0.10" class="pure-menu-link">
+                digest ^0.10
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/env_logger/^0.10.0" class="pure-menu-link">
+                env_logger ^0.10.0
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                        <i>optional</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/futures-util/^0.3.28" class="pure-menu-link">
+                futures-util ^0.3.28
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/hmac/^0.12.1" class="pure-menu-link">
+                hmac ^0.12.1
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/log/^0.4.20" class="pure-menu-link">
+                log ^0.4.20
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                        <i>optional</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/reqwest/^0.11.22" class="pure-menu-link">
+                reqwest ^0.11.22
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/rust_decimal/^1" class="pure-menu-link">
+                rust_decimal ^1
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                        <i>optional</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/serde/^1.0" class="pure-menu-link">
+                serde ^1.0
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/serde_json/^1.0" class="pure-menu-link">
+                serde_json ^1.0
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/serde_qs/^0.10.1" class="pure-menu-link">
+                serde_qs ^0.10.1
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/serde_with/^3.7.0" class="pure-menu-link">
+                serde_with ^3.7.0
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/sha2/^0.10" class="pure-menu-link">
+                sha2 ^0.10
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/simd-json/^0.13.4" class="pure-menu-link">
+                simd-json ^0.13.4
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                        <i>optional</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/thiserror/^1" class="pure-menu-link">
+                thiserror ^1
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/tokio/^1.0.0" class="pure-menu-link">
+                tokio ^1.0.0
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                        <i>optional</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/tungstenite/^0.20.1" class="pure-menu-link">
+                tungstenite ^0.20.1
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                        <i>optional</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/url/^2" class="pure-menu-link">
+                url ^2
+                
+                    <i class="dependencies normal">normal</i>
+                    
+                
+            </a>
+        </li><li class="pure-menu-item"><a href="/crate/dotenv/^0.15.0" class="pure-menu-link">
+                dotenv ^0.15.0
+                
+                    <i class="dependencies dev">dev</i>
+                    
+                
+            </a>
+        </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="pure-menu-heading">Versions</li>
+                        <li class="pure-menu-item">
+                            <div class="pure-menu pure-menu-scrollable sub-menu">
+                                <ul class="pure-menu-list">
+                                    
+                                    
+        
+         
+        <li class="pure-menu-item">
+            <a
+                href="/crate/okx-rs/0.1.1"
+                
+                rel="nofollow"
+                class="pure-menu-link"
+                
+                
+            ><b>0.1.1</b> (2024-05-03)</a>
+        </li>
+        
+         
+        <li class="pure-menu-item">
+            <a
+                href="/crate/okx-rs/0.1.0"
+                
+                rel="nofollow"
+                class="pure-menu-link"
+                
+                
+            ><b>0.1.0</b> (2023-01-04)</a>
+        </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        
+                        <li class="pure-menu-heading">Owners</li>
+                        <li class="pure-menu-item"><a href="https://crates.io/users/roytang121">
+                                    <img src="https://avatars.githubusercontent.com/u/751750?v=4" alt="roytang121" class="owner">
+                                </a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pure-u-1 pure-u-sm-17-24 pure-u-md-19-24 package-details" id="main">
+                <h1>okx-rs</h1>
+<p>Unofficial Rust Library for the OKX V5 API.</p>
+<h2>Usage</h2>
+<pre><code class="language-toml"><span class="syntax-source syntax-toml"><span class="syntax-punctuation syntax-definition syntax-table syntax-begin syntax-toml">[</span><span class="syntax-meta syntax-tag syntax-table syntax-toml"><span class="syntax-entity syntax-name syntax-table syntax-toml">dependencies</span></span><span class="syntax-punctuation syntax-definition syntax-table syntax-end syntax-toml">]</span>
+<span class="syntax-meta syntax-tag syntax-key syntax-toml"><span class="syntax-entity syntax-name syntax-tag syntax-toml">okx-rs</span></span> <span class="syntax-punctuation syntax-definition syntax-key-value syntax-toml">=</span> <span class="syntax-punctuation syntax-definition syntax-inline-table syntax-begin syntax-toml">{</span> <span class="syntax-meta syntax-tag syntax-key syntax-toml"><span class="syntax-entity syntax-name syntax-tag syntax-toml">git</span></span> <span class="syntax-punctuation syntax-definition syntax-key-value syntax-toml">=</span> <span class="syntax-string syntax-quoted syntax-double syntax-basic syntax-toml"><span class="syntax-punctuation syntax-definition syntax-string syntax-begin syntax-toml">&quot;</span>https://github.com/roytang121/okx-rs<span class="syntax-punctuation syntax-definition syntax-string syntax-end syntax-toml">&quot;</span></span> <span class="syntax-punctuation syntax-definition syntax-inline-table syntax-end syntax-toml">}</span>
+</span></code></pre>
+<h2>Examples</h2>
+<h3>Get Funding Balances</h3>
+<blockquote>
+<p>Get the balance of the funding account.</p>
+</blockquote>
+<pre><code class="language-rust"><span class="syntax-source syntax-rust"><span class="syntax-keyword syntax-other syntax-rust">use</span> <span class="syntax-meta syntax-path syntax-rust">okx_rs<span class="syntax-punctuation syntax-accessor syntax-rust">::</span></span><span class="syntax-meta syntax-path syntax-rust">api<span class="syntax-punctuation syntax-accessor syntax-rust">::</span></span><span class="syntax-meta syntax-path syntax-rust">v5<span class="syntax-punctuation syntax-accessor syntax-rust">::</span></span><span class="syntax-meta syntax-path syntax-rust">funding_account<span class="syntax-punctuation syntax-accessor syntax-rust">::</span></span>GetFundingBalances<span class="syntax-punctuation syntax-terminator syntax-rust">;</span>
+<span class="syntax-keyword syntax-other syntax-rust">use</span> <span class="syntax-meta syntax-path syntax-rust">okx_rs<span class="syntax-punctuation syntax-accessor syntax-rust">::</span></span><span class="syntax-meta syntax-path syntax-rust">api<span class="syntax-punctuation syntax-accessor syntax-rust">::</span></span><span class="syntax-meta syntax-path syntax-rust">v5<span class="syntax-punctuation syntax-accessor syntax-rust">::</span></span><span class="syntax-meta syntax-path syntax-rust">testkit<span class="syntax-punctuation syntax-accessor syntax-rust">::</span></span>with_env_private_client<span class="syntax-punctuation syntax-terminator syntax-rust">;</span>
+
+<span class="syntax-comment syntax-line syntax-documentation syntax-rust"><span class="syntax-punctuation syntax-definition syntax-comment syntax-rust">///</span> Rest API - get funding balances
+</span><span class="syntax-meta syntax-annotation syntax-rust"><span class="syntax-punctuation syntax-definition syntax-annotation syntax-rust">#</span><span class="syntax-punctuation syntax-section syntax-group syntax-begin syntax-rust">[</span><span class="syntax-variable syntax-annotation syntax-rust">tokio</span>::<span class="syntax-variable syntax-annotation syntax-rust">main</span><span class="syntax-punctuation syntax-section syntax-group syntax-end syntax-rust">]</span></span>
+async <span class="syntax-meta syntax-function syntax-rust"><span class="syntax-meta syntax-function syntax-rust"><span class="syntax-storage syntax-type syntax-function syntax-rust">fn</span> </span><span class="syntax-entity syntax-name syntax-function syntax-rust">main</span></span><span class="syntax-meta syntax-function syntax-rust"><span class="syntax-meta syntax-function syntax-parameters syntax-rust"><span class="syntax-punctuation syntax-section syntax-parameters syntax-begin syntax-rust">(</span></span><span class="syntax-meta syntax-function syntax-rust"><span class="syntax-meta syntax-function syntax-parameters syntax-rust"><span class="syntax-punctuation syntax-section syntax-parameters syntax-end syntax-rust">)</span></span></span></span><span class="syntax-meta syntax-function syntax-rust"> </span><span class="syntax-meta syntax-function syntax-rust"><span class="syntax-meta syntax-block syntax-rust"><span class="syntax-punctuation syntax-section syntax-block syntax-begin syntax-rust">{</span>
+    <span class="syntax-support syntax-function syntax-rust">with_env_private_client</span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-begin syntax-rust">(</span><span class="syntax-meta syntax-function syntax-closure syntax-rust"><span class="syntax-meta syntax-function syntax-parameters syntax-rust"><span class="syntax-punctuation syntax-section syntax-parameters syntax-begin syntax-rust">|</span></span></span><span class="syntax-meta syntax-function syntax-closure syntax-rust"><span class="syntax-meta syntax-function syntax-parameters syntax-rust"><span class="syntax-variable syntax-parameter syntax-rust">client</span><span class="syntax-punctuation syntax-section syntax-parameters syntax-end syntax-rust">|</span></span> </span><span class="syntax-meta syntax-function syntax-closure syntax-rust">async <span class="syntax-storage syntax-modifier syntax-rust">move</span> <span class="syntax-meta syntax-block syntax-rust"><span class="syntax-punctuation syntax-section syntax-block syntax-begin syntax-rust">{</span>
+        <span class="syntax-storage syntax-type syntax-rust">let</span> response <span class="syntax-keyword syntax-operator syntax-assignment syntax-rust">=</span> client
+            <span class="syntax-punctuation syntax-accessor syntax-dot syntax-rust">.</span><span class="syntax-support syntax-function syntax-rust">request</span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-begin syntax-rust">(</span>GetFundingBalances <span class="syntax-meta syntax-block syntax-rust"><span class="syntax-punctuation syntax-section syntax-block syntax-begin syntax-rust">{</span>
+                <span class="syntax-keyword syntax-operator syntax-range syntax-rust">..</span><span class="syntax-support syntax-type syntax-rust">Default</span><span class="syntax-meta syntax-path syntax-rust"><span class="syntax-punctuation syntax-accessor syntax-rust">::</span></span>default<span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-begin syntax-rust">(</span></span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-end syntax-rust">)</span></span>
+            </span><span class="syntax-meta syntax-block syntax-rust"><span class="syntax-punctuation syntax-section syntax-block syntax-end syntax-rust">}</span></span></span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-end syntax-rust">)</span></span>
+            <span class="syntax-punctuation syntax-accessor syntax-dot syntax-rust">.</span>await
+            <span class="syntax-punctuation syntax-accessor syntax-dot syntax-rust">.</span><span class="syntax-support syntax-function syntax-rust">unwrap</span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-begin syntax-rust">(</span></span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-end syntax-rust">)</span></span><span class="syntax-punctuation syntax-terminator syntax-rust">;</span>
+        <span class="syntax-support syntax-macro syntax-rust">println!</span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-begin syntax-rust">(</span></span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-string syntax-quoted syntax-double syntax-rust"><span class="syntax-punctuation syntax-definition syntax-string syntax-begin syntax-rust">&quot;</span><span class="syntax-constant syntax-other syntax-placeholder syntax-rust">{}</span><span class="syntax-punctuation syntax-definition syntax-string syntax-end syntax-rust">&quot;</span></span></span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-separator syntax-rust">,</span> <span class="syntax-meta syntax-path syntax-rust">serde_json<span class="syntax-punctuation syntax-accessor syntax-rust">::</span></span>to_string_pretty<span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-begin syntax-rust">(</span><span class="syntax-keyword syntax-operator syntax-bitwise syntax-rust">&amp;</span>response</span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-end syntax-rust">)</span></span><span class="syntax-punctuation syntax-accessor syntax-dot syntax-rust">.</span><span class="syntax-support syntax-function syntax-rust">unwrap</span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-begin syntax-rust">(</span></span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-end syntax-rust">)</span></span><span class="syntax-punctuation syntax-section syntax-group syntax-end syntax-rust">)</span></span><span class="syntax-punctuation syntax-terminator syntax-rust">;</span>
+    </span><span class="syntax-meta syntax-block syntax-rust"><span class="syntax-punctuation syntax-section syntax-block syntax-end syntax-rust">}</span></span></span></span><span class="syntax-meta syntax-group syntax-rust"><span class="syntax-punctuation syntax-section syntax-group syntax-end syntax-rust">)</span></span>
+    <span class="syntax-punctuation syntax-accessor syntax-dot syntax-rust">.</span>await<span class="syntax-punctuation syntax-terminator syntax-rust">;</span>
+</span><span class="syntax-meta syntax-block syntax-rust"><span class="syntax-punctuation syntax-section syntax-block syntax-end syntax-rust">}</span></span></span>
+</span></code></pre>
+<!-- raw HTML omitted -->
+<h2>V5 API Features</h2>
+<blockquote>
+<p>The following is a list of all the features that are currently supported by the library. The list is updated as the library is updated. If you find any problems, please submit an issue or pull request.</p>
+</blockquote>
+<h3>Trading Account</h3>
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get balance</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get positions</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get positions history</li>
+<li><input type="checkbox" disabled="" /> REST / Get account and position risk</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get bills details (last 7 days)</li>
+<li><input type="checkbox" disabled="" /> REST / Get bills details (last 3 months)</li>
+<li><input type="checkbox" disabled="" /> REST / Get account configuration</li>
+<li><input type="checkbox" disabled="" /> REST / Set position mode</li>
+<li><input type="checkbox" disabled="" /> REST / Set leverage</li>
+<li><input type="checkbox" disabled="" /> REST / Get maximum buy/sell amount or open amount</li>
+<li><input type="checkbox" disabled="" /> REST / Get maximum available tradable amount</li>
+<li><input type="checkbox" disabled="" /> REST / Increase/decrease margin</li>
+<li><input type="checkbox" disabled="" /> REST / Get leverage</li>
+<li><input type="checkbox" disabled="" /> REST / Get leverage estimated info</li>
+<li><input type="checkbox" disabled="" /> REST / Get the maximum loan of instrument</li>
+<li><input type="checkbox" disabled="" /> REST / Get fee rates</li>
+<li><input type="checkbox" disabled="" /> REST / Get interest accrued data</li>
+<li><input type="checkbox" disabled="" /> REST / Get interest rate</li>
+<li><input type="checkbox" disabled="" /> REST / Set greeks (PA/BS)</li>
+<li><input type="checkbox" disabled="" /> REST / Isolated margin trading settings</li>
+<li><input type="checkbox" disabled="" /> REST / Get maximum withdrawals</li>
+<li><input type="checkbox" disabled="" /> REST / Get account risk state</li>
+<li><input type="checkbox" disabled="" /> REST / Manual borrow and repay in Quick Margin Mode</li>
+<li><input type="checkbox" disabled="" /> REST / Get borrow and repay history in Quick Margin Mode</li>
+<li><input type="checkbox" disabled="" /> REST / VIP loans borrow and repay</li>
+<li><input type="checkbox" disabled="" /> REST / Get borrow and repay history for VIP loans</li>
+<li><input type="checkbox" disabled="" /> REST / Get VIP interest accrued data</li>
+<li><input type="checkbox" disabled="" /> REST / Get VIP interest deducted data</li>
+<li><input type="checkbox" disabled="" /> REST / Get VIP loan order list</li>
+<li><input type="checkbox" disabled="" /> REST / Get VIP loan order detail</li>
+<li><input type="checkbox" disabled="" /> REST / Get borrow interest and limit</li>
+<li><input type="checkbox" disabled="" /> REST / Position builder</li>
+<li><input type="checkbox" disabled="" /> REST / Get Greeks</li>
+<li><input type="checkbox" disabled="" /> REST / Get PM position limitation</li>
+<li><input type="checkbox" disabled="" /> REST / Set risk offset type</li>
+<li><input type="checkbox" disabled="" /> REST / Activate option</li>
+<li><input type="checkbox" disabled="" /> REST / Set auto loan</li>
+<li><input type="checkbox" disabled="" /> REST / Set account mode</li>
+<li><input type="checkbox" disabled="" /> REST / Reset MMP Status</li>
+<li><input type="checkbox" disabled="" /> REST / Set MMP</li>
+<li><input type="checkbox" disabled="" /> REST / GET MMP Config</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" checked="" disabled="" /> WS / Account channel</li>
+<li><input type="checkbox" checked="" disabled="" /> WS / Positions channel</li>
+<li><input type="checkbox" checked="" disabled="" /> WS / Balance and position channel</li>
+<li><input type="checkbox" disabled="" /> WS / Position risk warning</li>
+<li><input type="checkbox" disabled="" /> WS / Account greeks channel</li>
+</ul>
+<!-- raw HTML omitted -->
+<h3>Orderbook Trading</h3>
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" disabled="" /> POST / Place order</li>
+<li><input type="checkbox" disabled="" /> POST / Place multiple orders</li>
+<li><input type="checkbox" checked="" disabled="" /> POST / Cancel order</li>
+<li><input type="checkbox" checked="" disabled="" /> POST / Cancel multiple orders</li>
+<li><input type="checkbox" disabled="" /> POST / Amend order</li>
+<li><input type="checkbox" disabled="" /> POST / Amend multiple orders</li>
+<li><input type="checkbox" disabled="" /> POST / Close positions</li>
+<li><input type="checkbox" checked="" disabled="" /> GET / Order details</li>
+<li><input type="checkbox" checked="" disabled="" /> GET / Order List</li>
+<li><input type="checkbox" disabled="" /> GET / Order history (last 7 days)</li>
+<li><input type="checkbox" disabled="" /> GET / Order history (last 3 months)</li>
+<li><input type="checkbox" checked="" disabled="" /> GET / Transaction details (last 3 days）</li>
+<li><input type="checkbox" disabled="" /> GET / Transaction details (last 3 months)</li>
+<li><input type="checkbox" disabled="" /> GET / Easy convert currency list</li>
+<li><input type="checkbox" disabled="" /> POST / Place easy convert</li>
+<li><input type="checkbox" disabled="" /> GET / Easy convert history</li>
+<li><input type="checkbox" disabled="" /> GET / One-click repay currency list</li>
+<li><input type="checkbox" disabled="" /> POST / Trade one-click repay</li>
+<li><input type="checkbox" disabled="" /> GET / One-click repay history</li>
+<li><input type="checkbox" disabled="" /> POST / Mass cancel order</li>
+<li><input type="checkbox" disabled="" /> POST / Cancel All After</li>
+<li><input type="checkbox" checked="" disabled="" /> WS / Order channel</li>
+<li><input type="checkbox" disabled="" /> WS / Place order</li>
+<li><input type="checkbox" disabled="" /> WS / Place multiple orders</li>
+<li><input type="checkbox" disabled="" /> WS / Cancel order</li>
+<li><input type="checkbox" disabled="" /> WS / Cancel multiple orders</li>
+<li><input type="checkbox" disabled="" /> WS / Amend order</li>
+<li><input type="checkbox" disabled="" /> WS / Amend multiple orders</li>
+<li><input type="checkbox" disabled="" /> WS / Mass cancel order</li>
+<li><input type="checkbox" disabled="" /> POST / Place algo order</li>
+<li><input type="checkbox" disabled="" /> POST / Cancel algo order</li>
+<li><input type="checkbox" disabled="" /> POST / Amend algo order</li>
+<li><input type="checkbox" disabled="" /> POST / Cancel advance algo order</li>
+<li><input type="checkbox" disabled="" /> GET / Algo order details</li>
+<li><input type="checkbox" disabled="" /> GET / Algo order list</li>
+<li><input type="checkbox" disabled="" /> GET / Algo order history</li>
+<li><input type="checkbox" disabled="" /> WS / Algo orders channel</li>
+<li><input type="checkbox" disabled="" /> WS / Advance algo orders channel</li>
+<li><input type="checkbox" disabled="" /> POST / Place grid algo order</li>
+<li><input type="checkbox" disabled="" /> POST / Amend grid algo order</li>
+<li><input type="checkbox" disabled="" /> POST / Stop grid algo order</li>
+<li><input type="checkbox" disabled="" /> POST / Close position for contract grid</li>
+<li><input type="checkbox" disabled="" /> POST / Cancel close position order for contract grid</li>
+<li><input type="checkbox" disabled="" /> POST / Instant trigger grid algo order</li>
+<li><input type="checkbox" disabled="" /> GET / Grid algo order list</li>
+<li><input type="checkbox" disabled="" /> GET / Grid algo order history</li>
+<li><input type="checkbox" disabled="" /> GET / Grid algo order details</li>
+<li><input type="checkbox" disabled="" /> GET / Grid algo sub orders</li>
+<li><input type="checkbox" disabled="" /> GET / Grid algo order positions</li>
+<li><input type="checkbox" disabled="" /> POST / Spot/Moon grid withdraw income</li>
+<li><input type="checkbox" disabled="" /> POST / Compute margin balance</li>
+<li><input type="checkbox" disabled="" /> POST / Adjust margin balance</li>
+<li><input type="checkbox" disabled="" /> GET / Grid AI parameter (public)</li>
+<li><input type="checkbox" disabled="" /> POST / Compute min investment (public)</li>
+<li><input type="checkbox" disabled="" /> GET / RSI back testing (public)</li>
+<li><input type="checkbox" disabled="" /> WS / Spot grid algo orders channel</li>
+<li><input type="checkbox" disabled="" /> WS / Contract grid algo orders channel</li>
+<li><input type="checkbox" disabled="" /> WS / Moon grid algo orders channel</li>
+<li><input type="checkbox" disabled="" /> WS / Grid positions channel</li>
+<li><input type="checkbox" disabled="" /> WS / Grid sub orders channel</li>
+<li><input type="checkbox" disabled="" /> POST / Place recurring buy order</li>
+<li><input type="checkbox" disabled="" /> POST / Amend recurring buy order</li>
+<li><input type="checkbox" disabled="" /> POST / Stop recurring buy order</li>
+<li><input type="checkbox" disabled="" /> GET / Recurring buy order list</li>
+<li><input type="checkbox" disabled="" /> GET / Recurring buy order history</li>
+<li><input type="checkbox" disabled="" /> GET / Recurring buy order details</li>
+<li><input type="checkbox" disabled="" /> GET / Recurring buy sub orders</li>
+<li><input type="checkbox" disabled="" /> WS / Recurring buy orders channel</li>
+<li><input type="checkbox" disabled="" /> GET / Existing leading positions</li>
+<li><input type="checkbox" disabled="" /> GET / Leading position history</li>
+<li><input type="checkbox" disabled="" /> POST / Place leading stop order</li>
+<li><input type="checkbox" disabled="" /> POST / Close leading position</li>
+<li><input type="checkbox" disabled="" /> GET / Leading instruments</li>
+<li><input type="checkbox" disabled="" /> POST / Amend leading instruments</li>
+<li><input type="checkbox" disabled="" /> GET / Profit sharing details</li>
+<li><input type="checkbox" disabled="" /> GET / Total profit sharing</li>
+<li><input type="checkbox" disabled="" /> GET / Unrealized profit sharing details</li>
+<li><input type="checkbox" disabled="" /> GET / Tickers</li>
+<li><input type="checkbox" disabled="" /> GET / Ticker</li>
+<li><input type="checkbox" disabled="" /> GET / Order book</li>
+<li><input type="checkbox" disabled="" /> GET / Order lite book</li>
+<li><input type="checkbox" disabled="" /> GET / Candlesticks</li>
+<li><input type="checkbox" disabled="" /> GET / Candlesticks history</li>
+<li><input type="checkbox" disabled="" /> GET / Trades</li>
+<li><input type="checkbox" disabled="" /> GET / Trades history</li>
+<li><input type="checkbox" disabled="" /> GET / Option trades by instrument family</li>
+<li><input type="checkbox" disabled="" /> GET / Option trades</li>
+<li><input type="checkbox" disabled="" /> GET / 24H total volume</li>
+<li><input type="checkbox" disabled="" /> WS / Tickers channel</li>
+<li><input type="checkbox" disabled="" /> WS / Candlesticks channel</li>
+<li><input type="checkbox" disabled="" /> WS / Trades channel</li>
+<li><input type="checkbox" disabled="" /> WS / All trades channel</li>
+<li><input type="checkbox" checked="" disabled="" /> WS / Order book channel</li>
+<li><input type="checkbox" disabled="" /> WS / Option trades channel</li>
+</ul>
+<!-- raw HTML omitted -->
+<h3>Funding Account</h3>
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get currencies</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get balance</li>
+<li><input type="checkbox" disabled="" /> REST / Get non-tradable assets</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get account asset valuation</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Funds transfer</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get funds transfer state</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Asset bills details</li>
+<li><input type="checkbox" disabled="" /> REST / Lightning deposits</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get deposit address</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get deposit history</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Withdrawal</li>
+<li><input type="checkbox" disabled="" /> REST / Lightning withdrawals</li>
+<li><input type="checkbox" disabled="" /> REST / Cancel withdrawal</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get withdrawal history</li>
+<li><input type="checkbox" disabled="" /> REST / Get deposit withdraw status</li>
+<li><input type="checkbox" disabled="" /> REST / Small assets convert</li>
+<li><input type="checkbox" disabled="" /> REST / Get exchange list (public)</li>
+<li><input type="checkbox" disabled="" /> REST / Get convert currencies</li>
+<li><input type="checkbox" disabled="" /> REST / Get convert currency pair</li>
+<li><input type="checkbox" disabled="" /> REST / Estimate quote</li>
+<li><input type="checkbox" disabled="" /> REST / Convert trade</li>
+<li><input type="checkbox" disabled="" /> REST / Get convert history</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" disabled="" /> WS / Deposit info channel</li>
+<li><input type="checkbox" disabled="" /> WS / Withdrawal info channel</li>
+</ul>
+<!-- raw HTML omitted -->
+<h3>Public data</h3>
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get instruments</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get delivery/exercise history</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get open interest</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get funding rate</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get funding rate history</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get limit price</li>
+<li><input type="checkbox" disabled="" /> REST / Get option market data</li>
+<li><input type="checkbox" disabled="" /> REST / Get estimated delivery/exercise price</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get discount rate and interest-free quota</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get system time</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get mark price</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get position tiers</li>
+<li><input type="checkbox" disabled="" /> REST / Get interest rate and loan quota</li>
+<li><input type="checkbox" disabled="" /> REST / Get interest rate and loan quota for VIP loans</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get underlying</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get insurance fund</li>
+<li><input type="checkbox" disabled="" /> REST / Unit convert</li>
+<li><input type="checkbox" disabled="" /> REST / Get option tick bands</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get index tickers</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get index candlesticks</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get index candlesticks history</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get mark price candlesticks</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get mark price candlesticks history</li>
+<li><input type="checkbox" disabled="" /> REST / Get oracle</li>
+<li><input type="checkbox" disabled="" /> REST / Get exchange rate</li>
+<li><input type="checkbox" checked="" disabled="" /> REST / Get index components</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" checked="" disabled="" /> WS / Instruments channel</li>
+<li><input type="checkbox" disabled="" /> WS / Open interest channel</li>
+<li><input type="checkbox" disabled="" /> WS / Funding rate channel</li>
+<li><input type="checkbox" disabled="" /> WS / Price limit channel</li>
+<li><input type="checkbox" disabled="" /> WS / Option summary channel</li>
+<li><input type="checkbox" disabled="" /> WS / Estimated delivery/exercise price channel</li>
+<li><input type="checkbox" checked="" disabled="" /> WS / Mark price channel</li>
+<li><input type="checkbox" checked="" disabled="" /> WS / Index tickers channel</li>
+<li><input type="checkbox" disabled="" /> WS / Mark price candlesticks channel</li>
+<li><input type="checkbox" disabled="" /> WS / Index candlesticks channel</li>
+<li><input type="checkbox" disabled="" /> WS / Liquidation orders channel</li>
+</ul>
+<!-- raw HTML omitted -->
+<h3>Financial Product</h3>
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" disabled="" /> GET / offers</li>
+<li><input type="checkbox" disabled="" /> POST / Purchase</li>
+<li><input type="checkbox" disabled="" /> POST / Redeem</li>
+<li><input type="checkbox" disabled="" /> POST / Cancel purchases/redemptions</li>
+<li><input type="checkbox" disabled="" /> GET / Active orders</li>
+<li><input type="checkbox" disabled="" /> GET / Order history</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" disabled="" /> GET / Saving balance</li>
+<li><input type="checkbox" disabled="" /> POST / Savings purchase/redemption</li>
+<li><input type="checkbox" disabled="" /> POST / Set lending rate</li>
+<li><input type="checkbox" disabled="" /> GET / Lending history</li>
+<li><input type="checkbox" disabled="" /> GET / public borrow info (public)</li>
+<li><input type="checkbox" disabled="" /> GET / Public borrow history (public)</li>
+</ul>
+<!-- raw HTML omitted -->
+<h3>Trading Statistics</h3>
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" disabled="" /> REST / Get support coin</li>
+<li><input type="checkbox" disabled="" /> REST / Get taker volume</li>
+<li><input type="checkbox" disabled="" /> REST / Get margin lending ratio</li>
+<li><input type="checkbox" disabled="" /> REST / Get long/short ratio</li>
+<li><input type="checkbox" disabled="" /> REST / Get contracts open interest and volume</li>
+<li><input type="checkbox" disabled="" /> REST / Get options open interest and volume</li>
+<li><input type="checkbox" disabled="" /> REST / Get put/call ratio</li>
+<li><input type="checkbox" disabled="" /> REST / Get open interest and volume (expiry)</li>
+<li><input type="checkbox" disabled="" /> REST / Get open interest and volume (strike)</li>
+<li><input type="checkbox" disabled="" /> REST / Get taker flow</li>
+</ul>
+<!-- raw HTML omitted -->
+<h3>Sub-account</h3>
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" disabled="" /> REST / Get sub-account list</li>
+<li><input type="checkbox" disabled="" /> REST / Reset the API Key of a sub-account</li>
+<li><input type="checkbox" disabled="" /> REST / Get sub-account trading balance</li>
+<li><input type="checkbox" disabled="" /> REST / Get sub-account funding balance</li>
+<li><input type="checkbox" disabled="" /> REST / Get sub-account maximum withdrawals</li>
+<li><input type="checkbox" disabled="" /> REST / Get history of sub-account transfer</li>
+<li><input type="checkbox" disabled="" /> REST / Get history of managed sub-account transfer</li>
+<li><input type="checkbox" disabled="" /> REST / Master accounts manage the transfers between sub-accounts</li>
+<li><input type="checkbox" disabled="" /> REST / Set permission of transfer out</li>
+<li><input type="checkbox" disabled="" /> REST / Get custody trading sub-account list</li>
+<li><input type="checkbox" disabled="" /> REST / Get the user's affiliate rebate information</li>
+<li><input type="checkbox" disabled="" /> REST / Set sub-accounts VIP loan allocation</li>
+<li><input type="checkbox" disabled="" /> REST / Get sub-account borrow interest and limit</li>
+</ul>
+<!-- raw HTML omitted -->
+<h3>Status</h3>
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" disabled="" /> REST / Status</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ul>
+<li><input type="checkbox" disabled="" /> WS / Status channel</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+                </div>
+        </div>
+    </div></body>
+</html>

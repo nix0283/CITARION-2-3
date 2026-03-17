@@ -1,0 +1,135 @@
+# Government Revenues (GR)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651054-government-revenues-gr/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Government Revenues (GR) ](/support/solutions/43000651054-government-revenues-gr/)
+
+# Government Revenues (GR) 
+ Government revenue.
+
+All countries for which *GR* is available are listed below:
+
+- Albania
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Belize
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Bulgaria
+- Burundi
+- Canada
+- Cape Verde
+- Chile
+- China
+- Colombia
+- Congo
+- Costa Rica
+- Croatia
+- Cuba
+- Cyprus
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Estonia
+- Faroe Islands
+- Finland
+- France
+- Gambia
+- Georgia
+- Germany
+- Greece
+- Guatemala
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iran
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Kyrgyzstan
+- Laos
+- Latvia
+- Lebanon
+- Libya
+- Lithuania
+- Luxembourg
+- Macau
+- Macedonia
+- Malawi
+- Malaysia
+- Maldives
+- Malta
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Netherlands
+- New Zealand
+- Nicaragua
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Puerto Rico
+- Qatar
+- Romania
+- Russia
+- Saudi Arabia
+- Seychelles
+- Sierra Leone
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Sri Lanka
+- Suriname
+- Swaziland
+- Sweden
+- Switzerland
+- Taiwan
+- Tajikistan
+- Thailand
+- Timor-leste
+- Trinidad and Tobago
+- Turkey
+- Ukraine
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Vietnam
+ Previous Previous Government Payrolls (GPA) Next Next Government Spending (GSP) Launch Supercharts
+

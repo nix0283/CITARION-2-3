@@ -1,0 +1,16 @@
+# Explorers
+
+**URL:** https://www.tradingview.com/support/solutions/43000706866-explorers/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Financials 
+- / [ Crypto ](/support/folders/43000590536-crypto/)
+- / [ Explorers ](/support/solutions/43000706866-explorers/)
+
+# Explorers 
+ A blockchain explorer is a powerful tool or website that enables users to explore and navigate the contents of a specific blockchain network. It provides detailed and real-time information about transactions, blocks, addresses, and other relevant data. Users can search for specific transactions, verify transaction status, trace funds, analyze network activity, and gain insights into the overall health and history of the blockchain. Additionally, some explorers offer advanced features such as charting, statistical analysis, and visual representations of blockchain data.
+ Previous Previous Website Next Next Source code Launch Supercharts
+

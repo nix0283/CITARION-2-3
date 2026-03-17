@@ -1,0 +1,161 @@
+# Asset сlass: Equity
+
+**URL:** https://www.tradingview.com/support/solutions/43000717956-asset-lass-equity/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Financials 
+- / [ ETF ](/support/folders/43000592471-etf/)
+- / [ Asset сlass: Equity ](/support/solutions/43000717956-asset-lass-equity/)
+
+# Asset сlass: Equity 
+
+#### Equity: Categories, Focuses, and Niches
+ The fund contains only equity securities. Equity is an ownership share in a business, with rights to participate in profit distribution and trade on a public exchange.
+
+Equity ETFs are classified into three main Categories: *Sector*, where funds are based on specific industry segments; *Size and Style*, focusing on company sizes and investment approaches; and *High Dividend Yield*, targeting funds with dividend returns.
+
+#### Category Sector:
+
+In the *Sector* category, classification follows the Global Industry Classification Standard (GICS).
+
+Each higher-level category strictly determines its specific subcategories, ensuring a precise classification for each ETF.
+ Focus Niche Communication services
+ Media & entertainment
+ Interactive Media & Services
+ Broad-based
+ Consumer discretionary
+ Automobile manufacturers
+ Hotels, restaurants & leisure
+ Hotels, resorts & cruise lines
+ Casinos & gaming
+ Broadline retail
+ Broad-based
+ Consumer staples
+ Food, beverage & tobacco
+ Broad-based
+ Energy
+ Energy equipment & services
+ MLPs
+ Oil & gas equipment & services
+ Oil & gas exploration & production
+ Oil & gas refining & marketing
+ Oil, gas & consumable fuels
+ Broad-based
+ Financials
+ Asset management & custody banks
+ Banks
+ Capital markets
+ Diversified Banks
+ Financial Exchanges & Data
+ Financial services
+ Insurance
+ Mortgage REITs
+ Property & casualty insurance
+ Regional banks
+ Transaction & payment processing services
+ Broad-based
+ Health care
+ Biotechnology
+ Health care equipment
+ Health care equipment & services
+ Health care equipment & supplies
+ Health care providers & services
+ Health care technology
+ Life sciences tools & services
+ Pharma, biotech & life sciences
+ Pharmaceuticals
+ Broad-based
+ Industrials
+ Auto
+ Construction & engineering
+ Passenger airlines
+ Passenger ground transportation
+ Transportation
+ Broad-based
+ Information technology
+ Application software
+ Communications equipment
+ Internet services & infrastructure
+ Semiconductors
+ Software
+ Software & services
+ Broad-based
+ Materials
+ Copper miners
+ Diversified metals & mining
+ Gold miners
+ Metals & mining
+ Silver miners
+ Steel producers
+ Broad-based
+ Real estate
+ Specialized REITs
+ REITs
+ Broad-based
+ Utilities
+ Electric Utilities
+ Broad-based
+ Theme
+ 5G
+ Agriculture
+ Big Tech
+ Blockchain
+ Broad technology
+ Broad thematic
+ Cannabis
+ Consumer
+ Cybersecurity
+ Digital economy
+ Environment
+ FinTech
+ Genomic advancements
+ Housing
+ Infrastructure
+ Internet
+ Low carbon
+ Millennials
+ Mobility
+ Natural resources
+ Nuclear energy
+ Remote work
+ Renewable energy
+ Robotics
+ Robotics & AI
+ Space
+ Telecoms
+ Timber
+ Video games & eSports
+ Water
+
+#### Category Size and Style:
+
+These funds either replicate a large segment of the stock market or use it as a basis for stock selection, focusing on factors like company size or market capitalization.
+
+Focus: This describes the size range of the companies within the fund, from total market to micro-cap. The fund's declared size in its prospectus or other materials is the primary reference.
+
+Niche: This term describes a fund's style, which can be value, growth, or broad-based. If no style is specified, it's generally labeled as broad-based.
+ Focus Niche Extended market
+
+Growth
+
+Value
+
+Broad-based
+ Micro cap
+ Small cap
+ Mid cap
+ Large cap
+ Total market
+
+#### Category High Dividend Yield:
+
+These funds prioritize high dividend yield. The goal should be clearly stated, such as aiming for above-average dividends.
+
+Focus: All these funds are classified under the "High Dividend Yield" focus.
+
+Niche: They are typically labeled as "Broad-Based" in terms of niche.
+ Previous Previous Asset сlass Next Next Asset class: Fixed Income Launch Supercharts
+

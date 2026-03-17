@@ -1,0 +1,140 @@
+# External Debt (ED)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651012-external-debt-ed/
+
+---
+
+- [ Help Center ](/)
+- / [ Knowledge base ](/knowledge-base/)
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ External Debt (ED) ](/support/solutions/43000651012-external-debt-ed/)
+
+# External Debt (ED) 
+ External debt.
+
+All countries for which *ED* is available are listed below:
+
+- Albania
+- Algeria
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bangladesh
+- Belarus
+- Belgium
+- Belize
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Bulgaria
+- Burkina Faso
+- Burundi
+- Canada
+- Chile
+- China
+- Colombia
+- Congo
+- Costa Rica
+- Croatia
+- Cyprus
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Egypt
+- El Salvador
+- Estonia
+- Euro Area
+- Finland
+- France
+- Georgia
+- Germany
+- Ghana
+- Greece
+- Guyana
+- Honduras
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iran
+- Ireland
+- Israel
+- Italy
+- Jamaica
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Kyrgyzstan
+- Laos
+- Latvia
+- Lebanon
+- Lesotho
+- Liberia
+- Lithuania
+- Luxembourg
+- Macedonia
+- Malawi
+- Malaysia
+- Maldives
+- Malta
+- Mauritania
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Morocco
+- Namibia
+- Netherlands
+- New Zealand
+- Nicaragua
+- Nigeria
+- Norway
+- Pakistan
+- Paraguay
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Romania
+- Russia
+- Rwanda
+- Serbia
+- Seychelles
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Swaziland
+- Sweden
+- Switzerland
+- Taiwan
+- Tajikistan
+- Tanzania
+- Thailand
+- Trinidad and Tobago
+- Tunisia
+- Turkey
+- Turkmenistan
+- Ukraine
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Venezuela
+- Vietnam
+- Zambia
+- Zimbabwe
+ Previous Previous Exports, YoY (EXPYY) Next Next Factory Orders (FO) Launch Supercharts
+

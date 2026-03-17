@@ -1,0 +1,22 @@
+[risk-monitor] Installing dependencies...
+bun install v1.3.10 (30e609e0)
+Resolving dependencies
+Resolved, downloaded and extracted [18]
+Saved lockfile
+
++ @types/node@20.19.37 (v25.5.0 available)
++ typescript@5.9.3
++ socket.io@4.8.3
+
+23 packages installed [739.00ms]
+[risk-monitor] Running bun run dev...
+$ bun --hot index.ts
+Risk Monitor Service running on port 3004
+CORS allowed origins: http://localhost:3000, http://localhost:3001, http://127.0.0.1:3000, http://127.0.0.1:3001
+Risk Monitor Service initialized
+Features: Real-time risk monitoring, kill switch, alerts
+[RiskMonitor] Kill switch API response: {
+  success: true,
+  botsStopped: 0,
+  reason: "Extreme volatility with elevated risk: 50",
+}

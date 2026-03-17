@@ -1,0 +1,46 @@
+# I want to know more about the security of my Pine Scripts
+
+**URL:** https://www.tradingview.com/support/solutions/43000521061-i-want-to-know-more-about-the-security-of-my-pine-scripts/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / [ I want to know more about the security of my Pine Scripts ](/support/solutions/43000521061-i-want-to-know-more-about-the-security-of-my-pine-scripts/)
+
+# I want to know more about the security of my Pine Scripts 
+ ***Do you have a privacy policy that relates specifically to using Pine Script? ***
+
+No. All information about our security safeguards you can find in our Terms of Use and Privacy Policy. We use technical and organizational safeguards to protect your personal data as well as your private data, including scripts.
+
+***What encryption, if any, is used for the storage of Pine Scripts? Is it stored in a database or on a file system? If it is stored in a database, and assuming you use encryption, is it encrypted at the record level or at the file level?** *
+
+According to our Information Security Policy, we cannot disclose detailed descriptions of the architecture of our information systems and implemented security technologies. We use firewalls, authentication systems, access control mechanisms, encryption and other security measures and controls in accordance with cybersecurity standards and best practices. We are constantly improving the ways we secure the data we collect, store, and process. 
+
+***Who has access to private Pine Scripts? Do your developers/contractors have access? What policies and procedures are in place to protect my work? ***
+
+We do not provide our contractors with access to private or invite-only scripts. TradingView's Information Security Policy defines information security procedures and practices that apply to all our information's systems and all employees. Third parties, with whom we work, do the same. 
+
+We apply a wide range of cybersecurity measures to protect our information systems, our data and user data, such as: 
+
+- Access to information systems and data, regulated according to business and security requirements. 
+- Access to sensitive information is allowed only to employees who need such access for duty purposes. 
+- Information during transmission is protected by using encryption, digital signature, cryptographic hash or other security techniques to ensure confidentiality, integrity and availability of data. 
+- When confidential information is transmitted over public networks, it is heavily encrypted. 
+- We use anti-virus software to protect our system from malicious software. 
+- We apply processes and tools used to properly backup information with a proven methodology for its timely recovery. 
+- Our vulnerability management process is used to identify and fix vulnerabilities. 
+- We maintain our Bug Bounty program and perform periodic penetration tests to improve the security of our services. 
+
+***By storing Pine Script on your servers, am I giving up my copyright? What, if anything, do your terms and conditions allow you to do with my code? ***
+
+No, you keep your author’s right and you grant us an irrevocable, perpetual, royalty-free licence for your script. With this, we can: 
+
+- publish this script as well as the name of the author; 
+- disclose the source code of script for open scripts; 
+- perform, display, use, and make available your open or protected script for any user or an invite-only script for users who have been invited. 
+
+You can only remove your scripts within the first 15 minutes of them being published. Once that time has passed, it is not possible to delete them, regardless of their type.
+
+ Previous Previous How do I track the device (including the exact time and location) used to access my account? Next Next I want to log in with my email/username and password. How can I do that? Launch Supercharts
+

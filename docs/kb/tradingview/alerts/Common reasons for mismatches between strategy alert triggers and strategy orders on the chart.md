@@ -1,0 +1,16 @@
+# Common reasons for mismatches between strategy alert triggers and strategy orders on the chart
+
+**URL:** https://www.tradingview.com/support/solutions/43000774016-common-reasons-for-mismatches-between-strategy-alert-triggers-and-strategy-orders-on-the-chart/
+
+---
+
+- [ Help Center ](/) - / - / [ Common reasons for mismatches between strategy alert triggers and… ](/support/solutions/43000774016-common-reasons-for-mismatches-between-strategy-alert-triggers-and-strategy-orders-on-the-chart/) # Common reasons for mismatches between strategy alert triggers and strategy orders on the chart Using the strategy features listed below may result in orders being executed differently in real-time and historical trading (i.e., re-pricing). As a result, strategy alert triggers may not match strategy orders on the chart. 1) **Enabling the ** **calc_on_every_tick option** If this option is disabled, the strategy is recalculated once in both historical and real-time trading, at the close of each bar. If this option is enabled, the strategy is recalculated in real time at every tick during bar construction. Such intra-bar recalculations may result in additional orders being placed and executed (which would not be present during historical recalculations), thus leading to different strategy calculation results in the alert and on the chart. 2) **Enabling the ** **calc_on_order_fills option** In this case, if an order is executed while a bar is being built, the strategy is recalculated, taking into account the OHLC known at the time of execution. If you wait until the bar closes and refresh the page, the strategy will also be recalculated when the order is executed on that bar. Still, this time taking into account the OHLC known at the time of the bar's close, since in general, when recalculating a strategy on a historical bar, there is no information about intra-bar price movement. This means that orders may be placed differently in real-time calculations than in historical calculations. Therefore, the strategy calculation results in the alert and on the chart may also not match. 3) **Using trailing orders** The execution level of a trailing order depends on intra-bar price fluctuations and the trail_offset parameter. In real-time, these fluctuations can be arbitrary: the price can rise and fall repeatedly. When calculating historical data, there is no information available about intrabar price movement. Therefore, the server makes assumptions about this movement, as described in the article ([https://www.tradingview.com/pine-script-docs/v5/concepts/strategies/#broker-emulator](https://www.tradingview.com/pine-script-docs/v5/concepts/strategies/#broker-emulator)). The difference between actual and estimated intrabar movements means that trail orders may execute at different prices in real time and historical data. This, in turn, leads to different strategy calculation results in the alert and on the chart. Previous Previous The impact of data repainting on alert calculation Next Next Introduction to TradingView alerts Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+
+![Image 2](https://static.tradingview.com/static/bundles/look-first-light.74b5bba06f657157cdb4.svg)
+

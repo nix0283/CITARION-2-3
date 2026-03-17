@@ -1,0 +1,18 @@
+[telegram-service] Installing dependencies...
+bun install v1.3.10 (30e609e0)
+Resolving dependencies
+Resolved, downloaded and extracted [42]
+Saved lockfile
+
++ socket.io@4.8.3
++ socket.io-client@4.8.3
+
+25 packages installed [655.00ms]
+[telegram-service] Running bun run dev...
+$ bun --hot index.ts
+Telegram Service running on port 3006
+[TelegramService] No BOT_TOKEN configured - polling disabled
+[TelegramService] Set TELEGRAM_BOT_TOKEN environment variable
+Telegram Service initialized
+Features: Telegram Bot polling, WebSocket notifications, Chat Service integration
+[TelegramService] Connected to Chat Service

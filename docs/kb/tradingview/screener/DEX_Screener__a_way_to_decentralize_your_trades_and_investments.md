@@ -1,0 +1,208 @@
+# DEX Screener: a way to decentralize your trades and investments
+
+**URL:** https://www.tradingview.com/support/solutions/43000744465-dex-screener-a-way-to-decentralize-your-trades-and-investments/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / [ DEX Screener ](/support/folders/43000596993-dex-screener/)
+- / [ DEX Screener: a way to decentralize your trades and investments ](/support/solutions/43000744465-dex-screener-a-way-to-decentralize-your-trades-and-investments/)
+
+# DEX Screener: a way to decentralize your trades and investments 
+ With the [DEX Screener](https://www.tradingview.com/dex-screener/), you can access the DEX universe and find promising crypto pairs that have been off your radar — there are so many of them, so different, so decentralized. With this tool you can scan multiple exchanges, see how numerous pairs perform and make the right choice that aligns with your strategy.
+
+**CONTENTS:**
+
+- [What is the DEX Screener](#What-is-the-DEX-Screener)
+- [DEX Screener vs CEX Screener](#DEX-Screener-vs-CEX-Screener)
+- [How to access the DEX Screener](#How-to-access-the-DEX-Screener)
+- [How to use the DEX Screener](#How-to-use-the-DEX-Screener) [Filters](#Filters)
+- [Column sets](#Column-sets)
+
+#### What is the DEX Screener 
+
+There are thousands of cryptocurrencies in the screener. Many of them are traded one to another. This results in dozens of thousands of pairs across many exchanges. Due to different trading conditions, the same pair on different exchanges may have a different price, volume, and spread.
+
+DEX Screener helps you find the most suitable exchange for your trading strategy by comparing crypto pair performance. This may be also helpful for arbitrage and when you're looking for unique coins, which may be available on fewer exchanges.
+
+With this tool, you can access key exchange-related stats, each updated in real time.
+
+#### DEX Screener vs CEX Screener 
+
+The primary distinction between DEX and CEX Screeners lies in what you analyze — trading pairs available on decentralized versus centralized platforms. Each screening tool is crafted to meet the requirements of distinct trader categories, given that these exchange types possess unique advantages and limitations.
+
+The contrast between decentralized and centralized platforms stems from their regulatory framework and operational methodology. Both serve separate investment objectives:
+
+- DEXs provide self-custody capabilities, unrestricted participation, and early access to new tokens. If you value privacy and asset control, a decentralized platform might suit you better
+- CEXs deliver substantial liquidity, sophisticated trading instruments, and quicker order fulfillment. They could be ideal if you're an engaged trader
+
+**Decentralized exchanges** encounter minimal regulatory restrictions, resulting in a balance: you receive reduced protection alongside lower liquidity and broader spreads versus CEXs. Conversely, they offer these benefits:
+
+- Access to an extensive range of tokens
+- Enhanced privacy and permissionless participation
+- Capacity to retain direct control of your holdings
+
+Numerous tokens initially appear on DEXs before subsequently receiving centralized exchange listings. When a cryptocurrency secures CEX placement, it frequently obtains exposure to broader markets and potentially elevated valuations through enhanced liquidity and recognition.
+
+**Centralized exchanges** function within tighter regulatory boundaries, featuring specific guidelines for acceptable funding sources, supported cryptocurrencies, withdrawal protocols, and regional availability. This regulatory structure provides multiple benefits:
+
+- Superior liquidity levels
+- Tighter bid-ask spreads
+- Accelerated transaction processing
+- User assistance services
+- Identity verification processes particularly beneficial for peer-to-peer transactions
+
+CEXs maintain stricter standards for new token listings, potentially shielding you from questionable market manipulation schemes. Nevertheless, you should exercise caution, as digital asset markets remain inherently unpredictable and transparency standards continue developing.
+
+**DEXs**
+
+**CEXs**
+
+Enable access to cryptocurrencies not available on prominent centralized platforms.
+
+Simpler fiat currency purchasing and fund withdrawal processes. Typically accommodates recognized payment options including credit cards and banking transfers.
+
+Maintain complete ownership of your holdings and private keys. Compatible with non-custodial wallet solutions.
+
+The platform secures your cryptocurrencies. No concern about private key management or wallet configuration required.
+
+Enable direct wallet-based trading without registration or authorization requirements.
+
+Frequently deliver superior liquidity, narrower spreads, and reduced slippage for popular trading pairs.
+
+Automated market maker systems allow earning trading fee shares while introducing impermanent loss exposure.
+
+Offer accessible user support. Account recovery is typically possible when issues arise.
+
+Generally demand minimal identity confirmation processes and offer enhanced transaction privacy.
+
+Orders typically execute more rapidly. Usually provides extensive advanced features including limit and stop orders, leveraged trading, derivatives, and additional products.
+
+Returning to screening tools — the selection depends on your trading requirements. Since trading and investing frequently involve counterintuitive approaches, you might utilize both simultaneously and differently.
+
+Each screening tool monitors distinct indicators for various trading and investment approaches, assisting you in identifying suitable assets according to the specific parameters we've thoughtfully chosen.
+
+#### How to access the DEX Screener 
+
+From the main page, click the "Products" dropdown, hover over Screeners, and click "DEX pairs."
+
+Another way to access it is from [Supercharts](https://www.tradingview.com/support/solutions/43000746464-getting-started-with-supercharts/). On the right toolbar, click "Products" → "Screeners." At the top, click "Stock Screener" and then select "DEX Screener."
+
+Both options lead to the same screener with identical functionality — choose whichever you prefer, then filter, scan, and pick coins that interest you most.
+
+#### How to use the DEX Screener 
+
+When you open the Screener, you'll see all crypto pairs available on TradingView, traded on major decentralized exchanges. Every crypto on our platform is here, sorted by previous 24 hours trading volume. You can change the sorting method with default filter sets to customize your discovery. In the top-left corner, click "All pairs" → "Open screen…".
+
+Like all TradingView screeners, you can create and save your own screens for further analysis. Set your desired filters and press the "Save" button.
+
+In the same dropdown, you can access recently used screens, export results as a CSV file, create a new screen, and make other adjustments.
+
+On the right, you'll find Screener settings, where you can choose what to display — symbol logo, description, and currency — and how often to refresh.
+
+Next to it is the "Hide filters" button — once your screener is set, hide the upper part to see and analyze more coins at once.
+
+#### Filters 
+
+Filters are conditions that a coin must meet to be displayed in the table. In the filter editing dialog, you can select the filtering criteria.
+
+To add new filter conditions, click the "+" button or press Shift + F:
+
+- **Pool info:** Access exchange, fully diluted valuation, liquidity, and network data
+- **Market data:** See price, volume, volatility, and other pairs performance metrics
+- **Trading activity:** Add transactions, unique buyers and sellers and more as a filtering condition
+- **Technicals:** Scan DEX pairs by technical indicators
+
+For some technical indicators including [RSI](https://www.tradingview.com/support/solutions/43000502338-relative-strength-index-rsi/), [Stoch RSI](https://www.tradingview.com/support/solutions/43000502333-stochastic-rsi-stoch-rsi/), [Momentum](https://www.tradingview.com/support/solutions/43000589187-momentum/), [EMA](https://www.tradingview.com/support/solutions/43000592270-exponential-moving-average/), [SMA](https://www.tradingview.com/support/solutions/43000696841-simple-moving-average/), [Keltner Channels](https://www.tradingview.com/support/solutions/43000502266-keltner-channels-kc/), you can access an expanded set of parameters.
+
+#### Column sets 
+
+Below the filters are column sets, each containing information for a specific type of analysis. You can always add a new column set using the "+" button on the right.
+
+Default column set configuration:
+
+- **Overview:** Key DEX data — network, exchange, price, liquidity, fully diluted valuation, and other critical information
+- **Performance:** Historical view of pairs gains and losses
+- **Transactions:** Number of transactions, buys and sells, liquidity, and more
+- **Trading volume:** Discover buy and sell volumes over different timeframes
+- **Traders:** See how many are there unique buyers and sellers over different timeframes
+- **Technicals:** Overview of oscillators, moving averages, and momentum indicators
+ **! Important:** Do not rely solely on an indicator's technical ratings for financial decisions. They only suggest trends do not replace your own market analysis. 
+#### Oh, and one more decentralized thing… 
+
+With the DEX Screener, you can access data from different pools and scan tokens by their key performance metrics. You can add the filters you need for a comprehensive analysis and adjust this tool to fit your trading needs. To enhance your decentralized trading, explore our community's [crypto trading ideas](https://www.tradingview.com/markets/cryptocurrencies/ideas/) to get insight on the next market gainers.
+
+Also read:
+
+- [TradingView screeners walkthrough](https://www.tradingview.com/support/solutions/43000718885-tradingview-screeners-walkthrough/)
+- [TradingView heatmaps: from global trends to details](https://www.tradingview.com/support/solutions/43000766446-tradingview-heatmaps-from-global-trends-to-details/) 
+
+- [TradingView social network](https://www.tradingview.com/support/solutions/43000761245-tradingview-social-network/)
+- [The technical analysis essentials](https://www.tradingview.com/support/solutions/43000759577-the-technical-analysis-essentials-with-tradingview/)
+- [How to trade on TradingView](https://www.tradingview.com/support/solutions/43000756695-how-to-trade-on-tradingview/)
+ Previous Previous CEX Screener: discover crypto trading pairs, centralized Next Next How to save custom screen Launch Supercharts
+
+---
+
+## Изображения
+
+### Изображение 1
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43587100058/original/npcPX2Gn7QJ5tZ0W7GvCJ2DLc8-2wSZOfg.png?1760970067
+
+**Описание:**
+
+This image shows the **TradingView** platform interface, specifically the **\
+
+---
+
+### Изображение 2
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43588282488/original/b6mCVWsOT9_TUQknmmU0SHbYgBIs5vNBaw.gif?1761567006
+
+**Описание:**
+
+Image could not be processed
+
+---
+
+### Изображение 3
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43588282540/original/1y4XDQ6EsPuiec0lL7DZn6aPytKOd7a0yw.gif?1761567027
+
+**Описание:**
+
+Image could not be processed
+
+---
+
+### Изображение 4
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43587100059/original/dMJpUOpVoxNfsFaizqcO8rXhwmUQVSUg6A.png?1760970068
+
+**Описание:**
+
+This image shows a **TradingView DEX (Decentralized Exchange) Screener interface** focused on displaying cryptocurrency trading pairs across different blockchain networks. Here's a detailed breakdown:
+
+
+### **Top Navigation Bar**
+- **TradingView Logo**: Left-aligned, with \
+
+---
+
+### Изображение 5
+
+**URL:** https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/43587100057/original/yG7L4ZLKMaeN2tRxDctBViMDjt4ldJ4UHw.png?1760970068
+
+**Описание:**
+
+This image shows the **TradingView DEX Screener interface** (a decentralized exchange data exploration tool) with a focus on the **table view customization menu**. Here’s a detailed breakdown:
+
+
+### **1. Top Navigation Bar**
+- **TradingView Logo**: Leftmost, links to the homepage.  
+- **Search Bar**: Labeled \
+
+---
+

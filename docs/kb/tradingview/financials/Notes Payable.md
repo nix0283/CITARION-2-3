@@ -1,0 +1,16 @@
+# Notes Payable
+
+**URL:** https://www.tradingview.com/support/solutions/43000563600-notes-payable/
+
+---
+
+- [ Help Center ](/) - / [ Knowledge base ](/knowledge-base/) - / Financials - / [ Balance Sheet ](/support/folders/43000565036-balance-sheet/) - / [ Notes Payable ](/support/solutions/43000563600-notes-payable/) # Notes Payable What are Notes Payable? Notes Payable represent legal instruments in which the issuer promises to pay a determined amount of money. Previous Previous Short Term Debt excl. Current Portion of LT Debt Next Next Other Short Term Debt Launch Supercharts
+
+---
+
+## Изображения
+
+![Image 1](https://static.tradingview.com/static/bundles/look-first-dark.8cb7462c584f600e8f31.svg)
+
+![Image 2](https://static.tradingview.com/static/bundles/look-first-light.74b5bba06f657157cdb4.svg)
+

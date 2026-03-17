@@ -1,0 +1,136 @@
+# How is Performance calculated in the Screener?
+
+**URL:** https://www.tradingview.com/support/solutions/43000636536-how-is-performance-calculated-in-the-screener/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / [ How is Performance calculated in the Screener? ](/support/solutions/43000636536-how-is-performance-calculated-in-the-screener/)
+
+# How is Performance calculated in the Screener? 
+ Screener Performance data is calculated using the formula:
+
+ Perf. = (currentClose – openDaysAgo) × 100 / abs(openDaysAgo) where:
+
+- **currentClose** — the latest closing price
+- **openDaysAgo** — the opening price of the corresponding past bar, determined by the selected interval (e.g., 1 week, 3 months, 365 days)
+
+**Example**
+
+Today is Tuesday, let's calculate **Perf.W**:
+
+- Take today’s closing price.
+- Subtract the opening price of last Tuesday’s daily bar
+- Multiply the difference by 100
+- Divide the result by the absolute value of last Tuesday’s daily bar opening price
+
+Below is a detailed formula for the most commonly used resolutions, accounting for specifics such as the number of days in a leap year.
+
+ Pine Script® // @version= 6 
+ indicator ( "Screener Performance" ) 
+
+ // first bar's timestamp in pine history 
+ var first_bar_time = time / 1000 
+
+ // Performance helper functions 
+ rateOfreturn ( ref ) => 
+ if ref < 0 and close > 0 
+ na 
+ else 
+ ( close - ref ) * 100 / math.abs ( ref ) 
+ rr ( bb , maxbarsback ) => 
+ nz ( open [ maxbarsback ] * 0 ) + bb == 0 ? na : rateOfreturn ( open [ bb ]) 
+ perfYTD () => 
+ if year != year ( timenow ) 
+ na 
+ else 
+ var lastYearOpen = open 
+ if year > year [ 1 ] 
+ lastYearOpen := open 
+ rateOfreturn ( lastYearOpen ) 
+
+ fastSearchTimeIndex ( x , maxbarsback ) => 
+ mid = 0 * time [ maxbarsback ] 
+ right = math.min ( bar_index , maxbarsback ) 
+ left = 0 
+ if x / 1000 <= first_bar_time 
+ bar_index 
+ else if time < x 
+ 0 
+ else 
+ for i = 0 to 10 
+ mid := math.ceil (( left + right ) / 2 ) 
+ if left == right 
+ break 
+ else if time [ mid ] < x 
+ right := mid 
+ continue 
+ else if time [ mid ] > x 
+ left := mid 
+ continue 
+ else 
+ break 
+ mid 
+
+ week1 = 7 
+ week_ago = timenow - 1000 * 60 * 60 * 24 * week1 
+ week_ago_this_bar = time - 1000 * 60 * 60 * 24 * week1 
+ countOfBarsWeekAgo = fastSearchTimeIndex ( week_ago , week1 ) 
+
+ month1 = 30 
+ month_ago = timenow - 1000 * 60 * 60 * 24 * month1 
+ countOfBars1MonthAgo = fastSearchTimeIndex ( month_ago , month1 ) 
+
+ month3 = 90 
+ months3_ago = timenow - 1000 * 60 * 60 * 24 * month3 
+ countOfBars3MonthAgo = fastSearchTimeIndex ( months3_ago , month3 ) 
+
+ month6 = 180 
+ months6_ago = timenow - 1000 * 60 * 60 * 24 * month6 
+ countOfBars6MonthAgo = fastSearchTimeIndex ( months6_ago , month6 ) 
+
+ years1 = 365 
+ oneYearAgo = timenow - 1000 * 60 * 60 * 24 * years1 
+ barsCountOneYear = fastSearchTimeIndex ( oneYearAgo , years1 ) 
+
+ years3 = 365 * 3 
+ years3_ago = timenow - 1000 * 60 * 60 * 24 * years3 
+ countOfBars3YearAgo = fastSearchTimeIndex ( years3_ago , years3 ) 
+
+ years5 = 365 * 4 + 366 
+ years5_ago = timenow - 1000 * 60 * 60 * 24 * years5 
+ countOfBars5YearAgo = fastSearchTimeIndex ( years5_ago , years5 ) 
+
+ years10 = ( 365 * 4 + 366 ) * 2 
+ years10_ago = timenow - 1000 * 60 * 60 * 24 * years10 
+ countOfBars10YearAgo = fastSearchTimeIndex ( years10_ago , years10 ) 
+
+ // Perf.<W | 1M | 3M | 6M | Y | 5Y | 10Y | YTD> 
+ fiveDays = 5 
+ fiveDaysAgo = timenow - 1000 * 60 * 60 * 24 * fiveDays 
+ countOfBarsFiveDaysAgo = fastSearchTimeIndex ( fiveDaysAgo , fiveDays ) 
+ perfYTD = perfYTD () 
+ plot ( rr ( countOfBarsFiveDaysAgo , fiveDays ) , title = 'Perf.5D' ) 
+ plot ( rr ( countOfBarsWeekAgo , week1 ) , title = 'Perf.W' ) 
+ plot ( rr ( countOfBars1MonthAgo , month1 ) , title = 'Perf.1M' ) 
+ plot ( rr ( countOfBars3MonthAgo , month3 ) , title = 'Perf.3M' ) 
+ plot ( rr ( countOfBars6MonthAgo , month6 ) , title = 'Perf.6M' ) 
+ plot ( rr ( barsCountOneYear , years1 ) , title = 'Perf.Y' ) 
+ plot ( rr ( countOfBars3YearAgo , years3 ) , title = 'Perf.3Y' ) 
+ plot ( rr ( countOfBars5YearAgo , years5 ) , title = 'Perf.5Y' ) 
+ plot ( rr ( countOfBars10YearAgo , years10 ) , title = 'Perf.10Y' ) 
+ plot ( perfYTD , title = 'Perf.YTD' ) 
+ Expand 89 lines Note: this script values are different on history and realtime because of timenow, see [here](https://www.tradingview.com/pine-script-docs/en/v4/essential/Indicator_repainting.html).
+
+For visual displays, you can add this script to your chart through the Pine Editor using the chart's daily timeframe. An indicator will appear on the chart, the plots of which will show the values for each type of performance.
+
+**Change % vs Performance %:**
+
+Let's say today is Tuesday.
+
+**Weekly Change** - the difference between the current close (Tuesday) and the close from the last week (the closing price of the previous Friday). 
+
+**Weekly Performance **- the difference between the current close (Tuesday) and the open from a week ago exactly (the previous Tuesday).
+ Previous Previous How is Volatility calculated in the Screener? Next Next How are ADR% and ATR% calculated? Launch Supercharts
+

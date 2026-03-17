@@ -1,0 +1,136 @@
+# Government Budget Value (GBV)
+
+**URL:** https://www.tradingview.com/support/solutions/43000651049-government-budget-value-gbv/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / Data 
+- / [ List of available economic data ](/support/folders/43000581956-list-of-available-economic-data/)
+- / [ Government Budget Value (GBV) ](/support/solutions/43000651049-government-budget-value-gbv/)
+
+# Government Budget Value (GBV) 
+ Government budget value.
+
+All countries for which *GBV* is available are listed below:
+
+- Afghanistan
+- Albania
+- Angola
+- Argentina
+- Armenia
+- Australia
+- Austria
+- Azerbaijan
+- Bahrain
+- Bangladesh
+- Belarus
+- Belgium
+- Belize
+- Bhutan
+- Bolivia
+- Bosnia and Herzegovina
+- Botswana
+- Brazil
+- Bulgaria
+- Burundi
+- Canada
+- Chile
+- China
+- Colombia
+- Congo
+- Costa Rica
+- Croatia
+- Cuba
+- Cyprus
+- Czech Republic
+- Denmark
+- Dominican Republic
+- Ecuador
+- Egypt
+- El Salvador
+- Estonia
+- Faroe Islands
+- Finland
+- France
+- Gambia
+- Georgia
+- Germany
+- Greece
+- Guatemala
+- Hong Kong
+- Hungary
+- Iceland
+- India
+- Indonesia
+- Iran
+- Iraq
+- Ireland
+- Israel
+- Italy
+- Japan
+- Jordan
+- Kazakhstan
+- Kenya
+- Kosovo
+- Kyrgyzstan
+- Laos
+- Latvia
+- Lebanon
+- Libya
+- Lithuania
+- Luxembourg
+- Macau
+- Macedonia
+- Malawi
+- Malaysia
+- Maldives
+- Malta
+- Mauritius
+- Mexico
+- Moldova
+- Mongolia
+- Montenegro
+- Netherlands
+- New Zealand
+- Nicaragua
+- Nigeria
+- Norway
+- Oman
+- Pakistan
+- Peru
+- Philippines
+- Poland
+- Portugal
+- Qatar
+- Romania
+- Russia
+- Saudi Arabia
+- Seychelles
+- Sierra Leone
+- Singapore
+- Slovakia
+- Slovenia
+- South Africa
+- South Korea
+- Spain
+- Sri Lanka
+- Suriname
+- Swaziland
+- Sweden
+- Switzerland
+- Taiwan
+- Tajikistan
+- Thailand
+- Timor-leste
+- Trinidad and Tobago
+- Turkey
+- Ukraine
+- United Kingdom
+- United States
+- Uruguay
+- Uzbekistan
+- Vietnam
+ Previous Previous Government Budget (GBP) Next Next Government Debt (GD) Launch Supercharts
+

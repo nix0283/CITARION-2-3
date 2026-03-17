@@ -1,0 +1,57 @@
+# How to install and update Desktop app on Linux
+
+**URL:** https://www.tradingview.com/support/solutions/43000728898-how-to-install-and-update-desktop-app-on-linux/
+
+---
+
+- [ Help Center ](/)
+- / 
+- / [ Installation and troubleshooting ](/support/folders/43000577553-installation-and-troubleshooting/)
+- / [ How to install and update Desktop app on Linux ](/support/solutions/43000728898-how-to-install-and-update-desktop-app-on-linux/)
+
+# How to install and update Desktop app on Linux 
+ This article covers installing and updating procedures for the TradingView Desktop app on Linux. We provide two installation options: debian package and snap package. If you want to learn more about snap and debian packages, you can do so by following [this link](https://ubuntu.com/about/packages). 
+
+These instructions apply to 64-bit Debian-based Linux distributions such as Ubuntu, Mint, etc.
+
+#### Installation
+ Debian package 
+- Open [tradingview.com/desktop](https://www.tradingview.com/desktop) in your browser and download the Debian package;
+- Double-click the Debian package to start the installation process.
+
+ If something went wrong, you can try installing the debian package through the terminal. Follow these steps:
+
+- Install our official public software signing key:
+
+ wget -O - https://tvd-packages.tradingview.com/keyring.gpg | sudo tee /usr/share/keyrings/tradingview-desktop-archive-keyring.gpg >/dev/null 
+- Add our repository to your list of repositories:
+ echo "deb [arch=amd64 signed-by=/usr/share/keyrings/tradingview-desktop-archive-keyring.gpg] https://tvd-packages.tradingview.com/ubuntu/stable jammy multiverse" | sudo tee /etc/apt/sources.list.d/tradingview-desktop.list >/dev/null 
+- Update your package database:
+ sudo apt update 
+- Install TradingView Desktop:
+ sudo apt install tradingview Snap package 
+- Go to [snapcraft.io/tradingview](https://snapcraft.io/tradingview) and follow instructions to install the app.
+ Or do it through the terminal:
+
+- Make sure that the snap daemon (snapd) is installed. Learn if snapd is pre-installed on your system or obtain instructions on how to install snapd for various distributions [here](https://snapcraft.io/docs/installing-snapd).
+- Install the Snap package:
+
+ sudo snap install tradingview 
+#### 
+
+#### Update
+ Debian package 
+- Run these commands in your terminal to update the app:
+ sudo apt update sudo apt --only-upgrade install tradingview If the TradingView Desktop app hasn’t updated after running these commands, remove the app and install it through the terminal as described in the Installation section.
+ Snap package 
+- Run this command in your terminal to update the app:
+
+ sudo snap refresh tradingview Also read:
+
+- [How to trade on TradingView](https://www.tradingview.com/support/solutions/43000756695-how-to-trade-on-tradingview/)
+- [Paper Trading — main functionality](https://www.tradingview.com/support/solutions/43000516466-paper-trading-main-functionality/)
+- [The technical analysis essentials](https://www.tradingview.com/support/solutions/43000759577-the-technical-analysis-essentials-with-tradingview/)
+- [Introduction to fundamental analysis](https://www.tradingview.com/support/solutions/43000759574-introduction-to-fundamental-analysis-on-tradingview/)
+- [Portfolios: track your assets, know your trades](https://www.tradingview.com/support/solutions/43000760937-tradingview-portfolios-track-your-assets-know-your-trades/)
+ Previous Previous How to update Desktop app on Mac and Windows Next Next Troubleshooting installation problems on Windows Launch Supercharts
+
