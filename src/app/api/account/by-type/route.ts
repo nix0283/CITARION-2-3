@@ -87,14 +87,15 @@ async function handleGet(request: NextRequest, context: AuthContext) {
     
     // For PAPER mode, we look for paper trading accounts
     // These are stored in the PaperAccount table (linked to Account)
+    // Note: PAPER accounts have exchangeType with "-paper-" suffix (e.g., "futures-paper-xyz123")
     if (mode === "PAPER") {
       // Get PAPER accounts from PaperAccount table
-      // Note: exchangeType is on the Account table, not PaperAccount
+      // We search by exchangeType starting with the marketType (e.g., "futures-paper-*" for futures)
       const paperAccounts = await db.paperAccount.findMany({
         where: {
           account: {
             userId,
-            exchangeType: marketType,
+            exchangeType: { startsWith: marketType },
           },
         },
         include: {

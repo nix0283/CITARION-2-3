@@ -939,7 +939,7 @@ export class UnifiedTradingEngine {
     
     const positions = await db.position.findMany({
       where: whereClause,
-      orderBy: { openedAt: 'desc' },
+      orderBy: { createdAt: 'desc' },
     });
     
     const positionInfos: PositionInfo[] = [];
@@ -976,7 +976,7 @@ export class UnifiedTradingEngine {
         trailingActive: pos.trailingActive || false,
         highestPrice: pos.highestPrice || undefined,
         lowestPrice: pos.lowestPrice || undefined,
-        openedAt: pos.openedAt,
+        openedAt: pos.createdAt,
         closedAt: pos.closedAt || undefined,
         closeReason: pos.closeReason || undefined,
         isDemo: pos.isDemo,
