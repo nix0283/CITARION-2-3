@@ -1647,3 +1647,421 @@ export async function isSignalDuplicate(signal: ParsedSignal): Promise<{
     originalSignalId: result.originalSignal?.id,
   };
 }
+
+// ==================== PHASE 3: ADVANCED PARSING IMPROVEMENTS ====================
+
+/**
+ * BREAKOUT SIGNAL PARSING IMPROVEMENTS
+ * 
+ * Handles special breakout signal formats:
+ * - "Breakout above 67500" - Entry when price breaks above level
+ * - "Breakout below 35000" - Entry when price breaks below level
+ * - "Пробой выше 67500" - Russian breakout format
+ */
+export function parseBreakoutSignal(text: string): {
+  isBreakout: boolean;
+  breakoutLevel?: number;
+  breakoutDirection?: 'above' | 'below';
+  triggerPrice?: number;
+} {
+  const cleanText = text.toLowerCase();
+  
+  // Pattern: "breakout above/below PRICE"
+  const breakoutMatch = cleanText.match(/(?:breakout|пробой)\s+(?:above|выше|below|ниже)\s+([\d,.]+)/i);
+  if (breakoutMatch) {
+    const price = parseFloat(breakoutMatch[1].replace(/,/g, ''));
+    const direction = /above|выше/i.test(cleanText) ? 'above' : 'below';
+    
+    return {
+      isBreakout: true,
+      breakoutLevel: price,
+      breakoutDirection: direction,
+      triggerPrice: price,
+    };
+  }
+  
+  // Pattern: "above PRICE" or "below PRICE" without explicit breakout keyword
+  const simpleBreakoutMatch = cleanText.match(/\b(above|below|выше|ниже)\s+([\d,.]+)/i);
+  if (simpleBreakoutMatch) {
+    const direction = /above|выше/i.test(simpleBreakoutMatch[1]) ? 'above' : 'below';
+    const price = parseFloat(simpleBreakoutMatch[2].replace(/,/g, ''));
+    
+    return {
+      isBreakout: true,
+      breakoutLevel: price,
+      breakoutDirection: direction,
+      triggerPrice: price,
+    };
+  }
+  
+  return { isBreakout: false };
+}
+
+/**
+ * TRAILING ENTRY PARSING
+ * 
+ * Handles trailing entry signals:
+ * - "Market when drops below 3500"
+ * - "Market when rises above 67500"
+ * - "По рынку когда упадет ниже 3500"
+ */
+export function parseTrailingEntry(text: string): {
+  hasTrailingEntry: boolean;
+  triggerCondition?: 'above' | 'below';
+  triggerPrice?: number;
+  entryType?: 'market' | 'limit';
+} {
+  const cleanText = text.toLowerCase();
+  
+  // Pattern: "market when drops below/rises above PRICE"
+  const trailingMatch = cleanText.match(
+    /(?:market|рынок|по рынку)\s+when\s+(?:drops|falls|упадет|falls?ет)\s+(?:below|ниже)\s+([\d,.]+)/i
+  ) || cleanText.match(
+    /(?:market|рынок|по рынку)\s+when\s+(?:rises|goes|поднимет(?:ся)?)\s+(?:above|выше)\s+([\d,.]+)/i
+  );
+  
+  if (trailingMatch) {
+    const price = parseFloat(trailingMatch[1].replace(/,/g, ''));
+    const isBelow = /below|ниже/i.test(cleanText);
+    
+    return {
+      hasTrailingEntry: true,
+      triggerCondition: isBelow ? 'below' : 'above',
+      triggerPrice: price,
+      entryType: 'market',
+    };
+  }
+  
+  return { hasTrailingEntry: false };
+}
+
+/**
+ * RUSSIAN SLANG PATTERNS
+ * 
+ * Common Russian trading slang patterns:
+ * - "БТК/УСДТ ЛОНГ" - BTC/USDT LONG (Cyrillic)
+ * - "БТК ЛОНГ ВХОД 67000" - BTC LONG ENTRY 67000
+ * - "ПРОДАЖА ЭФИРА" - SELL ETH
+ * - "ПОКУПКА БИТКА" - BUY BTC
+ */
+const RUSSIAN_SYMBOL_MAP: Record<string, string> = {
+  'биткоин': 'BTC',
+  'биток': 'BTC',
+  'битка': 'BTC',
+  'битк': 'BTC',
+  'бтк': 'BTC',
+  'эфир': 'ETH',
+  'эфирик': 'ETH',
+  'эфирка': 'ETH',
+  'эф': 'ETH',
+  'эфи': 'ETH',
+  'эфира': 'ETH',
+  'соло': 'SOL',
+  'сол': 'SOL',
+  'солана': 'SOL',
+  'крипта': '',  // Generic - no specific symbol
+  'альт': '',    // Generic altcoin
+  'альтик': '',  // Generic altcoin
+};
+
+const RUSSIAN_DIRECTION_MAP: Record<string, 'LONG' | 'SHORT'> = {
+  'лонг': 'LONG',
+  'лонги': 'LONG',
+  'покупка': 'LONG',
+  'покупаем': 'LONG',
+  'покупать': 'LONG',
+  'шорт': 'SHORT',
+  'шорты': 'SHORT',
+  'продажа': 'SHORT',
+  'продаем': 'SHORT',
+  'продавать': 'SHORT',
+  'продажу': 'SHORT',
+};
+
+export function parseRussianSlang(text: string): {
+  symbol?: string;
+  direction?: 'LONG' | 'SHORT';
+  normalizedText: string;
+} {
+  let normalizedText = text;
+  let symbol: string | undefined;
+  let direction: 'LONG' | 'SHORT' | undefined;
+  
+  const lowerText = text.toLowerCase();
+  
+  // Check for Russian symbols
+  for (const [russian, english] of Object.entries(RUSSIAN_SYMBOL_MAP)) {
+    if (lowerText.includes(russian) && english) {
+      symbol = english;
+      normalizedText = normalizedText.replace(new RegExp(russian, 'gi'), english);
+      break;
+    }
+  }
+  
+  // Check for Russian directions
+  for (const [russian, english] of Object.entries(RUSSIAN_DIRECTION_MAP)) {
+    if (lowerText.includes(russian)) {
+      direction = english;
+      normalizedText = normalizedText.replace(new RegExp(russian, 'gi'), english);
+      break;
+    }
+  }
+  
+  // Handle "БТК/УСДТ" pattern (Cyrillic)
+  const cyrillicPairMatch = normalizedText.match(/([А-Яа-я]+)\s*[\/\s]\s*([А-Яа-я]+)/i);
+  if (cyrillicPairMatch) {
+    const base = cyrillicPairMatch[1].toUpperCase();
+    const quote = cyrillicPairMatch[2].toUpperCase();
+    
+    // Convert common Cyrillic symbols to Latin
+    const cyrillicToLatin: Record<string, string> = {
+      'БТК': 'BTC',
+      'УСДТ': 'USDT',
+      'УСД': 'USD',
+      'ЭФИР': 'ETH',
+      'СОЛ': 'SOL',
+      'БНБ': 'BNB',
+    };
+    
+    const latinBase = cyrillicToLatin[base] || base;
+    const latinQuote = cyrillicToLatin[quote] || quote;
+    
+    if (latinBase !== base || latinQuote !== quote) {
+      normalizedText = normalizedText.replace(cyrillicPairMatch[0], `${latinBase}/${latinQuote}`);
+      if (!symbol) symbol = latinBase;
+    }
+  }
+  
+  return {
+    symbol,
+    direction,
+    normalizedText,
+  };
+}
+
+/**
+ * SIGNAL UPDATES HANDLING
+ * 
+ * Handles UPDATE commands for existing signals:
+ * - "UPDATE #1234: Move TP1 to 68000"
+ * - "ОБНОВЛЕНИЕ #1234: SL на 65000"
+ * - "Move stop to breakeven"
+ * - "Cancel signal #1234"
+ */
+export interface SignalUpdateCommand {
+  type: 'UPDATE_TP' | 'UPDATE_SL' | 'MOVE_TO_BREAKEVEN' | 'CANCEL_SIGNAL' | 'ADD_ENTRY' | 'PARTIAL_CLOSE';
+  signalId?: number;
+  tpIndex?: number;
+  newPrice?: number;
+  percentage?: number;
+}
+
+export function parseSignalUpdate(text: string): SignalUpdateCommand | null {
+  const cleanText = text.trim();
+  const lowerText = cleanText.toLowerCase();
+  
+  // Pattern: "UPDATE #1234: Move TP1 to 68000"
+  const updateMatch = cleanText.match(/(?:update|обновление|#)(\d+)\s*:?\s*(.+)/i);
+  if (updateMatch) {
+    const signalId = parseInt(updateMatch[1]);
+    const updateContent = updateMatch[2].toLowerCase();
+    
+    // Check for TP update
+    const tpMatch = updateContent.match(/(?:move\s+)?tp(\d)\s+(?:to\s+)?([\d,.]+)/i);
+    if (tpMatch) {
+      return {
+        type: 'UPDATE_TP',
+        signalId,
+        tpIndex: parseInt(tpMatch[1]),
+        newPrice: parseFloat(tpMatch[2].replace(/,/g, '')),
+      };
+    }
+    
+    // Check for SL update
+    const slMatch = updateContent.match(/(?:move\s+)?(?:sl|stop)\s+(?:to\s+)?([\d,.]+)/i);
+    if (slMatch) {
+      return {
+        type: 'UPDATE_SL',
+        signalId,
+        newPrice: parseFloat(slMatch[1].replace(/,/g, '')),
+      };
+    }
+    
+    // Check for breakeven
+    if (/breakeven|безубыток/i.test(updateContent)) {
+      return {
+        type: 'MOVE_TO_BREAKEVEN',
+        signalId,
+      };
+    }
+    
+    // Check for cancel
+    if (/cancel|отмена/i.test(updateContent)) {
+      return {
+        type: 'CANCEL_SIGNAL',
+        signalId,
+      };
+    }
+    
+    // Check for partial close
+    const partialMatch = updateContent.match(/close\s+(\d+)%?/i);
+    if (partialMatch) {
+      return {
+        type: 'PARTIAL_CLOSE',
+        signalId,
+        percentage: parseInt(partialMatch[1]),
+      };
+    }
+  }
+  
+  // Pattern: "Move stop to breakeven" (without signal ID)
+  if (/(?:move\s+)?(?:stop|sl)\s+to\s+breakeven/i.test(lowerText) || 
+      /на\s+безубыток/i.test(lowerText)) {
+    return {
+      type: 'MOVE_TO_BREAKEVEN',
+    };
+  }
+  
+  return null;
+}
+
+/**
+ * MULTI-EXCHANGE SYMBOL MAPPING
+ * 
+ * Different exchanges may use different symbol formats:
+ * - Binance: BTCUSDT
+ * - Bybit: BTCUSDT
+ * - OKX: BTC-USDT-SWAP
+ * - Bitget: BTCUSDT
+ * 
+ * This function normalizes symbols across exchanges.
+ */
+const EXCHANGE_SYMBOL_FORMATS: Record<string, {
+  parsePattern: RegExp;
+  formatTemplate: (base: string, quote: string) => string;
+}> = {
+  binance: {
+    parsePattern: /^([A-Z]+)(USDT|USD|BUSD|USDC)$/,
+    formatTemplate: (base, quote) => `${base}${quote}`,
+  },
+  bybit: {
+    parsePattern: /^([A-Z]+)(USDT|USD)$/,
+    formatTemplate: (base, quote) => `${base}${quote}`,
+  },
+  okx: {
+    parsePattern: /^([A-Z]+)-([A-Z]+)(?:-SWAP)?$/,
+    formatTemplate: (base, quote) => `${base}-${quote}`,
+  },
+  bitget: {
+    parsePattern: /^([A-Z]+)(USDT|USD)_UMCBL$/,
+    formatTemplate: (base, quote) => `${base}${quote}`,
+  },
+};
+
+export function normalizeSymbolForExchange(
+  symbol: string,
+  targetExchange: string
+): string {
+  // Extract base and quote from symbol
+  let base: string = '';
+  let quote: string = 'USDT';
+  
+  // Try to parse existing symbol
+  for (const [, config] of Object.entries(EXCHANGE_SYMBOL_FORMATS)) {
+    const match = symbol.match(config.parsePattern);
+    if (match) {
+      base = match[1];
+      quote = match[2];
+      break;
+    }
+  }
+  
+  // Default parsing
+  if (!base) {
+    const usdtMatch = symbol.match(/^([A-Z]+)(USDT|USD|BUSD|USDC)$/i);
+    if (usdtMatch) {
+      base = usdtMatch[1].toUpperCase();
+      quote = usdtMatch[2].toUpperCase();
+    } else {
+      base = symbol.toUpperCase();
+    }
+  }
+  
+  // Get format config for target exchange
+  const exchangeKey = targetExchange.toLowerCase();
+  const formatConfig = EXCHANGE_SYMBOL_FORMATS[exchangeKey];
+  
+  if (formatConfig) {
+    return formatConfig.formatTemplate(base, quote);
+  }
+  
+  // Default format (Binance-style)
+  return `${base}${quote}`;
+}
+
+export function getSymbolMappings(symbol: string): Record<string, string> {
+  const mappings: Record<string, string> = {};
+  
+  for (const exchange of Object.keys(EXCHANGE_SYMBOL_FORMATS)) {
+    mappings[exchange] = normalizeSymbolForExchange(symbol, exchange);
+  }
+  
+  return mappings;
+}
+
+/**
+ * Enhanced signal parsing with all Phase 3 improvements
+ */
+export function parseSignalEnhanced(text: string): ParsedSignal | null {
+  // First, apply Russian slang normalization
+  const { normalizedText, direction: russianDirection } = parseRussianSlang(text);
+  
+  // Check for signal updates
+  const updateCommand = parseSignalUpdate(normalizedText);
+  if (updateCommand) {
+    // Return a signal with update action
+    const baseSignal = parseSignal(normalizedText);
+    if (baseSignal) {
+      return {
+        ...baseSignal,
+        action: 'UPDATE_TP',
+        direction: russianDirection || baseSignal.direction,
+        updateTpIndex: updateCommand.tpIndex,
+        updateTpPrice: updateCommand.newPrice,
+      };
+    }
+  }
+  
+  // Parse breakout signal
+  const breakout = parseBreakoutSignal(normalizedText);
+  
+  // Parse trailing entry
+  const trailingEntry = parseTrailingEntry(normalizedText);
+  
+  // Parse base signal
+  const baseSignal = parseSignal(normalizedText);
+  if (!baseSignal) return null;
+  
+  // Apply enhancements
+  if (breakout.isBreakout) {
+    baseSignal.signalType = 'BREAKOUT';
+    baseSignal.entryPrices = breakout.breakoutLevel ? [breakout.breakoutLevel] : baseSignal.entryPrices;
+  }
+  
+  if (trailingEntry.hasTrailingEntry) {
+    baseSignal.isMarketEntry = true;
+    baseSignal.trailingConfig = {
+      entry: {
+        type: 'price',
+        value: trailingEntry.triggerPrice || 0,
+      },
+    };
+  }
+  
+  // Override direction from Russian slang if detected
+  if (russianDirection) {
+    baseSignal.direction = russianDirection;
+  }
+  
+  return baseSignal;
+}

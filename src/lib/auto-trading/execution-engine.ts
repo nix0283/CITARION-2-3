@@ -19,6 +19,12 @@ import {
   type SignalInput,
   type TradeEntryInput,
 } from '@/lib/validators/trade-validation';
+import {
+  performComprehensiveRiskCheck,
+  calculateAutoCancelTime,
+  type AdvancedRiskConfig,
+  type RiskCheckResult,
+} from '@/lib/auto-trading/advanced-risk-management';
 
 // ==================== TYPES ====================
 
@@ -202,6 +208,12 @@ export interface ExecutionResult {
   warnings?: string[];
   /** Weight percentage for multi-entry (0-100) */
   weight?: number;
+  /** Risk check results */
+  riskChecks?: RiskCheckResult[];
+  /** Risk check passed */
+  riskCheckPassed?: boolean;
+  /** Auto-cancel timestamp */
+  autoCancelAt?: Date | null;
 }
 
 /**
@@ -221,6 +233,7 @@ export interface ExecutionContext {
     exchangeType: string;
     isTestnet: boolean;
   };
+  botConfig?: AdvancedRiskConfig | null;
 }
 
 /**
@@ -285,31 +298,55 @@ export class ExecutionEngine {
       
       context.signal = signalValidation.data;
 
-      // 2. Get exchange client
+      // 2. Load bot config for risk checks
+      context.botConfig = await this.loadBotConfig(params.userId);
+
+      // 3. Perform comprehensive risk check (NEW)
+      const riskResult = await this.performRiskCheck(context);
+      if (!riskResult.passed) {
+        const failedChecks = riskResult.checks
+          .filter(c => !c.passed)
+          .map(c => c.reason)
+          .join('; ');
+        
+        return {
+          success: false,
+          error: `Risk check failed: ${failedChecks}`,
+          errorCode: 'RISK_CHECK_FAILED',
+          riskChecks: riskResult.checks,
+          riskCheckPassed: false,
+        };
+      }
+
+      // 4. Get exchange client
       context.client = await this.getExchangeClient(context);
       if (!context.client) {
         return {
           success: false,
           error: 'Failed to initialize exchange client',
           errorCode: 'CLIENT_INIT_FAILED',
+          riskChecks: riskResult.checks,
+          riskCheckPassed: true,
         };
       }
 
-      // 3. Test connection
+      // 5. Test connection
       const connectionTest = await context.client.testConnection();
       if (!connectionTest.success) {
         return {
           success: false,
           error: `Exchange connection failed: ${connectionTest.message}`,
           errorCode: 'CONNECTION_FAILED',
+          riskChecks: riskResult.checks,
+          riskCheckPassed: true,
         };
       }
 
-      // 4. Get current price
+      // 6. Get current price
       const ticker = await context.client.getTicker(context.signal.symbol);
       const currentPrice = ticker.last;
 
-      // 5. Calculate position size
+      // 7. Calculate position size
       const accountInfo = await context.client.getAccountInfo();
       const positionSize = await this.calculatePositionSize(
         context,
@@ -322,10 +359,12 @@ export class ExecutionEngine {
           success: false,
           error: 'Calculated position size is zero',
           errorCode: 'INVALID_SIZE',
+          riskChecks: riskResult.checks,
+          riskCheckPassed: true,
         };
       }
 
-      // 6. Set leverage for futures
+      // 8. Set leverage for futures
       if (context.signal.leverage > 1) {
         await context.client.setLeverage({
           symbol: context.signal.symbol,
@@ -334,7 +373,7 @@ export class ExecutionEngine {
         });
       }
 
-      // 7. Execute entry order
+      // 9. Execute entry order
       const orderResult = await this.executeEntryOrder(
         context,
         positionSize,
@@ -346,17 +385,29 @@ export class ExecutionEngine {
           success: false,
           error: orderResult.error,
           errorCode: orderResult.errorCode,
+          riskChecks: riskResult.checks,
+          riskCheckPassed: true,
         };
       }
 
-      // 8. Create position record
+      // 10. Calculate auto-cancel time if configured
+      let autoCancelAt: Date | null = null;
+      if (context.botConfig && context.botConfig.autoCancelTimeout > 0) {
+        autoCancelAt = calculateAutoCancelTime(
+          new Date(),
+          context.botConfig.autoCancelTimeout,
+          context.botConfig.autoCancelTimeoutUnit
+        );
+      }
+
+      // 11. Create position record
       const position = await this.createPositionRecord(
         context,
         orderResult,
         positionSize
       );
 
-      // 9. Set TP/SL orders
+      // 12. Set TP/SL orders
       const warnings: string[] = [];
       if (context.signal.takeProfits && context.signal.takeProfits.length > 0) {
         await this.setTakeProfitOrders(context, position);
@@ -369,8 +420,11 @@ export class ExecutionEngine {
         }
       }
 
-      // 10. Log execution
+      // 13. Log execution
       await this.logExecution(context, orderResult, position);
+
+      // 14. Log risk check success
+      await this.logRiskCheck(context, riskResult, position.id);
 
       return {
         success: true,
@@ -384,6 +438,9 @@ export class ExecutionEngine {
         stopLoss: context.signal.stopLoss,
         leverage: context.signal.leverage,
         warnings,
+        riskChecks: riskResult.checks,
+        riskCheckPassed: true,
+        autoCancelAt,
       };
 
     } catch (error) {
@@ -431,6 +488,131 @@ export class ExecutionEngine {
         isTestnet: account.isTestnet,
       },
     };
+  }
+
+  /**
+   * Load bot configuration for risk checks
+   */
+  private async loadBotConfig(userId: string): Promise<AdvancedRiskConfig | null> {
+    try {
+      const botConfig = await db.botConfig.findFirst({
+        where: { userId, isActive: true },
+        select: {
+          slLeverageAdjustEnabled: true,
+          slLeverageAdjustPercent: true,
+          slLeverageAdjustMin: true,
+          maxTradesPerSymbol: true,
+          minSymbolPrice: true,
+          minSymbolVolume: true,
+          maxConcurrentAmount: true,
+          autoCancelTimeout: true,
+          autoCancelTimeoutUnit: true,
+          alternativeUsdPairs: true,
+          useAlternativePairs: true,
+        },
+      });
+
+      if (!botConfig) return null;
+
+      return {
+        slLeverageAdjustEnabled: botConfig.slLeverageAdjustEnabled,
+        slLeverageAdjustPercent: botConfig.slLeverageAdjustPercent,
+        slLeverageAdjustMin: botConfig.slLeverageAdjustMin,
+        maxTradesPerSymbol: botConfig.maxTradesPerSymbol,
+        minSymbolPrice: botConfig.minSymbolPrice ?? undefined,
+        minSymbolVolume: botConfig.minSymbolVolume ?? undefined,
+        maxConcurrentAmount: botConfig.maxConcurrentAmount ?? undefined,
+        autoCancelTimeout: botConfig.autoCancelTimeout,
+        autoCancelTimeoutUnit: botConfig.autoCancelTimeoutUnit as "SECONDS" | "MINUTES" | "HOURS",
+        alternativeUsdPairs: JSON.parse(botConfig.alternativeUsdPairs || "[]"),
+        useAlternativePairs: botConfig.useAlternativePairs,
+      };
+    } catch (error) {
+      console.error('[ExecutionEngine] Failed to load bot config:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Perform risk check before trade execution
+   */
+  private async performRiskCheck(context: ExecutionContext): Promise<{
+    passed: boolean;
+    checks: RiskCheckResult[];
+  }> {
+    const signal = context.signal!;
+    const config = context.botConfig;
+
+    // If no config, pass without checks
+    if (!config) {
+      return {
+        passed: true,
+        checks: [{
+          passed: true,
+          reason: 'No risk config loaded',
+          filterName: 'config_check',
+        }],
+      };
+    }
+
+    // Create a minimal signal object for risk check
+    const riskSignal = {
+      id: '',
+      userId: context.userId,
+      signalId: 0,
+      source: 'MANUAL' as const,
+      sourceChannel: null,
+      sourceMessage: '',
+      symbol: signal.symbol,
+      direction: signal.direction,
+      action: 'BUY' as const,
+      marketType: 'FUTURES' as const,
+      entryPrices: JSON.stringify(signal.entryPrices),
+      takeProfits: JSON.stringify(signal.takeProfits || []),
+      stopLoss: signal.stopLoss ?? null,
+      leverage: signal.leverage,
+      status: 'PENDING' as const,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      amountPerTrade: null,
+    };
+
+    const result = await performComprehensiveRiskCheck(
+      riskSignal as any,
+      context.userId,
+      config
+    );
+
+    return {
+      passed: result.passed,
+      checks: result.checks,
+    };
+  }
+
+  /**
+   * Log risk check result
+   */
+  private async logRiskCheck(
+    context: ExecutionContext,
+    riskResult: { passed: boolean; checks: RiskCheckResult[] },
+    positionId: string
+  ): Promise<void> {
+    try {
+      await db.systemLog.create({
+        data: {
+          level: riskResult.passed ? 'INFO' : 'WARN',
+          category: 'RISK_CHECK',
+          message: `Risk check ${riskResult.passed ? 'passed' : 'failed'} for ${context.signal?.symbol}`,
+          details: JSON.stringify({
+            positionId,
+            checks: riskResult.checks,
+          }),
+          userId: context.userId,
+        },
+      });
+    } catch (error) {
+      console.error('[ExecutionEngine] Failed to log risk check:', error);
+    }
   }
 
   /**

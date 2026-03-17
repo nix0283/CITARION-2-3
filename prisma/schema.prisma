@@ -52,6 +52,9 @@ model User {
   kronBots        KronBot[]
   botPerformanceSummaries BotPerformanceSummary[]
 
+  // Signal Bots
+  signalBotConfigs SignalBotConfig[]
+
   // Notifications
   notifications            Notification[]
   notificationPreference   NotificationPreference?
@@ -155,6 +158,9 @@ model Account {
   architectBots   ArchitectBot[]
   equilibristBots EquilibristBot[]
   kronBots        KronBot[]
+
+  // Signal Bots
+  signalBotConfigs SignalBotConfig[]
 
   @@unique([userId, exchangeId, exchangeType])
   
@@ -541,8 +547,226 @@ model BotConfig {
   notifyOnError     Boolean @default(true)
   notifyOnNewSignal Boolean @default(true)
 
+  // ==================== DIRECTION FILTER (Cornix-compatible) ====================
+  // Filter signals by direction
+  directionFilter String @default("BOTH") // LONG, SHORT, BOTH
+
+  // ==================== TRAILING ENTRY (Cornix-compatible) ====================
+  // Trailing buy - trails price before entry
+  trailingEntryEnabled         Boolean @default(false)
+  trailingEntryPercent         Float   @default(1) // Trail behind price by this %
+  trailingEntryActivateDist    Float   @default(0.5) // Activate when price within this % of entry
+  trailingEntryOnlyIfNotInGrp  Boolean @default(false) // Only use if not defined by signal
+
+  // ==================== TRAILING TAKE-PROFIT (Cornix-compatible) ====================
+  // Trailing sell - trails price after TP reached
+  trailingTPEnabled         Boolean @default(false)
+  trailingTPPercent        Float   @default(1) // Trail TP behind price by this %
+  trailingTPActivateAfterTP Int    @default(1) // Activate after Nth TP filled
+  trailingTPOnlyIfNotInGrp  Boolean @default(false)
+
+  // ==================== MOVING TAKE-PROFIT (Cornix-compatible) ====================
+  // Dynamic TP adjustment based on entry baseline
+  movingTPEnabled        Boolean @default(false)
+  movingTPBaseline       String  @default("AVERAGE_ENTRIES") // AVERAGE_ENTRIES, FIRST_ENTRY
+  movingTPOnlyIfNotInGrp Boolean @default(false)
+
+  // ==================== LIMIT PRICE REDUCTION (Cornix-compatible) ====================
+  // Reduce limit order price for better fill chance
+  limitPriceReductionEnabled Boolean @default(false)
+  limitPriceReductionPercent Float   @default(0.1) // Max % to reduce price
+
+  // ==================== OPERATION HOURS (Cornix-compatible) ====================
+  // Restrict trading to specific hours
+  operationHoursEnabled Boolean @default(false)
+  operationHoursStart   Int     @default(0) // Start hour (0-23)
+  operationHoursEnd     Int     @default(24) // End hour (0-24)
+  operationHoursDays    String  @default("[1,2,3,4,5,6,7]") // Days of week (1=Mon, 7=Sun)
+
+  // ==================== SIGNAL BEHAVIOR (Cornix-compatible) ====================
+  // Behavior when signal is cancelled/edited
+  onSignalCancel  String @default("CLOSE") // CLOSE, KEEP, IGNORE
+  onSignalEdit    String @default("UPDATE") // UPDATE, KEEP, IGNORE
+  onlyUseIfNotDef Boolean @default(false) // Only use config if not defined in signal
+
+  // ==================== ADVANCED RISK MANAGEMENT (Cornix-compatible) ====================
+  
+  // 1. Stop Loss Leverage Adjustments - reduce leverage when SL is hit
+  slLeverageAdjustEnabled  Boolean @default(false) // Enable leverage reduction on SL
+  slLeverageAdjustPercent  Float   @default(50) // % to reduce leverage (e.g., 50 = half)
+  slLeverageAdjustMin      Int     @default(1) // Minimum leverage after adjustment
+  
+  // 2. Simultaneous Trades Per Symbol - limit concurrent trades per trading pair
+  maxTradesPerSymbol Int @default(1) // Max concurrent trades per symbol (1-10)
+  
+  // 3. Min Symbol Price (USD) - filter low-priced assets
+  minSymbolPrice Float? // Minimum price in USD (null = disabled)
+  
+  // 4. Min Symbol 24H Volume (USD) - filter low-volume assets
+  minSymbolVolume Float? // Minimum 24h volume in USD (null = disabled)
+  
+  // 5. Max Concurrent Amount (USD) - total exposure limit
+  maxConcurrentAmount Float? // Maximum total position value in USD (null = unlimited)
+  
+  // 6. Auto-Cancel Trade Timeout - cancel unfilled orders after timeout
+  autoCancelTimeout      Int     @default(0) // Seconds before auto-cancel (0 = disabled)
+  autoCancelTimeoutUnit  String  @default("MINUTES") // SECONDS, MINUTES, HOURS
+  
+  // 7. Alternative USD Pairs - use alternative stablecoin pairs
+  alternativeUsdPairs    String  @default("[]") // JSON: ["USDC", "BUSD", "USD"] for fallback
+  useAlternativePairs    Boolean @default(false) // Enable alternative pair matching
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// ==================== SIGNAL BOT CONFIGURATION ====================
+// Signal Bot - follows external signals from Telegram, TradingView, Chat
+
+model SignalBotConfig {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId String?
+  account   Account? @relation(fields: [accountId], references: [id])
+
+  name        String
+  description String?
+  isActive    Boolean @default(false)
+
+  // ==================== SIGNAL SOURCES ====================
+  // Telegram integration
+  telegramEnabled    Boolean @default(false)
+  telegramChatIds    String  @default("[]") // JSON: ["chat_id_1", "chat_id_2"]
+  telegramKeywords   String  @default("[]") // JSON: ["buy", "long", "entry"]
+  
+  // TradingView webhook
+  tradingViewEnabled Boolean @default(false)
+  tradingViewSecret  String? // Webhook secret for verification
+  
+  // Built-in chat
+  chatEnabled Boolean @default(false)
+  chatRoomIds String  @default("[]") // JSON: ["room_id_1"]
+  
+  // ==================== SIGNAL FILTERING ====================
+  // Symbol filters
+  allowedSymbols     String? // JSON: ["BTCUSDT", "ETHUSDT"]
+  blockedSymbols     String  @default("[]")
+  
+  // Direction filter
+  directionFilter String @default("BOTH") // LONG, SHORT, BOTH
+  
+  // Risk filters
+  minRiskReward    Float?  // Minimum R:R ratio
+  maxRiskPercent   Float   @default(5) // Max risk per trade (%)
+  requireSL        Boolean @default(true) // Require stop loss
+  requireTP        Boolean @default(true) // Require take profit
+  
+  // Entry filters
+  maxEntryDistance Float? // Max % distance from entry price
+  
+  // ==================== EXECUTION SETTINGS ====================
+  // Position sizing
+  positionSizeType  String  @default("FIXED") // FIXED, PERCENT, RISK_BASED
+  positionSizeValue Float   @default(100) // USDT or % of balance
+  
+  // Leverage
+  maxLeverage   Int     @default(10)
+  defaultLeverage Int   @default(5)
+  leverageMode  String  @default("ISOLATED") // ISOLATED, CROSS
+  
+  // Stop Loss / Take Profit
+  defaultSLPercent Float? // Default SL % if not in signal
+  defaultTPPercent Float? // Default TP % if not in signal
+  tpStrategy       String  @default("EVENLY") // EVENLY, CUSTOM
+  
+  // ==================== ADVANCED RISK MANAGEMENT ====================
+  // Simultaneous trades
+  maxOpenTrades     Int @default(5)
+  maxTradesPerSymbol Int @default(1)
+  
+  // Exposure limits
+  maxConcurrentAmount Float? // Max total position value in USDT
+  minSymbolPrice      Float? // Minimum symbol price
+  minSymbolVolume     Float? // Minimum 24h volume
+  
+  // Auto-cancel
+  autoCancelTimeout Int    @default(30) // Minutes before auto-cancel
+  slTimeoutEnabled  Boolean @default(false)
+  slTimeoutMinutes  Int     @default(0)
+  
+  // SL Leverage adjustment
+  slLeverageAdjustEnabled Boolean @default(false)
+  slLeverageAdjustPercent Float   @default(50)
+  
+  // ==================== TIMING SETTINGS ====================
+  // Operation hours
+  operationHoursEnabled Boolean @default(false)
+  operationHoursStart   Int     @default(0) // Hour 0-23
+  operationHoursEnd     Int     @default(24)
+  operationHoursDays    String  @default("[1,2,3,4,5,6,7]") // Days of week
+  
+  // Cooldown
+  cooldownBetweenTrades Int @default(5) // Minutes
+  
+  // ==================== NOTIFICATION SETTINGS ====================
+  notifyOnSignal   Boolean @default(true)
+  notifyOnEntry    Boolean @default(true)
+  notifyOnExit     Boolean @default(true)
+  notifyOnError    Boolean @default(true)
+  
+  // ==================== STATISTICS ====================
+  totalSignalsReceived Int @default(0)
+  totalSignalsExecuted Int @default(0)
+  totalSignalsFiltered Int @default(0)
+  totalPnL            Float @default(0)
+  winRate             Float @default(0)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastSignalAt DateTime?
+
+  signals SignalRecord[]
+}
+
+// ==================== SIGNAL RECORD ====================
+// Tracks all received and processed signals
+
+model SignalRecord {
+  id             String @id @default(cuid())
+  signalBotId    String
+  signalBot      SignalBotConfig @relation(fields: [signalBotId], references: [id], onDelete: Cascade)
+  
+  // Signal source
+  source         String // TELEGRAM, TRADINGVIEW, CHAT, MANUAL
+  sourceChatId   String?
+  sourceMessageId String?
+  
+  // Original signal data
+  rawMessage     String // Original message text
+  parsedSignal   String // JSON: ParsedSignal object
+  
+  // Processing status
+  status         String @default("PENDING") // PENDING, PROCESSING, EXECUTED, FILTERED, FAILED, CANCELLED
+  filterReason   String? // Why signal was filtered
+  errorMessage   String?
+  
+  // Execution details
+  executedAt     DateTime?
+  positionId     String?
+  tradeIds       String? // JSON: array of trade IDs
+  
+  // Result
+  pnl            Float?
+  pnlPercent     Float?
+  
+  // Timestamps
+  receivedAt     DateTime @default(now())
+  processedAt    DateTime?
+  
+  @@index([signalBotId, status])
+  @@index([signalBotId, receivedAt])
+  @@index([source, status])
 }
 
 // ==================== MARKET DATA CACHE ====================

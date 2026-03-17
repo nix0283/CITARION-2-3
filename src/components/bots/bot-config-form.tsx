@@ -42,9 +42,34 @@ import {
   RotateCcw,
   Percent,
   Loader2,
+  ArrowUp,
+  ArrowDown,
+  ArrowUpDown,
+  Clock,
+  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+
+// Import extended Cornix-compatible sections
+import {
+  DirectionFilterSection,
+  TrailingEntrySection,
+  TrailingTPSection,
+  MovingTPSection,
+  LimitPriceReductionSection,
+  OperationHoursSection,
+  SignalBehaviorSection,
+  type ExtendedBotConfig,
+  DEFAULT_EXTENDED_CONFIG,
+} from "./bot-config-extensions";
+
+// Import Advanced Risk Management Section
+import {
+  AdvancedRiskSection,
+  type AdvancedRiskConfig,
+  DEFAULT_ADVANCED_RISK_CONFIG,
+} from "./advanced-risk-section";
 
 // Helper function for trailing type descriptions
 function getTrailingDescription(type: string): string {
@@ -136,6 +161,68 @@ interface BotConfigData {
   notifyOnSL: boolean;
   notifyOnTP: boolean;
   notifyOnError: boolean;
+  
+  // ========== CORNIX-COMPATIBLE EXTENDED FEATURES ==========
+  // Direction Filter
+  directionFilter: "LONG" | "SHORT" | "BOTH";
+  
+  // Trailing Entry
+  trailingEntryEnabled: boolean;
+  trailingEntryPercent: number;
+  trailingEntryActivateDist: number;
+  trailingEntryOnlyIfNotInGrp: boolean;
+  
+  // Trailing TP
+  trailingTPEnabled: boolean;
+  trailingTPPercent: number;
+  trailingTPActivateAfterTP: number;
+  trailingTPOnlyIfNotInGrp: boolean;
+  
+  // Moving TP
+  movingTPEnabled: boolean;
+  movingTPBaseline: "AVERAGE_ENTRIES" | "FIRST_ENTRY";
+  movingTPOnlyIfNotInGrp: boolean;
+  
+  // Limit Price Reduction
+  limitPriceReductionEnabled: boolean;
+  limitPriceReductionPercent: number;
+  
+  // Operation Hours
+  operationHoursEnabled: boolean;
+  operationHoursStart: number;
+  operationHoursEnd: number;
+  operationHoursDays: number[];
+  
+  // Signal Behavior
+  onSignalCancel: "CLOSE" | "KEEP" | "IGNORE";
+  onSignalEdit: "UPDATE" | "KEEP" | "IGNORE";
+  onlyUseIfNotDef: boolean;
+
+  // ========== ADVANCED RISK MANAGEMENT ==========
+  // 1. SL Leverage Adjustment
+  slLeverageAdjustEnabled: boolean;
+  slLeverageAdjustPercent: number;
+  slLeverageAdjustMin: number;
+  
+  // 2. Simultaneous Trades Per Symbol
+  maxTradesPerSymbol: number;
+  
+  // 3. Min Symbol Price (USD)
+  minSymbolPrice: number | null;
+  
+  // 4. Min Symbol 24H Volume (USD)
+  minSymbolVolume: number | null;
+  
+  // 5. Max Concurrent Amount (USD)
+  maxConcurrentAmount: number | null;
+  
+  // 6. Auto-Cancel Trade Timeout
+  autoCancelTimeout: number;
+  autoCancelTimeoutUnit: "SECONDS" | "MINUTES" | "HOURS";
+  
+  // 7. Alternative USD Pairs
+  alternativeUsdPairs: string[];
+  useAlternativePairs: boolean;
 }
 
 const DEFAULT_CONFIG: BotConfigData = {
@@ -199,6 +286,48 @@ const DEFAULT_CONFIG: BotConfigData = {
   notifyOnSL: true,
   notifyOnTP: true,
   notifyOnError: true,
+  
+  // ========== CORNIX-COMPATIBLE EXTENDED FEATURES ==========
+  directionFilter: "BOTH",
+  
+  trailingEntryEnabled: false,
+  trailingEntryPercent: 1,
+  trailingEntryActivateDist: 0.5,
+  trailingEntryOnlyIfNotInGrp: false,
+  
+  trailingTPEnabled: false,
+  trailingTPPercent: 1,
+  trailingTPActivateAfterTP: 1,
+  trailingTPOnlyIfNotInGrp: false,
+  
+  movingTPEnabled: false,
+  movingTPBaseline: "AVERAGE_ENTRIES",
+  movingTPOnlyIfNotInGrp: false,
+  
+  limitPriceReductionEnabled: false,
+  limitPriceReductionPercent: 0.1,
+  
+  operationHoursEnabled: false,
+  operationHoursStart: 0,
+  operationHoursEnd: 24,
+  operationHoursDays: [1, 2, 3, 4, 5, 6, 7],
+  
+  onSignalCancel: "CLOSE",
+  onSignalEdit: "UPDATE",
+  onlyUseIfNotDef: false,
+
+  // ========== ADVANCED RISK MANAGEMENT ==========
+  slLeverageAdjustEnabled: false,
+  slLeverageAdjustPercent: 50,
+  slLeverageAdjustMin: 1,
+  maxTradesPerSymbol: 1,
+  minSymbolPrice: null,
+  minSymbolVolume: null,
+  maxConcurrentAmount: null,
+  autoCancelTimeout: 0,
+  autoCancelTimeoutUnit: "MINUTES",
+  alternativeUsdPairs: ["USDC", "BUSD", "USD"],
+  useAlternativePairs: false,
 };
 
 export function BotConfigForm() {
@@ -743,6 +872,28 @@ export function BotConfigForm() {
                   </div>
                 </>
               )}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* ==================== TRAILING TAKE-PROFIT ==================== */}
+        <AccordionItem value="trailing-tp" className="border rounded-lg bg-card">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline">
+            <div className="flex items-center gap-2">
+              <Target className="h-5 w-5 text-primary" />
+              <span className="font-medium">Trailing Take-Profit</span>
+              {config.trailingTPEnabled && (
+                <span className="ml-2 text-xs text-green-500">●</span>
+              )}
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4">
+            <div className="space-y-6 pt-2">
+              <TrailingTPSection 
+                config={config} 
+                updateConfig={updateConfig}
+                leverage={config.leverage}
+              />
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -1762,6 +1913,39 @@ export function BotConfigForm() {
                   />
                 </div>
               ))}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* ==================== ADVANCED RISK MANAGEMENT ==================== */}
+        <AccordionItem value="advanced-risk" className="border rounded-lg bg-card">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline">
+            <div className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-primary" />
+              <span className="font-medium">Advanced Risk Management</span>
+              <Badge variant="outline" className="text-xs bg-amber-500/10 text-amber-500 border-amber-500/30">
+                Cornix-compatible
+              </Badge>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4">
+            <div className="space-y-6 pt-2">
+              <AdvancedRiskSection
+                config={{
+                  slLeverageAdjustEnabled: config.slLeverageAdjustEnabled,
+                  slLeverageAdjustPercent: config.slLeverageAdjustPercent,
+                  slLeverageAdjustMin: config.slLeverageAdjustMin,
+                  maxTradesPerSymbol: config.maxTradesPerSymbol,
+                  minSymbolPrice: config.minSymbolPrice,
+                  minSymbolVolume: config.minSymbolVolume,
+                  maxConcurrentAmount: config.maxConcurrentAmount,
+                  autoCancelTimeout: config.autoCancelTimeout,
+                  autoCancelTimeoutUnit: config.autoCancelTimeoutUnit,
+                  alternativeUsdPairs: config.alternativeUsdPairs,
+                  useAlternativePairs: config.useAlternativePairs,
+                }}
+                updateConfig={(key, value) => updateConfig(key as keyof BotConfigData, value)}
+              />
             </div>
           </AccordionContent>
         </AccordionItem>

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getDefaultUserId } from "@/lib/default-user";
 
-// Default bot config (Cornix-style)
+// Default bot config (Cornix-style with full feature set)
 const DEFAULT_BOT_CONFIG = {
   name: "Default Bot",
   description: "Default trading bot configuration",
@@ -35,7 +35,7 @@ const DEFAULT_BOT_CONFIG = {
   slTimeoutUnit: "SECONDS",
   slOrderType: "MARKET",
   
-  // Trailing
+  // Trailing Stop
   trailingEnabled: false,
   trailingType: "BREAKEVEN",
   
@@ -54,6 +54,43 @@ const DEFAULT_BOT_CONFIG = {
   notifyOnTP: true,
   notifyOnError: true,
   notifyOnNewSignal: true,
+  
+  // ========== CORNIX-COMPATIBLE EXTENDED FEATURES ==========
+  
+  // Direction Filter
+  directionFilter: "BOTH",
+  
+  // Trailing Entry
+  trailingEntryEnabled: false,
+  trailingEntryPercent: 1,
+  trailingEntryActivateDist: 0.5,
+  trailingEntryOnlyIfNotInGrp: false,
+  
+  // Trailing Take-Profit
+  trailingTPEnabled: false,
+  trailingTPPercent: 1,
+  trailingTPActivateAfterTP: 1,
+  trailingTPOnlyIfNotInGrp: false,
+  
+  // Moving Take-Profit
+  movingTPEnabled: false,
+  movingTPBaseline: "AVERAGE_ENTRIES",
+  movingTPOnlyIfNotInGrp: false,
+  
+  // Limit Price Reduction
+  limitPriceReductionEnabled: false,
+  limitPriceReductionPercent: 0.1,
+  
+  // Operation Hours
+  operationHoursEnabled: false,
+  operationHoursStart: 0,
+  operationHoursEnd: 24,
+  operationHoursDays: "[1,2,3,4,5,6,7]",
+  
+  // Signal Behavior
+  onSignalCancel: "CLOSE",
+  onSignalEdit: "UPDATE",
+  onlyUseIfNotDef: false,
 };
 
 // GET - Fetch bot configuration
@@ -171,7 +208,91 @@ export async function POST(request: NextRequest) {
       notifyOnError = true,
       notifyOnNewSignal = true,
       accountId,
+      // ========== CORNIX-COMPATIBLE EXTENDED FEATURES ==========
+      directionFilter = "BOTH",
+      trailingEntryEnabled = false,
+      trailingEntryPercent = 1,
+      trailingEntryActivateDist = 0.5,
+      trailingEntryOnlyIfNotInGrp = false,
+      trailingTPEnabled = false,
+      trailingTPPercent = 1,
+      trailingTPActivateAfterTP = 1,
+      trailingTPOnlyIfNotInGrp = false,
+      movingTPEnabled = false,
+      movingTPBaseline = "AVERAGE_ENTRIES",
+      movingTPOnlyIfNotInGrp = false,
+      limitPriceReductionEnabled = false,
+      limitPriceReductionPercent = 0.1,
+      operationHoursEnabled = false,
+      operationHoursStart = 0,
+      operationHoursEnd = 24,
+      operationHoursDays,
+      onSignalCancel = "CLOSE",
+      onSignalEdit = "UPDATE",
+      onlyUseIfNotDef = false,
     } = body;
+
+    // Prepare data with all fields
+    const configData = {
+      name,
+      description,
+      isActive,
+      exchangeId,
+      exchangeType,
+      tradeAmount,
+      amountType,
+      amountOverride,
+      leverage,
+      leverageOverride,
+      entryStrategy,
+      entryZoneTargets,
+      tpStrategy,
+      tpTargetCount,
+      defaultStopLoss,
+      slTimeout,
+      slTimeoutUnit,
+      slOrderType,
+      trailingEnabled,
+      trailingType,
+      trailingValue,
+      trailingTriggerType,
+      trailingTriggerValue,
+      trailingStopPercent,
+      hedgeMode,
+      marginMode,
+      maxOpenTrades,
+      minTradeInterval,
+      allowedSymbols: allowedSymbols ? JSON.stringify(allowedSymbols) : null,
+      blacklistedSymbols: blacklistedSymbols ? JSON.stringify(blacklistedSymbols) : null,
+      notifyOnEntry,
+      notifyOnExit,
+      notifyOnSL,
+      notifyOnTP,
+      notifyOnError,
+      notifyOnNewSignal,
+      // Cornix extended features
+      directionFilter,
+      trailingEntryEnabled,
+      trailingEntryPercent,
+      trailingEntryActivateDist,
+      trailingEntryOnlyIfNotInGrp,
+      trailingTPEnabled,
+      trailingTPPercent,
+      trailingTPActivateAfterTP,
+      trailingTPOnlyIfNotInGrp,
+      movingTPEnabled,
+      movingTPBaseline,
+      movingTPOnlyIfNotInGrp,
+      limitPriceReductionEnabled,
+      limitPriceReductionPercent,
+      operationHoursEnabled,
+      operationHoursStart,
+      operationHoursEnd,
+      operationHoursDays: operationHoursDays ? JSON.stringify(operationHoursDays) : "[1,2,3,4,5,6,7]",
+      onSignalCancel,
+      onSignalEdit,
+      onlyUseIfNotDef,
+    };
 
     let config;
 
@@ -179,44 +300,7 @@ export async function POST(request: NextRequest) {
       // Update existing config
       config = await db.botConfig.update({
         where: { id },
-        data: {
-          name,
-          description,
-          isActive,
-          exchangeId,
-          exchangeType,
-          tradeAmount,
-          amountType,
-          amountOverride,
-          leverage,
-          leverageOverride,
-          entryStrategy,
-          entryZoneTargets,
-          tpStrategy,
-          tpTargetCount,
-          defaultStopLoss,
-          slTimeout,
-          slTimeoutUnit,
-          slOrderType,
-          trailingEnabled,
-          trailingType,
-          trailingValue,
-          trailingTriggerType,
-          trailingTriggerValue,
-          trailingStopPercent,
-          hedgeMode,
-          marginMode,
-          maxOpenTrades,
-          minTradeInterval,
-          allowedSymbols: allowedSymbols ? JSON.stringify(allowedSymbols) : null,
-          blacklistedSymbols: blacklistedSymbols ? JSON.stringify(blacklistedSymbols) : null,
-          notifyOnEntry,
-          notifyOnExit,
-          notifyOnSL,
-          notifyOnTP,
-          notifyOnError,
-          notifyOnNewSignal,
-        }
+        data: configData
       });
     } else {
       // Create new config
@@ -224,42 +308,7 @@ export async function POST(request: NextRequest) {
       config = await db.botConfig.create({
         data: {
           userId,
-          name,
-          description,
-          isActive,
-          exchangeId,
-          exchangeType,
-          tradeAmount,
-          amountType,
-          amountOverride,
-          leverage,
-          leverageOverride,
-          entryStrategy,
-          entryZoneTargets,
-          tpStrategy,
-          tpTargetCount,
-          defaultStopLoss,
-          slTimeout,
-          slTimeoutUnit,
-          slOrderType,
-          trailingEnabled,
-          trailingType,
-          trailingValue,
-          trailingTriggerType,
-          trailingTriggerValue,
-          trailingStopPercent,
-          hedgeMode,
-          marginMode,
-          maxOpenTrades,
-          minTradeInterval,
-          allowedSymbols: allowedSymbols ? JSON.stringify(allowedSymbols) : null,
-          blacklistedSymbols: blacklistedSymbols ? JSON.stringify(blacklistedSymbols) : null,
-          notifyOnEntry,
-          notifyOnExit,
-          notifyOnSL,
-          notifyOnTP,
-          notifyOnError,
-          notifyOnNewSignal,
+          ...configData,
           accountId,
         }
       });

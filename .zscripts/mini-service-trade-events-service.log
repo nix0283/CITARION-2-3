@@ -1,12 +1,9 @@
 [trade-events-service] Installing dependencies...
 bun install v1.3.10 (30e609e0)
-Resolving dependencies
-Resolved, downloaded and extracted [34]
-Saved lockfile
 
 + socket.io@4.8.3
 
-22 packages installed [788.00ms]
+22 packages installed [173.00ms]
 [trade-events-service] Running bun run dev...
 $ bun --hot index.ts
 Trade Events Service running on port 3003

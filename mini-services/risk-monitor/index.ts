@@ -72,6 +72,25 @@ interface BotSummary {
   byType: Record<string, number>;
 }
 
+// Risk Check Result from Execution Engine
+interface RiskCheckResult {
+  passed: boolean;
+  reason?: string;
+  filterName: string;
+  metadata?: Record<string, unknown>;
+}
+
+// Risk Check Event
+interface RiskCheckEvent {
+  userId: string;
+  symbol: string;
+  direction: 'LONG' | 'SHORT';
+  passed: boolean;
+  checks: RiskCheckResult[];
+  timestamp: Date;
+  positionId?: string;
+}
+
 // State
 let riskState: RiskState = {
   riskScore: 25,
@@ -374,6 +393,72 @@ io.on("connection", (socket) => {
       alert.acknowledged = true;
       io.emit('alert_acknowledged', alert);
     }
+  });
+
+  // Handle risk check event from execution engine
+  socket.on("risk_check_event", (event: RiskCheckEvent) => {
+    console.log(`[RiskMonitor] Risk check event: ${event.symbol} ${event.direction} - ${event.passed ? 'PASSED' : 'FAILED'}`);
+    
+    // Broadcast to all clients
+    io.emit("risk_check_notification", event);
+    
+    // If risk check failed, create an alert
+    if (!event.passed) {
+      const failedChecks = event.checks.filter(c => !c.passed);
+      const reasons = failedChecks.map(c => c.reason).join('; ');
+      
+      addAlert({
+        type: 'warning',
+        message: `Risk check failed for ${event.symbol}: ${reasons}`,
+        data: {
+          symbol: event.symbol,
+          direction: event.direction,
+          failedChecks,
+          userId: event.userId,
+          positionId: event.positionId,
+        },
+      });
+    }
+    
+    // Update risk score based on check results
+    if (event.passed) {
+      // Slight decrease in risk score when checks pass (good behavior)
+      const newScore = Math.max(0, riskState.riskScore - 0.5);
+      updateRiskState({ riskScore: newScore });
+    } else {
+      // Increase risk score when checks fail
+      const newScore = Math.min(100, riskState.riskScore + 2);
+      updateRiskState({ riskScore: newScore });
+    }
+  });
+
+  // Batch risk check events (for high-frequency trading)
+  socket.on("batch_risk_check_events", (events: RiskCheckEvent[]) => {
+    const failedCount = events.filter(e => !e.passed).length;
+    const passedCount = events.filter(e => e.passed).length;
+    
+    io.emit("batch_risk_check_summary", {
+      total: events.length,
+      passed: passedCount,
+      failed: failedCount,
+      timestamp: new Date(),
+    });
+    
+    // Update risk score based on batch results
+    if (failedCount > passedCount) {
+      const newScore = Math.min(100, riskState.riskScore + failedCount * 0.5);
+      updateRiskState({ riskScore: newScore });
+    }
+  });
+
+  // Get risk check history for user
+  socket.on("get_risk_check_history", (userId: string) => {
+    // Return filtered alerts for this user
+    const userAlerts = alertHistory.filter(
+      a => a.data?.userId === userId && a.message.includes('Risk check')
+    ).slice(0, 20);
+    
+    socket.emit("risk_check_history", userAlerts);
   });
 
   // Update risk manually

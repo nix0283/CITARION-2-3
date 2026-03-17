@@ -100,8 +100,8 @@ export function filterSignal(
   
   // TP Required Filter
   if (config.requireTP) {
-    const hasTP = signal.takeProfit !== null || 
-      (signal.takeProfits && JSON.parse(signal.takeProfits as string).length > 0);
+    const parsedTPs = signal.takeProfits ? JSON.parse(signal.takeProfits) : [];
+    const hasTP = parsedTPs.length > 0;
     filters.push({
       name: "requireTP",
       passed: hasTP,
@@ -144,33 +144,46 @@ export function filterSignal(
   }
   
   // R:R Filter
-  if (config.minRiskRewardRatio && signal.stopLoss && signal.takeProfit) {
-    const rr = calculateRR(
-      signal.entryPrice,
-      signal.stopLoss,
-      signal.takeProfit,
-      signal.direction as "LONG" | "SHORT"
-    );
-    const rrValid = rr >= config.minRiskRewardRatio;
-    filters.push({
-      name: "minRiskRewardRatio",
-      passed: rrValid,
-      reason: rrValid ? undefined : `R:R ${rr.toFixed(2)} below minimum ${config.minRiskRewardRatio}`
-    });
-    if (!rrValid) passed = false;
-    totalScore += rrValid ? 20 : 0;
+  if (config.minRiskRewardRatio && signal.stopLoss) {
+    // Parse entry prices from JSON
+    const parsedEntries = signal.entryPrices ? JSON.parse(signal.entryPrices) : [];
+    const parsedTPs = signal.takeProfits ? JSON.parse(signal.takeProfits) : [];
+    
+    if (parsedEntries.length > 0 && parsedTPs.length > 0) {
+      const entryPrice = parsedEntries[0];
+      const tpPrice = parsedTPs[0].price || parsedTPs[0];
+      
+      const rr = calculateRR(
+        entryPrice,
+        signal.stopLoss,
+        tpPrice,
+        signal.direction as "LONG" | "SHORT"
+      );
+      const rrValid = rr >= config.minRiskRewardRatio;
+      filters.push({
+        name: "minRiskRewardRatio",
+        passed: rrValid,
+        reason: rrValid ? undefined : `R:R ${rr.toFixed(2)} below minimum ${config.minRiskRewardRatio}`
+      });
+      if (!rrValid) passed = false;
+      totalScore += rrValid ? 20 : 0;
+    }
   }
   
   // Max Entry Distance Filter
   if (config.maxEntryDistance && currentPrice) {
-    const distance = Math.abs(signal.entryPrice - currentPrice) / currentPrice * 100;
-    const distanceValid = distance <= config.maxEntryDistance;
-    filters.push({
-      name: "maxEntryDistance",
-      passed: distanceValid,
-      reason: distanceValid ? undefined : `Entry distance ${distance.toFixed(2)}% exceeds max ${config.maxEntryDistance}%`
-    });
-    if (!distanceValid) passed = false;
+    const parsedEntries = signal.entryPrices ? JSON.parse(signal.entryPrices) : [];
+    if (parsedEntries.length > 0) {
+      const entryPrice = parsedEntries[0];
+      const distance = Math.abs(entryPrice - currentPrice) / currentPrice * 100;
+      const distanceValid = distance <= config.maxEntryDistance;
+      filters.push({
+        name: "maxEntryDistance",
+        passed: distanceValid,
+        reason: distanceValid ? undefined : `Entry distance ${distance.toFixed(2)}% exceeds max ${config.maxEntryDistance}%`
+      });
+      if (!distanceValid) passed = false;
+    }
   }
   
   // Signal Age Filter
@@ -217,12 +230,19 @@ export function scoreSignal(
 ): number {
   let score = 50; // Base score
   
+  // Parse entry prices and TPs from JSON
+  const parsedEntries = signal.entryPrices ? JSON.parse(signal.entryPrices) : [];
+  const parsedTPs = signal.takeProfits ? JSON.parse(signal.takeProfits) : [];
+  
   // R:R bonus
-  if (signal.stopLoss && signal.takeProfit) {
+  if (signal.stopLoss && parsedEntries.length > 0 && parsedTPs.length > 0) {
+    const entryPrice = parsedEntries[0];
+    const tpPrice = parsedTPs[0].price || parsedTPs[0];
+    
     const rr = calculateRR(
-      signal.entryPrice,
+      entryPrice,
       signal.stopLoss,
-      signal.takeProfit,
+      tpPrice,
       signal.direction as "LONG" | "SHORT"
     );
     if (rr >= 3) score += 20;
@@ -234,11 +254,8 @@ export function scoreSignal(
   if (signal.stopLoss) score += 10;
   
   // Has multiple TPs bonus
-  if (signal.takeProfits) {
-    const tps = JSON.parse(signal.takeProfits as string);
-    if (tps.length >= 3) score += 10;
-    else if (tps.length >= 2) score += 5;
-  }
+  if (parsedTPs.length >= 3) score += 10;
+  else if (parsedTPs.length >= 2) score += 5;
   
   // Cap at 100
   return Math.min(100, Math.max(0, score));

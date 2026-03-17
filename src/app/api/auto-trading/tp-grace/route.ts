@@ -3,7 +3,8 @@ import { db } from "@/lib/db";
 import {
   executeTPGrace,
   validateTPGraceConfig,
-  type TPGraceConfig
+  type TPGraceConfig,
+  type TPGraceState
 } from "@/lib/auto-trading/tp-grace";
 
 /**
@@ -32,7 +33,12 @@ export async function POST(request: NextRequest) {
 
     // Get position from database
     const position = await db.position.findUnique({
-      where: { id: positionId }
+      where: { id: positionId },
+      include: {
+        Signal: {
+          select: { signalId: true }
+        }
+      }
     });
 
     if (!position) {
@@ -59,16 +65,22 @@ export async function POST(request: NextRequest) {
     }
 
     // Get existing state if provided
-    let existingState = null;
+    let existingState: TPGraceState | undefined = undefined;
     if (existingStateId) {
       const stateRecord = await db.tPGraceState.findUnique({
         where: { id: existingStateId }
       });
       if (stateRecord) {
-        existingState = {
-          ...stateRecord,
-          tpTargets: JSON.parse(stateRecord.tpTargets)
-        };
+        try {
+          existingState = {
+            ...stateRecord,
+            tpTargets: JSON.parse(stateRecord.tpTargets || "[]"),
+            status: stateRecord.status as "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED",
+            direction: stateRecord.direction as "LONG" | "SHORT"
+          } as TPGraceState;
+        } catch (e) {
+          console.error("Failed to parse existing state:", e);
+        }
       }
     }
 
@@ -87,11 +99,13 @@ export async function POST(request: NextRequest) {
 
     // Save state to database
     if (results[0]?.state) {
+      const signalId = position.Signal?.signalId || null;
+      
       await db.tPGraceState.upsert({
         where: { positionId },
         create: {
           positionId,
-          signalId: position.signalId || undefined,
+          signalId,
           tpTargets: JSON.stringify(results[0].state.tpTargets),
           totalRetries: results[0].state.totalRetries,
           maxRetries: results[0].state.maxRetries,

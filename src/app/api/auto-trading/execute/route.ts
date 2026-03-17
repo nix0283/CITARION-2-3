@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import {
   executeFirstEntryAsMarket,
+  parseEntryPrices,
+  parseTakeProfits,
   type FirstEntryConfig,
   type FirstEntryMode
 } from "@/lib/auto-trading/first-entry-market";
@@ -65,7 +67,13 @@ export async function POST(request: NextRequest) {
     } = {};
 
     const direction = signal.direction as "LONG" | "SHORT";
-    const marketPrice = currentPrice || signal.entryPrice;
+    
+    // Parse entry prices from signal
+    const entryPrices = parseEntryPrices(signal);
+    const firstEntryPrice = entryPrices.length > 0 ? entryPrices[0] : 0;
+    
+    // Use provided currentPrice or first entry price
+    const marketPrice = currentPrice || firstEntryPrice;
 
     // 1. Signal Filtering
     const filterConfig: SignalFilterConfig = {
@@ -107,7 +115,8 @@ export async function POST(request: NextRequest) {
       const firstEntryConfig: FirstEntryConfig = {
         enabled: true,
         mode: botConfig.firstEntryAsMarketActivate as FirstEntryMode,
-        maxPriceCap: botConfig.firstEntryAsMarketCap
+        maxPriceCap: botConfig.firstEntryAsMarketCap,
+        onlyIfNotDefinedByGroup: false // Default, could be added to botConfig
       };
 
       const firstEntryResult = await executeFirstEntryAsMarket(
@@ -131,34 +140,26 @@ export async function POST(request: NextRequest) {
         maxRetries: 3 // Default
       };
 
-      // Parse TP targets
-      let tpTargets: Array<{ price: number; amount: number }> = [];
-      if (signal.takeProfits) {
-        try {
-          const tps = JSON.parse(signal.takeProfits);
-          tpTargets = tps.map((tp: any) => ({
-            price: tp.price,
-            amount: tp.percentage || 100 / tps.length
-          }));
-        } catch (e) {
-          // Use single TP if available
-          if (signal.takeProfit) {
-            tpTargets = [{ price: signal.takeProfit, amount: 100 }];
-          }
-        }
+      // Parse TP targets from JSON
+      const parsedTPs = parseTakeProfits(signal);
+      const tpTargets: Array<{ price: number; amount: number }> = parsedTPs.map(tp => ({
+        price: tp.price,
+        amount: tp.percentage || (100 / parsedTPs.length)
+      }));
+
+      if (tpTargets.length > 0) {
+        const tpGraceResults = await executeTPGrace(
+          signal.id,
+          tpTargets,
+          tpGraceConfig,
+          direction
+        );
+
+        executionResults.tpGrace = {
+          success: tpGraceResults[0]?.success ?? false,
+          retriesNeeded: tpGraceResults.filter(r => r.retryPlaced).length
+        };
       }
-
-      const tpGraceResults = await executeTPGrace(
-        signal.id,
-        tpTargets,
-        tpGraceConfig,
-        direction
-      );
-
-      executionResults.tpGrace = {
-        success: tpGraceResults[0]?.success ?? false,
-        retriesNeeded: tpGraceResults.filter(r => r.retryPlaced).length
-      };
     }
 
     // 4. Trailing Stop (setup)
@@ -173,6 +174,9 @@ export async function POST(request: NextRequest) {
 
       const validation = validateTrailingConfig(trailingConfig);
       if (validation.valid && signal.stopLoss) {
+        // Use first entry price for trailing state
+        const entryPriceForTrailing = firstEntryPrice || marketPrice;
+        
         const trailingState = {
           id: `ts-${Date.now()}`,
           positionId: signal.id,
@@ -180,9 +184,9 @@ export async function POST(request: NextRequest) {
           status: "INACTIVE" as const,
           originalSL: signal.stopLoss,
           currentSL: signal.stopLoss,
-          avgEntryPrice: signal.entryPrice,
-          highestPrice: signal.entryPrice,
-          lowestPrice: signal.entryPrice,
+          avgEntryPrice: entryPriceForTrailing,
+          highestPrice: entryPriceForTrailing,
+          lowestPrice: entryPriceForTrailing,
           triggerTargetIndex: -1,
           lastTPPrice: null,
           last2TPPrice: null,
@@ -193,17 +197,7 @@ export async function POST(request: NextRequest) {
         };
 
         // Parse TP targets for trailing
-        let tpPrices: number[] = [];
-        if (signal.takeProfits) {
-          try {
-            const tps = JSON.parse(signal.takeProfits);
-            tpPrices = tps.map((tp: any) => tp.price);
-          } catch (e) {
-            if (signal.takeProfit) {
-              tpPrices = [signal.takeProfit];
-            }
-          }
-        }
+        const tpPrices = parseTakeProfits(signal).map(tp => tp.price);
 
         const trailingResult = processTrailingStop(
           trailingState,

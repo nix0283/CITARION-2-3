@@ -246,6 +246,34 @@ export function isTPBeforeEntry(
 }
 
 /**
+ * Parse entry prices from signal
+ * Signal.entryPrices is a JSON string: "[50000, 49500, 49000]"
+ */
+export function parseEntryPrices(signal: Signal): number[] {
+  if (!signal.entryPrices) return [];
+  try {
+    const parsed = JSON.parse(signal.entryPrices);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Parse take profits from signal
+ * Signal.takeProfits is a JSON string: '[{"price": 52000, "percentage": 30}, ...]'
+ */
+export function parseTakeProfits(signal: Signal): Array<{ price: number; percentage?: number }> {
+  if (!signal.takeProfits) return [];
+  try {
+    const parsed = JSON.parse(signal.takeProfits);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
  * Execute first entry as market
  * Main entry point for first entry logic
  */
@@ -274,12 +302,27 @@ export async function executeFirstEntryAsMarket(
   }
   
   const direction = signal.direction as "LONG" | "SHORT";
-  const entryPrice = signal.entryPrice;
-  const amount = signal.amount || 100; // Default amount
   
-  // Check TP protection
-  if (signal.takeProfit) {
-    if (isTPBeforeEntry(entryPrice, signal.takeProfit, direction)) {
+  // Parse entry prices from JSON
+  const entryPrices = parseEntryPrices(signal);
+  if (entryPrices.length === 0) {
+    return {
+      success: false,
+      state: null as unknown as FirstEntryState,
+      orderPlaced: false,
+      error: "No entry prices found in signal"
+    };
+  }
+  
+  // Use first entry price for first entry logic
+  const entryPrice = entryPrices[0];
+  const amount = signal.amountPerTrade || 100; // Default amount
+  
+  // Check TP protection - parse from JSON
+  const takeProfits = parseTakeProfits(signal);
+  if (takeProfits.length > 0) {
+    const firstTP = takeProfits[0].price;
+    if (isTPBeforeEntry(entryPrice, firstTP, direction)) {
       return {
         success: false,
         state: null as unknown as FirstEntryState,
@@ -353,5 +396,7 @@ export default {
   createFirstEntryState,
   processFirstEntryIteration,
   isTPBeforeEntry,
-  executeFirstEntryAsMarket
+  executeFirstEntryAsMarket,
+  parseEntryPrices,
+  parseTakeProfits
 };

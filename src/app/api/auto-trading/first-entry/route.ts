@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import {
   executeFirstEntryAsMarket,
   validateFirstEntryConfig,
+  parseEntryPrices,
   type FirstEntryConfig,
   type FirstEntryMode
 } from "@/lib/auto-trading/first-entry-market";
@@ -57,11 +58,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Parse entry prices and get first entry price
+    const entryPrices = parseEntryPrices(signal);
+    const firstEntryPrice = entryPrices.length > 0 ? entryPrices[0] : 0;
+    
+    // Use provided currentPrice or first entry price
+    const price = currentPrice || firstEntryPrice;
+
     // Execute First Entry as Market
     const result = await executeFirstEntryAsMarket(
       signal,
       entryConfig,
-      currentPrice || signal.entryPrice
+      price
     );
 
     return NextResponse.json({
