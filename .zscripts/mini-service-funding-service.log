@@ -22894,3 +22894,1202 @@ $ bun --hot index.ts
 [OKX] WebSocket disconnected
 [OKX] Connecting WebSocket...
 [OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74678.9
+[okx] Updated markPrice for ETHUSDT: 2335.17
+[okx] Updated markPrice for SOLUSDT: 95.07
+[okx] Updated markPrice for BNBUSDT: 673.5
+[okx] Updated markPrice for XRPUSDT: 1.5339
+[okx] Updated markPrice for DOGEUSDT: 0.10094
+[okx] Updated markPrice for ADAUSDT: 0.289
+[okx] Updated markPrice for AVAXUSDT: 10.276
+[okx] Updated markPrice for LINKUSDT: 9.865
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74642.5
+[okx] Updated markPrice for ETHUSDT: 2334.25
+[okx] Updated markPrice for SOLUSDT: 95.01
+[okx] Updated markPrice for BNBUSDT: 673.3
+[okx] Updated markPrice for XRPUSDT: 1.5336
+[okx] Updated markPrice for DOGEUSDT: 0.1009
+[okx] Updated markPrice for ADAUSDT: 0.2889
+[okx] Updated markPrice for AVAXUSDT: 10.27
+[okx] Updated markPrice for LINKUSDT: 9.863
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74633.7
+[okx] Updated markPrice for ETHUSDT: 2334.39
+[okx] Updated markPrice for SOLUSDT: 95.02
+[okx] Updated markPrice for BNBUSDT: 673.2
+[okx] Updated markPrice for XRPUSDT: 1.5334
+[okx] Updated markPrice for DOGEUSDT: 0.1009
+[okx] Updated markPrice for ADAUSDT: 0.2889
+[okx] Updated markPrice for AVAXUSDT: 10.267
+[okx] Updated markPrice for LINKUSDT: 9.863
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[Bitget] WebSocket disconnected
+[Bitget] Connecting WebSocket...
+[Bitget] WebSocket connected
+[OKX] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74600.3
+[okx] Updated markPrice for ETHUSDT: 2332.91
+[okx] Updated markPrice for SOLUSDT: 94.97
+[okx] Updated markPrice for BNBUSDT: 673
+[okx] Updated markPrice for XRPUSDT: 1.5329
+[okx] Updated markPrice for DOGEUSDT: 0.10084
+[okx] Updated markPrice for ADAUSDT: 0.2888
+[okx] Updated markPrice for AVAXUSDT: 10.266
+[okx] Updated markPrice for LINKUSDT: 9.86
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74599.8
+[okx] Updated markPrice for ETHUSDT: 2333.1
+[okx] Updated markPrice for SOLUSDT: 94.97
+[okx] Updated markPrice for BNBUSDT: 673
+[okx] Updated markPrice for XRPUSDT: 1.5329
+[okx] Updated markPrice for DOGEUSDT: 0.10083
+[okx] Updated markPrice for ADAUSDT: 0.2888
+[okx] Updated markPrice for AVAXUSDT: 10.265
+[okx] Updated markPrice for LINKUSDT: 9.86
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74527.8
+[okx] Updated markPrice for ETHUSDT: 2331.73
+[okx] Updated markPrice for SOLUSDT: 94.9
+[okx] Updated markPrice for BNBUSDT: 672.6
+[okx] Updated markPrice for XRPUSDT: 1.5306
+[okx] Updated markPrice for DOGEUSDT: 0.10066
+[okx] Updated markPrice for ADAUSDT: 0.2885
+[okx] Updated markPrice for AVAXUSDT: 10.254
+[okx] Updated markPrice for LINKUSDT: 9.848
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74582.9
+[okx] Updated markPrice for ETHUSDT: 2333.11
+[okx] Updated markPrice for SOLUSDT: 94.99
+[okx] Updated markPrice for BNBUSDT: 673
+[okx] Updated markPrice for XRPUSDT: 1.5327
+[okx] Updated markPrice for DOGEUSDT: 0.10074
+[okx] Updated markPrice for ADAUSDT: 0.289
+[okx] Updated markPrice for AVAXUSDT: 10.264
+[okx] Updated markPrice for LINKUSDT: 9.859
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74580.5
+[okx] Updated markPrice for ETHUSDT: 2332.91
+[okx] Updated markPrice for SOLUSDT: 94.98
+[okx] Updated markPrice for BNBUSDT: 672.8
+[okx] Updated markPrice for XRPUSDT: 1.5324
+[okx] Updated markPrice for DOGEUSDT: 0.10071
+[okx] Updated markPrice for ADAUSDT: 0.2889
+[okx] Updated markPrice for AVAXUSDT: 10.264
+[okx] Updated markPrice for LINKUSDT: 9.856
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74596.7
+[okx] Updated markPrice for ETHUSDT: 2333.94
+[okx] Updated markPrice for SOLUSDT: 95.02
+[okx] Updated markPrice for BNBUSDT: 673.1
+[okx] Updated markPrice for XRPUSDT: 1.5326
+[okx] Updated markPrice for DOGEUSDT: 0.10074
+[okx] Updated markPrice for ADAUSDT: 0.2891
+[okx] Updated markPrice for AVAXUSDT: 10.265
+[okx] Updated markPrice for LINKUSDT: 9.859
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[Bitget] WebSocket disconnected
+[Bitget] Connecting WebSocket...
+[Bitget] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74567.1
+[okx] Updated markPrice for ETHUSDT: 2331.94
+[okx] Updated markPrice for SOLUSDT: 94.95
+[okx] Updated markPrice for BNBUSDT: 672.7
+[okx] Updated markPrice for XRPUSDT: 1.532
+[okx] Updated markPrice for DOGEUSDT: 0.10066
+[okx] Updated markPrice for ADAUSDT: 0.2889
+[okx] Updated markPrice for AVAXUSDT: 10.258
+[okx] Updated markPrice for LINKUSDT: 9.854
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74531.1
+[okx] Updated markPrice for ETHUSDT: 2330.53
+[okx] Updated markPrice for SOLUSDT: 94.85
+[okx] Updated markPrice for BNBUSDT: 672.4
+[okx] Updated markPrice for XRPUSDT: 1.5312
+[okx] Updated markPrice for DOGEUSDT: 0.10061
+[okx] Updated markPrice for ADAUSDT: 0.2887
+[okx] Updated markPrice for AVAXUSDT: 10.258
+[okx] Updated markPrice for LINKUSDT: 9.848
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74531.1
+[okx] Updated markPrice for ETHUSDT: 2330.87
+[okx] Updated markPrice for SOLUSDT: 94.89
+[okx] Updated markPrice for BNBUSDT: 672.6
+[okx] Updated markPrice for XRPUSDT: 1.5313
+[okx] Updated markPrice for DOGEUSDT: 0.10063
+[okx] Updated markPrice for ADAUSDT: 0.2888
+[okx] Updated markPrice for AVAXUSDT: 10.26
+[okx] Updated markPrice for LINKUSDT: 9.851
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74530.6
+[okx] Updated markPrice for ETHUSDT: 2330.85
+[okx] Updated markPrice for SOLUSDT: 94.87
+[okx] Updated markPrice for BNBUSDT: 672.5
+[okx] Updated markPrice for XRPUSDT: 1.5309
+[okx] Updated markPrice for DOGEUSDT: 0.10061
+[okx] Updated markPrice for ADAUSDT: 0.2887
+[okx] Updated markPrice for AVAXUSDT: 10.26
+[okx] Updated markPrice for LINKUSDT: 9.851
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[Bitget] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[Bitget] Connecting WebSocket...
+[Bitget] WebSocket connected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74529.4
+[okx] Updated markPrice for ETHUSDT: 2330.8
+[okx] Updated markPrice for SOLUSDT: 94.86
+[okx] Updated markPrice for BNBUSDT: 672.6
+[okx] Updated markPrice for XRPUSDT: 1.532
+[okx] Updated markPrice for DOGEUSDT: 0.10061
+[okx] Updated markPrice for ADAUSDT: 0.2888
+[okx] Updated markPrice for AVAXUSDT: 10.26
+[okx] Updated markPrice for LINKUSDT: 9.85
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74527.2
+[okx] Updated markPrice for ETHUSDT: 2329.56
+[okx] Updated markPrice for SOLUSDT: 94.84
+[okx] Updated markPrice for BNBUSDT: 672.7
+[okx] Updated markPrice for XRPUSDT: 1.5328
+[okx] Updated markPrice for DOGEUSDT: 0.10058
+[okx] Updated markPrice for ADAUSDT: 0.2888
+[okx] Updated markPrice for AVAXUSDT: 10.26
+[okx] Updated markPrice for LINKUSDT: 9.85
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74519.4
+[okx] Updated markPrice for ETHUSDT: 2329.7
+[okx] Updated markPrice for SOLUSDT: 94.83
+[okx] Updated markPrice for BNBUSDT: 672.6
+[okx] Updated markPrice for XRPUSDT: 1.5337
+[okx] Updated markPrice for DOGEUSDT: 0.10055
+[okx] Updated markPrice for ADAUSDT: 0.2889
+[okx] Updated markPrice for AVAXUSDT: 10.26
+[okx] Updated markPrice for LINKUSDT: 9.852
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74489.8
+[okx] Updated markPrice for ETHUSDT: 2328.35
+[okx] Updated markPrice for SOLUSDT: 94.77
+[okx] Updated markPrice for BNBUSDT: 672.3
+[okx] Updated markPrice for XRPUSDT: 1.5329
+[okx] Updated markPrice for DOGEUSDT: 0.10051
+[okx] Updated markPrice for ADAUSDT: 0.2888
+[okx] Updated markPrice for AVAXUSDT: 10.259
+[okx] Updated markPrice for LINKUSDT: 9.849
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74487
+[okx] Updated markPrice for ETHUSDT: 2328.29
+[okx] Updated markPrice for SOLUSDT: 94.81
+[okx] Updated markPrice for BNBUSDT: 672.2
+[okx] Updated markPrice for XRPUSDT: 1.5323
+[okx] Updated markPrice for DOGEUSDT: 0.10052
+[okx] Updated markPrice for ADAUSDT: 0.2888
+[okx] Updated markPrice for AVAXUSDT: 10.259
+[okx] Updated markPrice for LINKUSDT: 9.848
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[Bitget] WebSocket disconnected
+[Bitget] Connecting WebSocket...
+[Bitget] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74530.6
+[okx] Updated markPrice for ETHUSDT: 2329.49
+[okx] Updated markPrice for SOLUSDT: 94.87
+[okx] Updated markPrice for BNBUSDT: 672.4
+[okx] Updated markPrice for XRPUSDT: 1.5329
+[okx] Updated markPrice for DOGEUSDT: 0.1006
+[okx] Updated markPrice for ADAUSDT: 0.2889
+[okx] Updated markPrice for AVAXUSDT: 10.263
+[okx] Updated markPrice for LINKUSDT: 9.85
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74577.9
+[okx] Updated markPrice for ETHUSDT: 2331.64
+[okx] Updated markPrice for SOLUSDT: 94.94
+[okx] Updated markPrice for BNBUSDT: 672.7
+[okx] Updated markPrice for XRPUSDT: 1.5338
+[okx] Updated markPrice for DOGEUSDT: 0.10068
+[okx] Updated markPrice for ADAUSDT: 0.2891
+[okx] Updated markPrice for AVAXUSDT: 10.269
+[okx] Updated markPrice for LINKUSDT: 9.854
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74610.2
+[okx] Updated markPrice for ETHUSDT: 2331.9
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for SOLUSDT: 94.95
+[okx] Updated markPrice for BNBUSDT: 672.7
+[okx] Updated markPrice for XRPUSDT: 1.5349
+[okx] Updated markPrice for DOGEUSDT: 0.10064
+[okx] Updated markPrice for ADAUSDT: 0.2891
+[okx] Updated markPrice for AVAXUSDT: 10.269
+[okx] Updated markPrice for LINKUSDT: 9.856
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74588.1
+[okx] Updated markPrice for ETHUSDT: 2331.29
+[okx] Updated markPrice for SOLUSDT: 94.95
+[okx] Updated markPrice for BNBUSDT: 672.7
+[okx] Updated markPrice for XRPUSDT: 1.535
+[okx] Updated markPrice for DOGEUSDT: 0.10064
+[okx] Updated markPrice for ADAUSDT: 0.2891
+[okx] Updated markPrice for AVAXUSDT: 10.267
+[okx] Updated markPrice for LINKUSDT: 9.856
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74620.2
+[okx] Updated markPrice for ETHUSDT: 2331.58
+[okx] Updated markPrice for SOLUSDT: 94.99
+[okx] Updated markPrice for BNBUSDT: 672.8
+[okx] Updated markPrice for XRPUSDT: 1.5354
+[okx] Updated markPrice for DOGEUSDT: 0.10064
+[okx] Updated markPrice for ADAUSDT: 0.2891
+[okx] Updated markPrice for AVAXUSDT: 10.268
+[okx] Updated markPrice for LINKUSDT: 9.858
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[Bitget] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[Bitget] Connecting WebSocket...
+[Bitget] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74655.5
+[okx] Updated markPrice for ETHUSDT: 2332.52
+[okx] Updated markPrice for SOLUSDT: 94.98
+[okx] Updated markPrice for BNBUSDT: 673
+[okx] Updated markPrice for XRPUSDT: 1.5368
+[okx] Updated markPrice for DOGEUSDT: 0.10072
+[okx] Updated markPrice for ADAUSDT: 0.2893
+[okx] Updated markPrice for AVAXUSDT: 10.274
+[okx] Updated markPrice for LINKUSDT: 9.863
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74726.3
+[okx] Updated markPrice for ETHUSDT: 2334.09
+[okx] Updated markPrice for SOLUSDT: 95.12
+[okx] Updated markPrice for BNBUSDT: 673.4
+[okx] Updated markPrice for XRPUSDT: 1.5397
+[okx] Updated markPrice for DOGEUSDT: 0.10085
+[okx] Updated markPrice for ADAUSDT: 0.2897
+[okx] Updated markPrice for AVAXUSDT: 10.285
+[okx] Updated markPrice for LINKUSDT: 9.874
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74702
+[okx] Updated markPrice for ETHUSDT: 2333.21
+[okx] Updated markPrice for SOLUSDT: 95.09
+[okx] Updated markPrice for BNBUSDT: 673.4
+[okx] Updated markPrice for XRPUSDT: 1.5388
+[okx] Updated markPrice for DOGEUSDT: 0.10083
+[okx] Updated markPrice for ADAUSDT: 0.2897
+[okx] Updated markPrice for AVAXUSDT: 10.287
+[okx] Updated markPrice for LINKUSDT: 9.873
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74699.3
+[okx] Updated markPrice for ETHUSDT: 2333.19
+[okx] Updated markPrice for SOLUSDT: 95.05
+[okx] Updated markPrice for BNBUSDT: 673.3
+[okx] Updated markPrice for XRPUSDT: 1.5383
+[okx] Updated markPrice for DOGEUSDT: 0.10078
+[okx] Updated markPrice for ADAUSDT: 0.2895
+[okx] Updated markPrice for AVAXUSDT: 10.284
+[okx] Updated markPrice for LINKUSDT: 9.87
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74674.5
+[okx] Updated markPrice for ETHUSDT: 2332.14
+[okx] Updated markPrice for SOLUSDT: 94.99
+[okx] Updated markPrice for BNBUSDT: 673.3
+[okx] Updated markPrice for XRPUSDT: 1.5375
+[okx] Updated markPrice for DOGEUSDT: 0.10076
+[okx] Updated markPrice for ADAUSDT: 0.2894
+[okx] Updated markPrice for AVAXUSDT: 10.283
+[okx] Updated markPrice for LINKUSDT: 9.868
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[Bitget] WebSocket disconnected
+[Bitget] Connecting WebSocket...
+[Bitget] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74631
+[okx] Updated markPrice for ETHUSDT: 2328.36
+[okx] Updated markPrice for SOLUSDT: 94.92
+[okx] Updated markPrice for BNBUSDT: 672.6
+[okx] Updated markPrice for XRPUSDT: 1.5364
+[okx] Updated markPrice for DOGEUSDT: 0.10061
+[okx] Updated markPrice for ADAUSDT: 0.289
+[okx] Updated markPrice for AVAXUSDT: 10.27
+[okx] Updated markPrice for LINKUSDT: 9.86
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74625.5
+[okx] Updated markPrice for ETHUSDT: 2327.9
+[okx] Updated markPrice for SOLUSDT: 94.96
+[okx] Updated markPrice for BNBUSDT: 672.7
+[okx] Updated markPrice for XRPUSDT: 1.5366
+[okx] Updated markPrice for DOGEUSDT: 0.10059
+[okx] Updated markPrice for ADAUSDT: 0.2891
+[okx] Updated markPrice for AVAXUSDT: 10.269
+[okx] Updated markPrice for LINKUSDT: 9.859
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74610.1
+[okx] Updated markPrice for ETHUSDT: 2327.43
+[okx] Updated markPrice for SOLUSDT: 94.96
+[okx] Updated markPrice for BNBUSDT: 672.8
+[okx] Updated markPrice for XRPUSDT: 1.5362
+[okx] Updated markPrice for DOGEUSDT: 0.10057
+[okx] Updated markPrice for ADAUSDT: 0.2891
+[okx] Updated markPrice for AVAXUSDT: 10.271
+[okx] Updated markPrice for LINKUSDT: 9.86
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74620.6
+[okx] Updated markPrice for ETHUSDT: 2327.1
+[okx] Updated markPrice for SOLUSDT: 94.94
+[okx] Updated markPrice for BNBUSDT: 672.7
+[okx] Updated markPrice for XRPUSDT: 1.5366
+[okx] Updated markPrice for DOGEUSDT: 0.10062
+[okx] Updated markPrice for ADAUSDT: 0.2892
+[okx] Updated markPrice for AVAXUSDT: 10.271
+[okx] Updated markPrice for LINKUSDT: 9.86
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74603.9
+[okx] Updated markPrice for ETHUSDT: 2324.62
+[okx] Updated markPrice for SOLUSDT: 94.92
+[okx] Updated markPrice for BNBUSDT: 672.4
+[okx] Updated markPrice for XRPUSDT: 1.5362
+[okx] Updated markPrice for DOGEUSDT: 0.10056
+[okx] Updated markPrice for ADAUSDT: 0.2891
+[okx] Updated markPrice for AVAXUSDT: 10.265
+[okx] Updated markPrice for LINKUSDT: 9.855
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[Bitget] WebSocket disconnected
+[Bitget] Connecting WebSocket...
+[Bitget] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74649.8
+[okx] Updated markPrice for ETHUSDT: 2326
+[okx] Updated markPrice for SOLUSDT: 94.92
+[okx] Updated markPrice for BNBUSDT: 672.8
+[okx] Updated markPrice for XRPUSDT: 1.5375
+[okx] Updated markPrice for DOGEUSDT: 0.10053
+[okx] Updated markPrice for ADAUSDT: 0.2893
+[okx] Updated markPrice for AVAXUSDT: 10.272
+[okx] Updated markPrice for LINKUSDT: 9.863
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74645.2
+[okx] Updated markPrice for ETHUSDT: 2325.7
+[okx] Updated markPrice for SOLUSDT: 94.92
+[okx] Updated markPrice for BNBUSDT: 672.8
+[okx] Updated markPrice for XRPUSDT: 1.5375
+[okx] Updated markPrice for DOGEUSDT: 0.1005
+[okx] Updated markPrice for ADAUSDT: 0.2892
+[okx] Updated markPrice for AVAXUSDT: 10.27
+[okx] Updated markPrice for LINKUSDT: 9.86
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74621.2
+[okx] Updated markPrice for ETHUSDT: 2325.08
+[okx] Updated markPrice for SOLUSDT: 94.88
+[okx] Updated markPrice for BNBUSDT: 672.6
+[okx] Updated markPrice for XRPUSDT: 1.5374
+[okx] Updated markPrice for DOGEUSDT: 0.10049
+[okx] Updated markPrice for ADAUSDT: 0.2892
+[okx] Updated markPrice for AVAXUSDT: 10.27
+[okx] Updated markPrice for LINKUSDT: 9.859
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74634.2
+[okx] Updated markPrice for ETHUSDT: 2324.39
+[okx] Updated markPrice for SOLUSDT: 94.91
+[okx] Updated markPrice for BNBUSDT: 672.7
+[okx] Updated markPrice for XRPUSDT: 1.5371
+[okx] Updated markPrice for DOGEUSDT: 0.10053
+[okx] Updated markPrice for ADAUSDT: 0.2894
+[okx] Updated markPrice for AVAXUSDT: 10.27
+[okx] Updated markPrice for LINKUSDT: 9.86
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[Bitget] WebSocket disconnected
+[Bitget] Connecting WebSocket...
+[Bitget] WebSocket connected
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74638.7
+[okx] Updated markPrice for ETHUSDT: 2324.39
+[okx] Updated markPrice for SOLUSDT: 94.93
+[okx] Updated markPrice for BNBUSDT: 672.8
+[okx] Updated markPrice for XRPUSDT: 1.5377
+[okx] Updated markPrice for DOGEUSDT: 0.10053
+[okx] Updated markPrice for ADAUSDT: 0.2894
+[okx] Updated markPrice for AVAXUSDT: 10.271
+[okx] Updated markPrice for LINKUSDT: 9.86
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74641.9
+[okx] Updated markPrice for ETHUSDT: 2324.06
+[okx] Updated markPrice for SOLUSDT: 94.93
+[okx] Updated markPrice for BNBUSDT: 672.6
+[okx] Updated markPrice for XRPUSDT: 1.5371
+[okx] Updated markPrice for DOGEUSDT: 0.10051
+[okx] Updated markPrice for ADAUSDT: 0.2893
+[okx] Updated markPrice for AVAXUSDT: 10.269
+[okx] Updated markPrice for LINKUSDT: 9.858
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74628.4
+[okx] Updated markPrice for ETHUSDT: 2324.41
+[okx] Updated markPrice for SOLUSDT: 94.9
+[okx] Updated markPrice for BNBUSDT: 672.6
+[okx] Updated markPrice for XRPUSDT: 1.5373
+[okx] Updated markPrice for DOGEUSDT: 0.10049
+[okx] Updated markPrice for ADAUSDT: 0.2894
+[okx] Updated markPrice for AVAXUSDT: 10.269
+[okx] Updated markPrice for LINKUSDT: 9.857
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74573.4
+[okx] Updated markPrice for ETHUSDT: 2322.62
+[okx] Updated markPrice for SOLUSDT: 94.83
+[okx] Updated markPrice for BNBUSDT: 672.3
+[okx] Updated markPrice for XRPUSDT: 1.5358
+[okx] Updated markPrice for DOGEUSDT: 0.10039
+[okx] Updated markPrice for ADAUSDT: 0.2891
+[okx] Updated markPrice for AVAXUSDT: 10.262
+[okx] Updated markPrice for LINKUSDT: 9.847
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74560.5
+[okx] Updated markPrice for ETHUSDT: 2322.93
+[okx] Updated markPrice for SOLUSDT: 94.8
+[okx] Updated markPrice for BNBUSDT: 672.4
+[okx] Updated markPrice for XRPUSDT: 1.5363
+[okx] Updated markPrice for DOGEUSDT: 0.1004
+[okx] Updated markPrice for ADAUSDT: 0.2892
+[okx] Updated markPrice for AVAXUSDT: 10.268
+[okx] Updated markPrice for LINKUSDT: 9.847
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[Bitget] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74551.1
+[okx] Updated markPrice for ETHUSDT: 2322.8
+[okx] Updated markPrice for SOLUSDT: 94.77
+[okx] Updated markPrice for BNBUSDT: 672.2
+[okx] Updated markPrice for XRPUSDT: 1.5354
+[okx] Updated markPrice for DOGEUSDT: 0.10037
+[okx] Updated markPrice for ADAUSDT: 0.2892
+[okx] Updated markPrice for AVAXUSDT: 10.264
+[okx] Updated markPrice for LINKUSDT: 9.843
+[OKX] REST: Updated 9 symbols
+[Bitget] Connecting WebSocket...
+[BingX] REST: Updated 9 symbols
+[Bitget] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74514.7
+[okx] Updated markPrice for ETHUSDT: 2322.67
+[okx] Updated markPrice for SOLUSDT: 94.73
+[okx] Updated markPrice for BNBUSDT: 672.3
+[okx] Updated markPrice for XRPUSDT: 1.5362
+[okx] Updated markPrice for DOGEUSDT: 0.10038
+[okx] Updated markPrice for ADAUSDT: 0.2892
+[okx] Updated markPrice for AVAXUSDT: 10.259
+[okx] Updated markPrice for LINKUSDT: 9.841
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74427.4
+[okx] Updated markPrice for ETHUSDT: 2319.59
+[okx] Updated markPrice for SOLUSDT: 94.6
+[okx] Updated markPrice for BNBUSDT: 671.5
+[okx] Updated markPrice for XRPUSDT: 1.5329
+[okx] Updated markPrice for DOGEUSDT: 0.10022
+[okx] Updated markPrice for ADAUSDT: 0.2887
+[okx] Updated markPrice for AVAXUSDT: 10.25
+[okx] Updated markPrice for LINKUSDT: 9.83
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74485.8
+[okx] Updated markPrice for ETHUSDT: 2322.78
+[okx] Updated markPrice for SOLUSDT: 94.75
+[okx] Updated markPrice for BNBUSDT: 671.8
+[okx] Updated markPrice for XRPUSDT: 1.534
+[okx] Updated markPrice for DOGEUSDT: 0.10034
+[okx] Updated markPrice for ADAUSDT: 0.289
+[okx] Updated markPrice for AVAXUSDT: 10.257
+[okx] Updated markPrice for LINKUSDT: 9.838
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[Bitget] WebSocket disconnected
+[Bitget] Connecting WebSocket...
+[Bitget] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74509.8
+[okx] Updated markPrice for ETHUSDT: 2322.51
+[okx] Updated markPrice for SOLUSDT: 94.75
+[okx] Updated markPrice for BNBUSDT: 671.9
+[okx] Updated markPrice for XRPUSDT: 1.5337
+[okx] Updated markPrice for DOGEUSDT: 0.10038
+[okx] Updated markPrice for ADAUSDT: 0.2892
+[okx] Updated markPrice for AVAXUSDT: 10.261
+[okx] Updated markPrice for LINKUSDT: 9.841
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74522.7
+[okx] Updated markPrice for ETHUSDT: 2322.98
+[okx] Updated markPrice for SOLUSDT: 94.79
+[okx] Updated markPrice for BNBUSDT: 672.1
+[okx] Updated markPrice for XRPUSDT: 1.5337
+[okx] Updated markPrice for DOGEUSDT: 0.1004
+[okx] Updated markPrice for ADAUSDT: 0.2893
+[okx] Updated markPrice for AVAXUSDT: 10.261
+[okx] Updated markPrice for LINKUSDT: 9.841
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74466.2
+[okx] Updated markPrice for ETHUSDT: 2320.92
+[okx] Updated markPrice for SOLUSDT: 94.67
+[okx] Updated markPrice for BNBUSDT: 671.7
+[okx] Updated markPrice for XRPUSDT: 1.5318
+[okx] Updated markPrice for DOGEUSDT: 0.10029
+[okx] Updated markPrice for ADAUSDT: 0.2889
+[okx] Updated markPrice for AVAXUSDT: 10.251
+[okx] Updated markPrice for LINKUSDT: 9.831
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74421.5
+[okx] Updated markPrice for ETHUSDT: 2317.66
+[okx] Updated markPrice for SOLUSDT: 94.55
+[okx] Updated markPrice for BNBUSDT: 671.3
+[okx] Updated markPrice for XRPUSDT: 1.5299
+[okx] Updated markPrice for DOGEUSDT: 0.10019
+[okx] Updated markPrice for ADAUSDT: 0.2887
+[okx] Updated markPrice for AVAXUSDT: 10.244
+[okx] Updated markPrice for LINKUSDT: 9.821
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74470.2
+[okx] Updated markPrice for ETHUSDT: 2319.34
+[okx] Updated markPrice for SOLUSDT: 94.59
+[okx] Updated markPrice for BNBUSDT: 671.6
+[okx] Updated markPrice for XRPUSDT: 1.53
+[okx] Updated markPrice for DOGEUSDT: 0.10021
+[okx] Updated markPrice for ADAUSDT: 0.2888
+[okx] Updated markPrice for AVAXUSDT: 10.249
+[okx] Updated markPrice for LINKUSDT: 9.823
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[Bitget] WebSocket disconnected
+[Bitget] Connecting WebSocket...
+[Bitget] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74474.9
+[okx] Updated markPrice for ETHUSDT: 2319.37
+[okx] Updated markPrice for SOLUSDT: 94.63
+[okx] Updated markPrice for BNBUSDT: 671.5
+[okx] Updated markPrice for XRPUSDT: 1.5302
+[okx] Updated markPrice for DOGEUSDT: 0.10022
+[okx] Updated markPrice for ADAUSDT: 0.2888
+[okx] Updated markPrice for AVAXUSDT: 10.247
+[okx] Updated markPrice for LINKUSDT: 9.821
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74492.1
+[okx] Updated markPrice for ETHUSDT: 2319.48
+[okx] Updated markPrice for SOLUSDT: 94.66
+[okx] Updated markPrice for BNBUSDT: 671.6
+[okx] Updated markPrice for XRPUSDT: 1.5306
+[okx] Updated markPrice for DOGEUSDT: 0.10027
+[okx] Updated markPrice for ADAUSDT: 0.2889
+[okx] Updated markPrice for AVAXUSDT: 10.249
+[okx] Updated markPrice for LINKUSDT: 9.823
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74462.9
+[okx] Updated markPrice for ETHUSDT: 2317.99
+[okx] Updated markPrice for SOLUSDT: 94.6
+[okx] Updated markPrice for BNBUSDT: 671.4
+[okx] Updated markPrice for XRPUSDT: 1.5309
+[okx] Updated markPrice for DOGEUSDT: 0.10022
+[okx] Updated markPrice for ADAUSDT: 0.2888
+[okx] Updated markPrice for AVAXUSDT: 10.248
+[okx] Updated markPrice for LINKUSDT: 9.816
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[OKX] REST: Updated 9 symbols
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] WebSocket disconnected
+[OKX] Connecting WebSocket...
+[OKX] WebSocket connected
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74498.9
+[okx] Updated markPrice for ETHUSDT: 2319.61
+[okx] Updated markPrice for SOLUSDT: 94.67
+[okx] Updated markPrice for BNBUSDT: 671.4
+[okx] Updated markPrice for XRPUSDT: 1.5327
+[okx] Updated markPrice for DOGEUSDT: 0.10029
+[okx] Updated markPrice for ADAUSDT: 0.2891
+[okx] Updated markPrice for AVAXUSDT: 10.254
+[okx] Updated markPrice for LINKUSDT: 9.82
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols
+[OKX] Polling REST API...
+[BingX] Polling REST API...
+[okx] Updated markPrice for BTCUSDT: 74511.6
+[okx] Updated markPrice for ETHUSDT: 2319.89
+[okx] Updated markPrice for SOLUSDT: 94.7
+[okx] Updated markPrice for BNBUSDT: 671.6
+[okx] Updated markPrice for XRPUSDT: 1.533
+[okx] Updated markPrice for DOGEUSDT: 0.10028
+[okx] Updated markPrice for ADAUSDT: 0.2892
+[okx] Updated markPrice for AVAXUSDT: 10.254
+[okx] Updated markPrice for LINKUSDT: 9.821
+[OKX] REST: Updated 9 symbols
+[BingX] REST: Updated 9 symbols

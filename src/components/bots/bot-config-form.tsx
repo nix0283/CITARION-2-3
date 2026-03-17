@@ -47,6 +47,10 @@ import {
   ArrowUpDown,
   Clock,
   AlertTriangle,
+  Globe,
+  Calculator,
+  Info,
+  Bitcoin,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -93,9 +97,17 @@ function getTrailingDescription(type: string): string {
 interface BotConfigData {
   // General
   tradeAmount: number;
-  amountType: "FIXED" | "PERCENTAGE";
+  amountType: "FIXED_USD" | "FIXED_BTC" | "PERCENTAGE" | "RISK_PERCENTAGE";
   amountOverride: boolean;
   closeOnTPSLBeforeEntry: boolean;
+  
+  // Risk Percentage (Cornix-compatible)
+  riskPercentageValue: number; // 0.1-100%
+  riskPercentagePortfolioSize: number; // Portfolio size for risk calculation
+  
+  // Leverage Mode (Cornix-compatible)
+  leverageMode: "UP_TO" | "EXACTLY";
+  useGlobalLeverage: boolean;
   
   // First Entry as Market (Cornix-compatible)
   firstEntryAsMarketEnabled: boolean;
@@ -227,9 +239,17 @@ interface BotConfigData {
 
 const DEFAULT_CONFIG: BotConfigData = {
   tradeAmount: 100,
-  amountType: "FIXED",
+  amountType: "FIXED_USD",
   amountOverride: false,
   closeOnTPSLBeforeEntry: true,
+  
+  // Risk Percentage
+  riskPercentageValue: 1, // 1% risk by default
+  riskPercentagePortfolioSize: 10000, // $10,000 portfolio
+  
+  // Leverage Mode
+  leverageMode: "UP_TO",
+  useGlobalLeverage: false,
   firstEntryAsMarketEnabled: false,
   firstEntryAsMarketCap: 1, // 1% default
   firstEntryAsMarketActivate: "ENTRY_PRICE_REACHED",
@@ -440,35 +460,150 @@ export function BotConfigForm() {
           <AccordionContent className="px-4 pb-4">
             <div className="space-y-6 pt-2">
               
-              {/* Amount per Trade */}
-              <div className="space-y-3">
+              {/* Amount per Trade - Cornix Compatible */}
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label className="text-sm font-medium">Amount per Trade</Label>
                   <Select
                     value={config.amountType}
-                    onValueChange={(v) => updateConfig("amountType", v as "FIXED" | "PERCENTAGE")}
+                    onValueChange={(v) => updateConfig("amountType", v as BotConfigData["amountType"])}
                   >
-                    <SelectTrigger className="w-[140px] h-8">
+                    <SelectTrigger className="w-[160px] h-8">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="FIXED">Fixed (USDT)</SelectItem>
+                      <SelectItem value="FIXED_USD">Fixed (USDT)</SelectItem>
+                      <SelectItem value="FIXED_BTC">Fixed (BTC)</SelectItem>
                       <SelectItem value="PERCENTAGE">Percentage</SelectItem>
+                      <SelectItem value="RISK_PERCENTAGE">Risk Percentage</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 
-                <div className="flex items-center gap-4">
-                  <Input
-                    type="number"
-                    value={config.tradeAmount}
-                    onChange={(e) => updateConfig("tradeAmount", parseFloat(e.target.value))}
-                    className="w-32"
-                  />
-                  <span className="text-sm text-muted-foreground">
-                    {config.amountType === "PERCENTAGE" ? "% от баланса" : "USDT"}
-                  </span>
-                </div>
+                {/* Fixed USD Amount */}
+                {config.amountType === "FIXED_USD" && (
+                  <div className="flex items-center gap-4">
+                    <DollarSign className="h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="number"
+                      value={config.tradeAmount}
+                      onChange={(e) => updateConfig("tradeAmount", parseFloat(e.target.value))}
+                      className="w-32"
+                    />
+                    <span className="text-sm text-muted-foreground">USDT</span>
+                  </div>
+                )}
+
+                {/* Fixed BTC Amount */}
+                {config.amountType === "FIXED_BTC" && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-4">
+                      <Bitcoin className="h-4 w-4 text-orange-500" />
+                      <Input
+                        type="number"
+                        value={config.tradeAmount}
+                        onChange={(e) => updateConfig("tradeAmount", parseFloat(e.target.value))}
+                        className="w-32"
+                        step={0.001}
+                      />
+                      <span className="text-sm text-muted-foreground">BTC</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Фиксированная сумма в BTC для каждой сделки
+                    </p>
+                  </div>
+                )}
+
+                {/* Percentage */}
+                {config.amountType === "PERCENTAGE" && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-4">
+                      <Percent className="h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="number"
+                        value={config.tradeAmount}
+                        onChange={(e) => updateConfig("tradeAmount", parseFloat(e.target.value))}
+                        className="w-32"
+                        min={0.1}
+                        max={100}
+                        step={0.1}
+                      />
+                      <span className="text-sm text-muted-foreground">% от баланса</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Процент от доступного баланса для каждой сделки
+                    </p>
+                  </div>
+                )}
+
+                {/* Risk Percentage - Cornix Compatible */}
+                {config.amountType === "RISK_PERCENTAGE" && (
+                  <div className="space-y-4 p-4 rounded-lg border border-primary/20 bg-primary/5">
+                    <div className="flex items-center gap-2">
+                      <Calculator className="h-4 w-4 text-primary" />
+                      <Label className="text-sm font-medium">Risk Percentage Calculator</Label>
+                      <Badge variant="outline" className="text-xs text-green-500">Cornix</Badge>
+                    </div>
+                    
+                    <p className="text-xs text-muted-foreground">
+                      Автоматический расчёт размера позиции на основе риска. Требует Stop Loss.
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-xs">Risk %</Label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="number"
+                            value={config.riskPercentageValue}
+                            onChange={(e) => updateConfig("riskPercentageValue", parseFloat(e.target.value))}
+                            min={0.1}
+                            max={100}
+                            step={0.1}
+                            className="w-24"
+                          />
+                          <span className="text-sm text-muted-foreground">%</span>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs">Portfolio Size</Label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="number"
+                            value={config.riskPercentagePortfolioSize}
+                            onChange={(e) => updateConfig("riskPercentagePortfolioSize", parseFloat(e.target.value))}
+                            className="w-28"
+                          />
+                          <span className="text-sm text-muted-foreground">USDT</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Formula explanation */}
+                    <div className="p-3 rounded-lg bg-secondary/50 space-y-2">
+                      <div className="flex items-center gap-1">
+                        <Info className="h-3 w-3 text-muted-foreground" />
+                        <span className="text-xs font-medium">Формула Cornix:</span>
+                      </div>
+                      <code className="text-xs text-muted-foreground block">
+                        Position Size = (Risk % × Portfolio) / Trade Loss %
+                      </code>
+                      <div className="text-xs text-muted-foreground mt-2">
+                        Пример: 1% риск от $10,000 при SL 5% = позиция $2,000
+                      </div>
+                    </div>
+
+                    {/* Warning about SL requirement */}
+                    {!config.defaultStopLoss && (
+                      <div className="flex items-center gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                        <AlertTriangle className="h-4 w-4 text-amber-500" />
+                        <span className="text-xs text-amber-600 dark:text-amber-400">
+                          Для Risk % требуется настроить Stop Loss
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
                 
                 {/* Override Toggle */}
                 <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
@@ -1580,12 +1715,54 @@ export function BotConfigForm() {
           <AccordionContent className="px-4 pb-4">
             <div className="space-y-6 pt-2">
               
-              {/* Leverage */}
-              <div className="space-y-2">
+              {/* Leverage - Cornix Compatible */}
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <Label className="text-sm font-medium">Leverage (Плечо)</Label>
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm font-medium">Leverage (Плечо)</Label>
+                    {config.useGlobalLeverage && (
+                      <Badge variant="outline" className="text-xs text-blue-500 border-blue-500/30">
+                        <Globe className="h-3 w-3 mr-1" />
+                        Global
+                      </Badge>
+                    )}
+                  </div>
                   <Badge variant="outline">{config.leverage}x</Badge>
                 </div>
+                
+                {/* Leverage Mode Selector - Cornix Compatible */}
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => updateConfig("leverageMode", "UP_TO")}
+                    className={cn(
+                      "p-3 rounded-lg border text-left transition-colors",
+                      config.leverageMode === "UP_TO"
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:bg-secondary/50"
+                    )}
+                  >
+                    <p className="font-medium text-sm">Up to</p>
+                    <p className="text-xs text-muted-foreground">
+                      Максимальное плечо, может быть меньше
+                    </p>
+                  </button>
+                  <button
+                    onClick={() => updateConfig("leverageMode", "EXACTLY")}
+                    className={cn(
+                      "p-3 rounded-lg border text-left transition-colors",
+                      config.leverageMode === "EXACTLY"
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:bg-secondary/50"
+                    )}
+                  >
+                    <p className="font-medium text-sm">Exactly</p>
+                    <p className="text-xs text-muted-foreground">
+                      Точное плечо для всех сделок
+                    </p>
+                  </button>
+                </div>
+
+                {/* Leverage Buttons */}
                 <div className="flex items-center gap-2 flex-wrap">
                   {[1, 2, 3, 5, 10, 20, 50, 100, 125].map((lev) => (
                     <Button
@@ -1600,8 +1777,33 @@ export function BotConfigForm() {
                   ))}
                 </div>
                 
+                {/* Global Settings Toggle */}
+                <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-blue-500" />
+                    <div>
+                      <p className="text-sm font-medium">Global Settings</p>
+                      <p className="text-xs text-muted-foreground">
+                        Применять ко всем символам
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Label className={cn("text-xs", !config.useGlobalLeverage && "text-muted-foreground")}>
+                      No
+                    </Label>
+                    <Switch
+                      checked={config.useGlobalLeverage}
+                      onCheckedChange={(v) => updateConfig("useGlobalLeverage", v)}
+                    />
+                    <Label className={cn("text-xs", config.useGlobalLeverage && "text-primary")}>
+                      Yes
+                    </Label>
+                  </div>
+                </div>
+
                 {/* Leverage Override */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50 mt-2">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
                   <div>
                     <p className="text-sm font-medium">Override</p>
                     <p className="text-xs text-muted-foreground">
