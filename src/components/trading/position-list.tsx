@@ -63,7 +63,7 @@ export function PositionList({
   }, [positions, searchQuery, filterDirection]);
   
   // Calculate totals
-  const totalPnl = positions.reduce((sum, p) => sum + p.unrealizedPnl, 0);
+  const totalPnl = positions.reduce((sum, p) => sum + (p.unrealizedPnl ?? 0), 0);
   const longCount = positions.filter(p => p.direction === "LONG").length;
   const shortCount = positions.filter(p => p.direction === "SHORT").length;
   
@@ -79,7 +79,8 @@ export function PositionList({
   // Render position row
   const renderPosition = (position: TradingPosition) => {
     const pnlPercent = calculatePnlPercent(position);
-    const isProfit = position.unrealizedPnl >= 0;
+    const unrealizedPnl = position.unrealizedPnl ?? 0;
+    const isProfit = unrealizedPnl >= 0;
     
     return (
       <button
@@ -142,8 +143,8 @@ export function PositionList({
             )}
           </div>
           <div className="text-right">
-            <div className={cn("font-mono font-medium", getPnlColorClass(position.unrealizedPnl))}>
-              {position.unrealizedPnl >= 0 ? "+" : ""}${position.unrealizedPnl.toFixed(2)}
+            <div className={cn("font-mono font-medium", getPnlColorClass(unrealizedPnl))}>
+              {unrealizedPnl >= 0 ? "+" : ""}${unrealizedPnl.toFixed(2)}
             </div>
             <div className={cn("text-[10px] font-mono", getPnlColorClass(pnlPercent))}>
               {formatPnlPercent(pnlPercent)}

@@ -62,7 +62,7 @@ async function handleGet(request: NextRequest, context: AuthContext) {
     
     // Build position query
     const whereClause: {
-      status: string;
+      status: { in: string[] };
       account?: {
         userId: string;
         exchangeType?: MarketType;
@@ -72,7 +72,7 @@ async function handleGet(request: NextRequest, context: AuthContext) {
       };
       isDemo?: boolean;
     } = {
-      status: "OPEN",
+      status: { in: ['OPEN', 'ACTIVE'] },
     };
     
     // Filter by mode

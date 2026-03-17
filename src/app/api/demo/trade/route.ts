@@ -208,6 +208,7 @@ export async function POST(request: NextRequest) {
 
 /**
  * GET endpoint to fetch demo positions
+ * Updates position prices with real-time data before returning
  */
 export async function GET() {
   try {
@@ -215,7 +216,7 @@ export async function GET() {
 
     const positions = await db.position.findMany({
       where: {
-        status: "OPEN",
+        status: { in: ['OPEN', 'ACTIVE'] },
         isDemo: true,
         account: { userId: user.id },
       },
@@ -230,6 +231,51 @@ export async function GET() {
       },
     });
 
+    // Update positions with real-time prices
+    const updatedPositions = await Promise.all(
+      positions.map(async (position) => {
+        try {
+          // Get current price from price service
+          const currentPrice = await priceService.getPrice(
+            position.symbol,
+            position.account?.exchangeId || 'binance'
+          );
+
+          // Calculate unrealized PnL
+          const isLong = position.direction === "LONG";
+          const priceChange = isLong
+            ? (currentPrice - position.avgEntryPrice) / position.avgEntryPrice
+            : (position.avgEntryPrice - currentPrice) / position.avgEntryPrice;
+          const unrealizedPnl = position.totalAmount * position.avgEntryPrice * priceChange * position.leverage;
+
+          // Update position in database with new price and PnL
+          await db.position.update({
+            where: { id: position.id },
+            data: {
+              currentPrice,
+              unrealizedPnl,
+              highestPrice: position.highestPrice
+                ? Math.max(position.highestPrice, currentPrice)
+                : currentPrice,
+              lowestPrice: position.lowestPrice
+                ? Math.min(position.lowestPrice, currentPrice)
+                : currentPrice,
+            },
+          });
+
+          return {
+            ...position,
+            currentPrice,
+            unrealizedPnl,
+          };
+        } catch (error) {
+          console.error(`[DemoTrade] Error updating price for ${position.symbol}:`, error);
+          // Return position without update if price fetch fails
+          return position;
+        }
+      })
+    );
+
     // Get demo balance
     const account = await db.account.findFirst({
       where: { userId: user.id, accountType: "DEMO" },
@@ -241,8 +287,8 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      positions,
-      count: positions.length,
+      positions: updatedPositions,
+      count: updatedPositions.length,
       balance,
       isDemo: true,
     });

@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
         stopLoss: p.stopLoss,
         takeProfit: p.takeProfit,
         trailingStop: p.trailingStop ? JSON.parse(p.trailingStop) : null,
-        trailingActive: p.trailingActive,
+        trailingActivated: p.trailingActivated,
         highestPrice: p.highestPrice,
         lowestPrice: p.lowestPrice,
         totalFundingPaid: p.totalFundingPaid,
@@ -354,7 +354,7 @@ export async function PUT(request: NextRequest) {
     if (takeProfit !== undefined) updateData.takeProfit = takeProfit;
     if (trailingStop !== undefined) {
       updateData.trailingStop = JSON.stringify(trailingStop);
-      updateData.trailingActive = trailingStop.enabled;
+      updateData.trailingActivated = trailingStop.enabled;
     }
 
     await db.paperPosition.update({

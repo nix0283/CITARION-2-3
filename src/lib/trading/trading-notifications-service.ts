@@ -74,7 +74,7 @@ export interface PositionUpdateEvent {
   pnlPercent?: number;
   
   // Trailing
-  trailingActive?: boolean;
+  trailingActivated?: boolean;
   trailingType?: string;
   trailingPrice?: number;
   

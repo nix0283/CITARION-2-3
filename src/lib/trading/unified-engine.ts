@@ -153,7 +153,7 @@ export interface PositionInfo {
   stopLoss?: number;
   takeProfit?: number;
   trailingStop?: TrailingStopConfig;
-  trailingActive?: boolean;
+  trailingActivated?: boolean;
   highestPrice?: number;
   lowestPrice?: number;
   openedAt: Date;
@@ -779,7 +779,7 @@ export class UnifiedTradingEngine {
         return { success: false, error: 'Position not found', errorCode: 'POSITION_NOT_FOUND' };
       }
       
-      if (position.status !== 'ACTIVE' && position.status !== 'OPENING') {
+      if (position.status !== 'OPEN' && position.status !== 'ACTIVE' && position.status !== 'OPENING') {
         return { success: false, error: 'Position is not active', errorCode: 'POSITION_NOT_ACTIVE' };
       }
       
@@ -844,19 +844,25 @@ export class UnifiedTradingEngine {
       
       await db.trade.create({
         data: {
+          userId: position.account.userId,
           accountId: position.accountId,
           positionId: position.id,
           symbol: position.symbol,
           direction: position.direction,
-          side: position.direction === 'LONG' ? 'SELL' : 'BUY',
-          type: 'MARKET',
-          status: 'FILLED',
+          status: 'CLOSED',
+          entryPrice: position.avgEntryPrice,
+          entryTime: position.createdAt,
           amount: quantity,
-          price: closePrice,
-          avgPrice: closePrice,
-          fee: closeResult.order?.fee || 0,
-          feeCurrency: closeResult.order?.feeCurrency || 'USDT',
+          leverage: position.leverage,
+          exitPrice: closePrice,
+          exitTime: new Date(),
+          closeReason: reason,
+          stopLoss: position.stopLoss,
+          takeProfits: position.takeProfit ? JSON.stringify([{ price: position.takeProfit, percentage: 100 }]) : null,
           pnl,
+          pnlPercent: entryPrice > 0 ? (pnl / (entryPrice * quantity)) * 100 : 0,
+          fee: closeResult.order?.fee || 0,
+          signalSource: position.source,
           isDemo: position.isDemo,
         },
       });
@@ -892,7 +898,7 @@ export class UnifiedTradingEngine {
     try {
       const whereClause: any = {
         account: { userId },
-        status: { in: ['ACTIVE', 'OPENING'] },
+        status: { in: ['OPEN', 'ACTIVE', 'OPENING'] },
       };
       
       if (symbol) whereClause.symbol = symbol;
@@ -928,7 +934,7 @@ export class UnifiedTradingEngine {
   ): Promise<PositionInfo[]> {
     const whereClause: any = {
       account: { userId },
-      status: { in: ['ACTIVE', 'OPENING', 'PENDING'] },
+      status: { in: ['OPEN', 'ACTIVE', 'OPENING', 'PENDING'] },
     };
     
     if (config?.mode === 'DEMO' || config?.mode === 'PAPER') {
@@ -973,7 +979,7 @@ export class UnifiedTradingEngine {
         stopLoss: pos.stopLoss || undefined,
         takeProfit: pos.takeProfit || undefined,
         trailingStop: pos.trailingStop ? JSON.parse(pos.trailingStop) : undefined,
-        trailingActive: pos.trailingActive || false,
+        trailingActivated: pos.trailingActivated || false,
         highestPrice: pos.highestPrice || undefined,
         lowestPrice: pos.lowestPrice || undefined,
         openedAt: pos.createdAt,
@@ -1016,7 +1022,7 @@ export class UnifiedTradingEngine {
       
       if (updates.trailingStop !== undefined) {
         updateData.trailingStop = JSON.stringify(updates.trailingStop);
-        updateData.trailingActive = updates.trailingStop.enabled;
+        updateData.trailingActivated = updates.trailingStop.enabled;
       }
       
       await db.position.update({
@@ -1190,8 +1196,11 @@ export class UnifiedTradingEngine {
         if (ticker?.last) return ticker.last;
       }
       
-      const price = await cachedPriceService.getPrice(symbol, exchangeId);
-      if (price) return price;
+      const priceData = await cachedPriceService.getPrice(symbol, exchangeId);
+      // cachedPriceService.getPrice returns CachedPrice object { symbol, exchange, price, bidPrice, askPrice, timestamp }
+      if (priceData && typeof priceData.price === 'number' && !isNaN(priceData.price)) {
+        return priceData.price;
+      }
       
       return null;
     } catch {
@@ -1207,18 +1216,29 @@ export class UnifiedTradingEngine {
     client?: IExchangeClient | null
   ): Promise<number> {
     try {
+      // Validate currentPrice
+      if (!currentPrice || isNaN(currentPrice) || currentPrice <= 0) {
+        console.error('[UnifiedTradingEngine] Invalid currentPrice:', currentPrice);
+        return 0;
+      }
+
       let availableBalance = 10000;
       
       if (client && !account.isDemo) {
         const accountInfo = await client.getAccountInfo();
-        availableBalance = accountInfo.availableMargin;
+        availableBalance = accountInfo.availableMargin || 10000;
       } else {
         const paperAccount = await db.paperAccount.findUnique({
           where: { accountId: account.id },
         });
         if (paperAccount) {
-          availableBalance = paperAccount.balance;
+          availableBalance = paperAccount.balance || 10000;
         }
+      }
+
+      // Validate availableBalance
+      if (isNaN(availableBalance) || availableBalance <= 0) {
+        availableBalance = 10000; // Default fallback
       }
       
       const amountPercent = signal.amountPercent || config.defaultAmountPercent || 2;
@@ -1226,10 +1246,11 @@ export class UnifiedTradingEngine {
       
       let positionSize: number;
       
-      if (signal.stopLoss) {
+      if (signal.stopLoss && signal.entryPrices.length > 0) {
         const riskPercent = signal.riskPercent || amountPercent;
         const riskAmount = availableBalance * (riskPercent / 100);
-        const priceDiff = Math.abs(signal.entryPrices[0] - signal.stopLoss);
+        const entryPrice = signal.entryPrices[0] || currentPrice;
+        const priceDiff = Math.abs(entryPrice - signal.stopLoss);
         const riskPerUnit = priceDiff / currentPrice;
         
         positionSize = riskPerUnit > 0 ? riskAmount / riskPerUnit : tradeValue / currentPrice;
@@ -1237,10 +1258,19 @@ export class UnifiedTradingEngine {
         positionSize = tradeValue / currentPrice;
       }
       
-      positionSize *= signal.leverage;
+      // Apply leverage
+      const leverage = signal.leverage && !isNaN(signal.leverage) ? signal.leverage : 1;
+      positionSize *= leverage;
       
+      // Round to 8 decimal places
       positionSize = Math.floor(positionSize * 1e8) / 1e8;
       
+      // Ensure non-negative
+      if (isNaN(positionSize) || positionSize < 0) {
+        positionSize = 0;
+      }
+      
+      // Apply max position size limit
       if (config.maxPositionSize && positionSize > config.maxPositionSize) {
         positionSize = config.maxPositionSize;
       }
@@ -1379,22 +1409,40 @@ export class UnifiedTradingEngine {
     config: TradingConfig,
     source: SignalSource
   ): Promise<any> {
+    // Validate and sanitize all numeric values to prevent NaN in database
+    const safeQuantity = isNaN(quantity) || quantity <= 0 ? 0 : quantity;
+    const entryPrice = orderResult.order?.avgPrice || signal.entryPrices[0] || 0;
+    const safeEntryPrice = isNaN(entryPrice) ? 0 : entryPrice;
+    const safeLeverage = isNaN(signal.leverage) || signal.leverage < 1 ? 1 : signal.leverage;
+    const safeStopLoss = signal.stopLoss && !isNaN(signal.stopLoss) ? signal.stopLoss : null;
+    const safeTakeProfit = signal.takeProfits[0]?.price && !isNaN(signal.takeProfits[0].price) 
+      ? signal.takeProfits[0].price 
+      : null;
+
+    if (safeQuantity <= 0) {
+      throw new Error(`Invalid position size: ${quantity}. Cannot create position record.`);
+    }
+
+    if (safeEntryPrice <= 0) {
+      throw new Error(`Invalid entry price: ${entryPrice}. Cannot create position record.`);
+    }
+
     return await db.position.create({
       data: {
         accountId,
         symbol: signal.symbol,
         direction: signal.direction,
-        status: 'ACTIVE',
-        totalAmount: quantity,
-        filledAmount: quantity,
-        avgEntryPrice: orderResult.order?.avgPrice || signal.entryPrices[0],
-        leverage: signal.leverage,
-        stopLoss: signal.stopLoss,
-        takeProfit: signal.takeProfits[0]?.price,
+        status: 'OPEN',
+        totalAmount: safeQuantity,
+        filledAmount: safeQuantity,
+        avgEntryPrice: safeEntryPrice,
+        leverage: safeLeverage,
+        stopLoss: safeStopLoss,
+        takeProfit: safeTakeProfit,
         trailingStop: signal.trailingConfig ? JSON.stringify(signal.trailingConfig) : null,
-        trailingActive: signal.trailingConfig?.enabled || false,
-        highestPrice: orderResult.order?.avgPrice || signal.entryPrices[0],
-        lowestPrice: orderResult.order?.avgPrice || signal.entryPrices[0],
+        trailingActivated: signal.trailingConfig?.enabled || false,
+        highestPrice: safeEntryPrice,
+        lowestPrice: safeEntryPrice,
         isDemo: config.mode === 'PAPER' || config.mode === 'DEMO',
         source: source,
       },
@@ -1499,7 +1547,7 @@ export class UnifiedTradingEngine {
       include: { account: true },
     });
     
-    if (!position || position.status !== 'ACTIVE') {
+    if (!position || (position.status !== 'OPEN' && position.status !== 'ACTIVE')) {
       this.stopPositionMonitoring(positionId);
       return;
     }
@@ -1520,7 +1568,7 @@ export class UnifiedTradingEngine {
       updates.lowestPrice = currentPrice;
     }
     
-    if (position.trailingActive && position.trailingStop) {
+    if (position.trailingActivated && position.trailingStop) {
       const trailingConfig: TrailingStopConfig = JSON.parse(position.trailingStop);
       const shouldUpdate = this.checkTrailingStop(
         currentPrice,
@@ -1534,7 +1582,7 @@ export class UnifiedTradingEngine {
       
       if (shouldUpdate.newSL) {
         updates.stopLoss = shouldUpdate.newSL;
-        updates.trailingActive = true;
+        updates.trailingActivated = true;
       }
       
       if (shouldUpdate.shouldClose) {

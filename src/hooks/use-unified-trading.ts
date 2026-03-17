@@ -39,7 +39,7 @@ export interface Position {
   unrealizedPnl: number;
   realizedPnl: number;
   trailingStop: any;
-  trailingActive: boolean;
+  trailingActivated: boolean;
   openedAt: Date;
   isDemo: boolean;
 }

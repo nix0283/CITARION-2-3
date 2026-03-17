@@ -4038,7 +4038,7 @@ model PaperPosition {
   stopLoss       Float?
   takeProfit     Float?
   trailingStop   String?
-  trailingActive Boolean @default(false)
+  trailingActivated Boolean @default(false)
   highestPrice   Float?
   lowestPrice    Float?
   

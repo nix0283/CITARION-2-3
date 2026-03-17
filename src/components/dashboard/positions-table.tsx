@@ -38,14 +38,15 @@ interface ApiPosition {
   direction: string;
   totalAmount: number;
   avgEntryPrice: number;
-  currentPrice: number;
+  currentPrice: number | null;
   leverage: number;
-  unrealizedPnl: number;
+  unrealizedPnl: number | null;
   stopLoss: number | null;
   takeProfit: number | null;
   createdAt: string;
   source?: string; // CHAT, TELEGRAM, PLATFORM, EXTERNAL
-  account: {
+  isDemo?: boolean;
+  account?: {
     exchangeId: string;
     exchangeName: string;
     isTestnet: boolean;
@@ -81,8 +82,8 @@ export function PositionsTable() {
 
   useEffect(() => {
     fetchPositions();
-    // Refresh every 30 seconds
-    const interval = setInterval(fetchPositions, 30000);
+    // Refresh every 5 seconds for real-time PnL updates
+    const interval = setInterval(fetchPositions, 5000);
     
     // Listen for position-opened event from chat
     const handlePositionOpened = (e: CustomEvent) => {
@@ -152,7 +153,10 @@ export function PositionsTable() {
     setShowShareCard(true);
   };
 
-  const formatPrice = (price: number) => {
+  const formatPrice = (price: number | null | undefined) => {
+    if (price === null || price === undefined) {
+      return "—";
+    }
     return price.toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: price < 1 ? 4 : 2,
@@ -197,9 +201,31 @@ export function PositionsTable() {
                   {apiPositions.length}
                 </Badge>
               )}
-              {isDemo && (
-                <span className="text-xs text-amber-500 ml-1">[DEMO]</span>
-              )}
+              {(() => {
+                const demoPositions = apiPositions.filter(p => p.isDemo);
+                const livePositions = apiPositions.filter(p => !p.isDemo);
+                if (demoPositions.length > 0 && livePositions.length > 0) {
+                  return (
+                    <div className="flex items-center gap-1 ml-2">
+                      <Badge variant="outline" className="text-xs text-amber-500">
+                        {demoPositions.length} Demo
+                      </Badge>
+                      <Badge variant="outline" className="text-xs text-green-500">
+                        {livePositions.length} Live
+                      </Badge>
+                    </div>
+                  );
+                } else if (demoPositions.length > 0) {
+                  return (
+                    <span className="text-xs text-amber-500 ml-2">[DEMO]</span>
+                  );
+                } else if (livePositions.length > 0) {
+                  return (
+                    <span className="text-xs text-green-500 ml-2">[LIVE]</span>
+                  );
+                }
+                return null;
+              })()}
             </CardTitle>
             <Button 
               variant="ghost" 
@@ -305,12 +331,12 @@ export function PositionsTable() {
                         <span
                           className={cn(
                             "font-mono text-sm font-medium",
-                            position.unrealizedPnl >= 0
+                            (position.unrealizedPnl ?? 0) >= 0
                               ? "text-green-500"
                               : "text-red-500"
                           )}
                         >
-                          {position.unrealizedPnl >= 0 ? "+" : ""}
+                          {(position.unrealizedPnl ?? 0) >= 0 ? "+" : ""}
                           ${formatPrice(position.unrealizedPnl)}
                         </span>
                       </TableCell>
@@ -364,9 +390,11 @@ export function PositionsTable() {
           symbol: selectedPosition.symbol,
           direction: selectedPosition.direction as "LONG" | "SHORT",
           entryPrice: selectedPosition.avgEntryPrice,
-          exitPrice: selectedPosition.currentPrice,
-          pnl: selectedPosition.unrealizedPnl,
-          pnlPercent: ((selectedPosition.currentPrice - selectedPosition.avgEntryPrice) / selectedPosition.avgEntryPrice) * 100 * selectedPosition.leverage,
+          exitPrice: selectedPosition.currentPrice ?? selectedPosition.avgEntryPrice,
+          pnl: selectedPosition.unrealizedPnl ?? 0,
+          pnlPercent: selectedPosition.currentPrice 
+            ? ((selectedPosition.currentPrice - selectedPosition.avgEntryPrice) / selectedPosition.avgEntryPrice) * 100 * selectedPosition.leverage 
+            : 0,
           leverage: selectedPosition.leverage,
           amount: selectedPosition.totalAmount * selectedPosition.avgEntryPrice,
           exchange: selectedPosition.account?.exchangeName || "Binance",

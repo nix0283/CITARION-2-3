@@ -3,8 +3,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { unifiedTradingEngine, type TradingConfig, type TradingMode, type TrailingStopConfig } from '@/lib/trading/unified-engine';
-import { getServerSession } from 'next-auth';
+import { unifiedTradingEngine, type TradingMode, type TrailingStopConfig } from '@/lib/trading/unified-engine';
+import { getDefaultUser } from '@/lib/auth-utils';
+import { db } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,35 +15,87 @@ export async function GET(request: NextRequest) {
     const exchangeId = searchParams.get('exchangeId');
     const symbol = searchParams.get('symbol');
     const direction = searchParams.get('direction');
+    const accountId = searchParams.get('accountId');
     
-    let userId = 'system';
+    // Get user ID - use default user if no session
+    let userId: string;
     try {
-      const session = await getServerSession();
-      if (session?.user?.id) {
-        userId = session.user.id;
-      }
-    } catch {}
+      const defaultUser = await getDefaultUser();
+      userId = defaultUser.id;
+    } catch {
+      userId = 'system';
+    }
     
-    const config: Partial<TradingConfig> = {};
-    if (mode) config.mode = mode;
-    if (exchangeId) config.exchangeId = exchangeId;
+    // Build query - include both OPEN and ACTIVE status
+    const whereClause: any = {
+      account: { userId },
+      status: { in: ['OPEN', 'ACTIVE'] },
+    };
     
-    let positions = await unifiedTradingEngine.getOpenPositions(userId, config);
+    if (mode === 'DEMO' || mode === 'PAPER') {
+      whereClause.isDemo = true;
+    } else if (mode === 'LIVE') {
+      whereClause.isDemo = false;
+    }
     
+    if (accountId) {
+      whereClause.accountId = accountId;
+    }
+    
+    // Fetch positions from database
+    const positions = await db.position.findMany({
+      where: whereClause,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        account: {
+          select: {
+            exchangeId: true,
+            exchangeName: true,
+          },
+        },
+      },
+    });
+    
+    // Filter by symbol if provided
+    let filteredPositions = positions;
     if (symbol) {
-      positions = positions.filter(p => p.symbol === symbol);
+      filteredPositions = filteredPositions.filter(p => p.symbol === symbol);
     }
     if (direction) {
-      positions = positions.filter(p => p.direction === direction);
+      filteredPositions = filteredPositions.filter(p => p.direction === direction);
     }
     
-    const totalUnrealizedPnl = positions.reduce((sum, p) => sum + (p.unrealizedPnl || 0), 0);
-    const totalRealizedPnl = positions.reduce((sum, p) => sum + (p.realizedPnl || 0), 0);
+    const totalUnrealizedPnl = filteredPositions.reduce((sum, p) => sum + (p.unrealizedPnl || 0), 0);
+    const totalRealizedPnl = filteredPositions.reduce((sum, p) => sum + (p.realizedPnl || 0), 0);
     
     return NextResponse.json({
       success: true,
-      count: positions.length,
-      positions,
+      count: filteredPositions.length,
+      positions: filteredPositions.map(p => ({
+        id: p.id,
+        accountId: p.accountId,
+        symbol: p.symbol,
+        direction: p.direction,
+        status: p.status,
+        totalAmount: p.totalAmount,
+        filledAmount: p.filledAmount,
+        avgEntryPrice: p.avgEntryPrice,
+        currentPrice: p.currentPrice,
+        leverage: p.leverage,
+        stopLoss: p.stopLoss,
+        takeProfit: p.takeProfit,
+        trailingStop: p.trailingStop ? JSON.parse(p.trailingStop) : null,
+        trailingActivated: p.trailingActivated,
+        highestPrice: p.highestPrice,
+        lowestPrice: p.lowestPrice,
+        unrealizedPnl: p.unrealizedPnl,
+        realizedPnl: p.realizedPnl,
+        isDemo: p.isDemo,
+        source: p.source,
+        openedAt: p.createdAt,
+        exchangeId: p.account?.exchangeId,
+        exchangeName: p.account?.exchangeName,
+      })),
       summary: {
         totalUnrealizedPnl,
         totalRealizedPnl,

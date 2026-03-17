@@ -25,3 +25,13 @@ Risk Monitor Service running on port 3004
 CORS allowed origins: http://localhost:3000, http://localhost:3001, http://127.0.0.1:3000, http://127.0.0.1:3001
 Risk Monitor Service initialized
 Features: Real-time risk monitoring, kill switch, alerts
+[RiskMonitor] Kill switch API response: {
+  success: true,
+  botsStopped: 0,
+  reason: "Extreme volatility with elevated risk: 50",
+}
+[RiskMonitor] Kill switch API response: {
+  success: true,
+  botsStopped: 0,
+  reason: "Extreme volatility with elevated risk: 50",
+}

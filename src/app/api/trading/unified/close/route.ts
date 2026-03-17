@@ -4,7 +4,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { unifiedTradingEngine } from '@/lib/trading/unified-engine';
-import { getServerSession } from 'next-auth';
+import { getDefaultUser } from '@/lib/auth-utils';
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,13 +12,14 @@ export async function POST(request: NextRequest) {
     
     const { positionId, reason, mode } = body;
     
-    let userId = 'system';
+    // Get user ID - use default user if no session
+    let userId: string;
     try {
-      const session = await getServerSession();
-      if (session?.user?.id) {
-        userId = session.user.id;
-      }
-    } catch {}
+      const user = await getDefaultUser();
+      userId = user.id;
+    } catch {
+      userId = 'system';
+    }
     
     if (positionId) {
       const result = await unifiedTradingEngine.closePosition(
