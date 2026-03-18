@@ -1,10 +1,35 @@
 /**
  * Unified Trading Engine for CITARION Platform
  * 
- * Single trading engine for all modes: LIVE, DEMO, PAPER
+ * Single engine with SEPARATE MODE HANDLERS: LIVE, DEMO, PAPER
  * Used by: Built-in Chat, Telegram Bot, Manual Trading, Auto Trading
  * 
- * Updated: Fixed import for cachedPriceService (v2)
+ * Architecture v4 - Mode-Specific Handlers:
+ * 
+ * ┌─────────────────────────────────────────────────────────────┐
+ * │                    UnifiedTradingEngine                     │
+ * ├─────────────────────────────────────────────────────────────┤
+ * │  executeTrade(request)                                      │
+ * │      │                                                      │
+ * │      ├── mode === 'LIVE'  ──► LiveTradeHandler             │
+ * │      │                         - Real exchange API calls    │
+ * │      │                         - Real balance checks        │
+ * │      │                         - Real order execution       │
+ * │      │                                                      │
+ * │      ├── mode === 'DEMO'  ──► DemoTradeHandler             │
+ * │      │                         - Virtual balance            │
+ * │      │                         - Slippage (0.05%)           │
+ * │      │                         - Fees (maker/taker)         │
+ * │      │                         - Basic liquidation          │
+ * │      │                                                      │
+ * │      └── mode === 'PAPER' ──► PaperTradeHandler            │
+ * │                                  - Virtual balance          │
+ * │                                  - Full simulation          │
+ * │                                  - Funding rate (8h)        │
+ * │                                  - Equity curve             │
+ * │                                  - Sharpe/Sortino metrics   │
+ * │                                  - Advanced liquidation     │
+ * └─────────────────────────────────────────────────────────────┘
  * 
  * Features:
  * - Multi-mode support (LIVE/DEMO/PAPER)
@@ -19,7 +44,6 @@
  * - Multi-exchange support
  * 
  * Note: TESTNET mode has been merged into DEMO mode.
- *       Former TESTNET accounts are now treated as DEMO accounts.
  */
 
 import { db } from '@/lib/db';
@@ -35,6 +59,136 @@ export type OrderSide = 'BUY' | 'SELL';
 export type OrderType = 'MARKET' | 'LIMIT' | 'STOP_MARKET' | 'STOP_LIMIT';
 export type PositionStatus = 'PENDING' | 'OPENING' | 'ACTIVE' | 'CLOSING' | 'CLOSED' | 'LIQUIDATED';
 export type SignalSource = 'CHAT' | 'TELEGRAM' | 'WEBHOOK' | 'MANUAL' | 'AUTO';
+
+// ==================== MODE-SPECIFIC CONFIG TYPES ====================
+
+/**
+ * LIVE Mode Configuration
+ * Real trading with actual exchange API
+ */
+export interface LiveModeConfig {
+  /** Require confirmation before execution */
+  requireConfirmation: boolean;
+  /** Maximum position size in USDT */
+  maxPositionSize: number;
+  /** Enable real-time balance sync */
+  syncBalance: boolean;
+  /** Order timeout in ms */
+  orderTimeout: number;
+}
+
+/**
+ * DEMO Mode Configuration  
+ * Basic simulation with slippage and fees
+ */
+export interface DemoModeConfig {
+  /** Initial virtual balance */
+  initialBalance: number;
+  /** Slippage percent for market orders */
+  slippagePercent: number;
+  /** Maker fee percent */
+  makerFeePercent: number;
+  /** Taker fee percent */
+  takerFeePercent: number;
+  /** Enable basic liquidation */
+  enableLiquidation: boolean;
+  /** Maintenance margin percent */
+  maintenanceMarginPercent: number;
+}
+
+/**
+ * PAPER Mode Configuration
+ * Full simulation with metrics and equity tracking
+ */
+export interface PaperModeConfig {
+  /** Initial virtual balance */
+  initialBalance: number;
+  /** Slippage percent for market orders */
+  slippagePercent: number;
+  /** Maker fee percent */
+  makerFeePercent: number;
+  /** Taker fee percent */
+  takerFeePercent: number;
+  /** Enable funding rate simulation */
+  enableFunding: boolean;
+  /** Funding interval in ms (default: 8 hours) */
+  fundingIntervalMs: number;
+  /** Base funding rate */
+  baseFundingRate: number;
+  /** Maintenance margin for liquidation */
+  maintenanceMarginPercent: number;
+  /** Enable equity curve tracking */
+  trackEquityCurve: boolean;
+  /** Equity recording interval in ms */
+  equityRecordInterval: number;
+  /** Enable advanced metrics calculation */
+  calculateMetrics: boolean;
+}
+
+/** @deprecated Use mode-specific configs instead */
+export interface SimulationConfig {
+  slippagePercent: number;
+  makerFeePercent: number;
+  takerFeePercent: number;
+  enableFunding: boolean;
+  fundingIntervalMs: number;
+  baseFundingRate: number;
+  maintenanceMarginPercent: number;
+}
+
+export interface EquityPoint {
+  timestamp: Date;
+  balance: number;
+  equity: number;
+  unrealizedPnl: number;
+  realizedPnl: number;
+  drawdown: number;
+  drawdownPercent: number;
+  openPositions: number;
+}
+
+export interface PerformanceMetrics {
+  totalTrades: number;
+  winningTrades: number;
+  losingTrades: number;
+  winRate: number;
+  totalPnl: number;
+  totalPnlPercent: number;
+  avgWin: number;
+  avgLoss: number;
+  profitFactor: number;
+  sharpeRatio: number;
+  sortinoRatio: number;
+  maxDrawdown: number;
+  maxDrawdownPercent: number;
+  avgDrawdown: number;
+  timeInDrawdown: number;
+  maxWinStreak: number;
+  maxLossStreak: number;
+  avgTradeDuration: number; // minutes
+}
+
+export interface VirtualBalance {
+  currency: string;
+  total: number;
+  available: number;
+  frozen: number;
+}
+
+export interface PendingOrder {
+  id: string;
+  symbol: string;
+  direction: Direction;
+  type: 'LIMIT' | 'STOP_LIMIT';
+  price: number;
+  triggerPrice?: number;
+  quantity: number;
+  leverage: number;
+  stopLoss?: number;
+  takeProfit?: number;
+  createdAt: Date;
+  expiresAt?: Date;
+}
 
 export type TrailingType = 
   | 'BREAKEVEN' 
@@ -617,7 +771,54 @@ export class UnifiedTradingEngine {
   private clientCache: Map<string, IExchangeClient> = new Map();
   private positionMonitors: Map<string, NodeJS.Timeout> = new Map();
   
-  private constructor() {}
+  // ==================== v3: SIMULATION PROPERTIES ====================
+  
+  /** Virtual balances for DEMO/PAPER mode */
+  private virtualBalances: Map<string, VirtualBalance> = new Map();
+  
+  /** Equity curve tracking */
+  private equityCurves: Map<string, EquityPoint[]> = new Map();
+  
+  /** Pending limit orders for matching */
+  private pendingOrders: Map<string, PendingOrder[]> = new Map();
+  
+  /** Last funding settlement time per symbol */
+  private lastFundingTime: Map<string, Date> = new Map();
+  
+  /** Peak equity for drawdown calculation */
+  private peakEquity: Map<string, number> = new Map();
+  
+  /** Trade history for metrics */
+  private tradeHistory: Map<string, Array<{ pnl: number; timestamp: Date; duration: number }>> = new Map();
+  
+  /** Default simulation config */
+  private readonly DEFAULT_SIMULATION_CONFIG: SimulationConfig = {
+    slippagePercent: 0.05,        // 0.05% typical slippage
+    makerFeePercent: 0.02,        // 0.02% maker fee (Binance futures)
+    takerFeePercent: 0.04,        // 0.04% taker fee (Binance futures)
+    enableFunding: true,
+    fundingIntervalMs: 8 * 60 * 60 * 1000, // 8 hours
+    baseFundingRate: 0.01,        // 0.01% per 8h
+    maintenanceMarginPercent: 0.5, // 0.5% maintenance margin
+  };
+  
+  private constructor() {
+    // Initialize virtual balances for common currencies
+    this.initializeVirtualBalances();
+  }
+  
+  /**
+   * Initialize virtual balances with default starting capital
+   */
+  private initializeVirtualBalances(): void {
+    const defaultBalance: VirtualBalance = {
+      currency: 'USDT',
+      total: 10000,
+      available: 10000,
+      frozen: 0,
+    };
+    // Will be set per account when needed
+  }
   
   static getInstance(): UnifiedTradingEngine {
     if (!UnifiedTradingEngine.instance) {
@@ -1296,47 +1497,17 @@ export class UnifiedTradingEngine {
     const side = signal.direction === 'LONG' ? 'buy' : 'sell';
     const entryPrice = signal.entryPrices[0] || currentPrice;
     
-    // For PAPER/DEMO mode - simulate order execution
+    // For PAPER/DEMO mode - simulate order execution with realistic conditions
     if (!client || account.isDemo) {
-      // For limit/stop-limit orders, create pending position
-      if (orderType === 'LIMIT' || orderType === 'STOP_LIMIT') {
-        return {
-          success: true,
-          order: {
-            id: `demo-order-${Date.now()}`,
-            symbol: signal.symbol,
-            side: side as 'buy' | 'sell',
-            type: orderType.toLowerCase(),
-            status: 'new', // Pending
-            price: entryPrice,
-            avgPrice: entryPrice,
-            quantity,
-            filledQuantity: 0, // Not filled yet
-            fee: 0,
-            feeCurrency: 'USDT',
-            createdAt: new Date(),
-          },
-        };
-      }
-      
-      // Market order - executed immediately
-      return {
-        success: true,
-        order: {
-          id: `demo-${Date.now()}`,
-          symbol: signal.symbol,
-          side: side as 'buy' | 'sell',
-          type: 'market',
-          status: 'filled',
-          price: currentPrice,
-          avgPrice: currentPrice,
-          quantity,
-          filledQuantity: quantity,
-          fee: quantity * currentPrice * 0.0004,
-          feeCurrency: 'USDT',
-          createdAt: new Date(),
-        },
-      };
+      return this.executeSimulatedOrder(
+        signal,
+        quantity,
+        currentPrice,
+        account.id,
+        orderType,
+        entryPrice,
+        triggerPrice
+      );
     }
     
     // Live trading - send order to exchange
@@ -1713,13 +1884,1387 @@ export class UnifiedTradingEngine {
     }
   }
   
+  // ==================== v3: SIMULATION METHODS ====================
+  
+  /**
+   * Execute simulated order with slippage, fees, and realistic conditions
+   */
+  private async executeSimulatedOrder(
+    signal: ParsedSignal,
+    quantity: number,
+    currentPrice: number,
+    accountId: string,
+    orderType: OrderType,
+    entryPrice: number,
+    triggerPrice?: number
+  ): Promise<OrderResult> {
+    const side = signal.direction === 'LONG' ? 'buy' : 'sell';
+    const simConfig = this.DEFAULT_SIMULATION_CONFIG;
+    
+    // For limit/stop-limit orders, create pending order for matching
+    if (orderType === 'LIMIT' || orderType === 'STOP_LIMIT') {
+      const pendingOrder: PendingOrder = {
+        id: `pending-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+        symbol: signal.symbol,
+        direction: signal.direction,
+        type: orderType,
+        price: entryPrice,
+        triggerPrice,
+        quantity,
+        leverage: signal.leverage,
+        stopLoss: signal.stopLoss,
+        takeProfit: signal.takeProfits[0]?.price,
+        createdAt: new Date(),
+      };
+      
+      if (!this.pendingOrders.has(accountId)) {
+        this.pendingOrders.set(accountId, []);
+      }
+      this.pendingOrders.get(accountId)!.push(pendingOrder);
+      
+      return {
+        success: true,
+        order: {
+          id: pendingOrder.id,
+          symbol: signal.symbol,
+          side: side as 'buy' | 'sell',
+          type: orderType.toLowerCase(),
+          status: 'new',
+          price: entryPrice,
+          avgPrice: entryPrice,
+          quantity,
+          filledQuantity: 0,
+          fee: 0,
+          feeCurrency: 'USDT',
+          createdAt: new Date(),
+        },
+      };
+    }
+    
+    // Market order - execute immediately with slippage
+    const executedPrice = this.applySlippage(currentPrice, signal.direction, simConfig.slippagePercent);
+    const positionValue = quantity * executedPrice;
+    const fee = this.calculateFee(positionValue, 'taker', simConfig);
+    
+    // Check and deduct from virtual balance
+    const balance = this.getInternalVirtualBalance(accountId);
+    const marginRequired = positionValue / signal.leverage;
+    
+    if (balance.available < marginRequired + fee) {
+      return {
+        success: false,
+        error: `Insufficient balance. Required: ${(marginRequired + fee).toFixed(2)} USDT, Available: ${balance.available.toFixed(2)} USDT`,
+        errorCode: 'INSUFFICIENT_BALANCE',
+      };
+    }
+    
+    // Update virtual balance
+    this.updateVirtualBalance(accountId, -(marginRequired + fee));
+    
+    // Record equity point
+    await this.updateEquityCurve(accountId, executedPrice);
+    
+    return {
+      success: true,
+      order: {
+        id: `sim-${Date.now()}`,
+        symbol: signal.symbol,
+        side: side as 'buy' | 'sell',
+        type: 'market',
+        status: 'filled',
+        price: executedPrice,
+        avgPrice: executedPrice,
+        quantity,
+        filledQuantity: quantity,
+        fee,
+        feeCurrency: 'USDT',
+        createdAt: new Date(),
+      },
+    };
+  }
+  
+  /**
+   * Apply slippage to execution price
+   * For LONG (buy): price goes up
+   * For SHORT (sell): price goes down
+   */
+  private applySlippage(
+    price: number,
+    direction: Direction,
+    slippagePercent: number
+  ): number {
+    const slippageFactor = direction === 'LONG' 
+      ? 1 + (slippagePercent / 100)
+      : 1 - (slippagePercent / 100);
+    return price * slippageFactor;
+  }
+  
+  /**
+   * Calculate trading fee based on order type
+   */
+  private calculateFee(
+    positionValue: number,
+    orderType: 'maker' | 'taker',
+    config: SimulationConfig
+  ): number {
+    const feePercent = orderType === 'maker' 
+      ? config.makerFeePercent 
+      : config.takerFeePercent;
+    return positionValue * (feePercent / 100);
+  }
+  
+  /**
+   * Check if position should be liquidated
+   */
+  private checkLiquidation(
+    entryPrice: number,
+    currentPrice: number,
+    leverage: number,
+    direction: Direction,
+    maintenanceMarginPercent: number
+  ): { isLiquidated: boolean; liquidationPrice: number } {
+    // Liquidation price = Entry * (1 - 1/leverage + maintenance_margin)
+    // For LONG: liquidate when price drops to liquidation price
+    // For SHORT: liquidate when price rises to liquidation price
+    const liquidationPrice = direction === 'LONG'
+      ? entryPrice * (1 - (1 / leverage) + (maintenanceMarginPercent / 100))
+      : entryPrice * (1 + (1 / leverage) - (maintenanceMarginPercent / 100));
+    
+    const isLiquidated = direction === 'LONG'
+      ? currentPrice <= liquidationPrice
+      : currentPrice >= liquidationPrice;
+    
+    return { isLiquidated, liquidationPrice };
+  }
+  
+  /**
+   * Settle funding rate for open positions
+   * Called every 8 hours (00:00, 08:00, 16:00 UTC)
+   */
+  private async settleFunding(
+    accountId: string,
+    symbol: string,
+    positionValue: number,
+    direction: Direction,
+    config: SimulationConfig
+  ): Promise<number> {
+    if (!config.enableFunding) return 0;
+    
+    const key = `${accountId}:${symbol}`;
+    const now = new Date();
+    const lastFunding = this.lastFundingTime.get(key);
+    
+    // Check if funding interval has passed
+    if (lastFunding && (now.getTime() - lastFunding.getTime()) < config.fundingIntervalMs) {
+      return 0;
+    }
+    
+    // Simulate funding rate with random variation
+    const fundingRate = config.baseFundingRate * (0.5 + Math.random()); // 0.005% - 0.015%
+    
+    // Funding payment: LONG pays if rate > 0, SHORT receives
+    // This simulates real futures funding mechanism
+    const fundingPayment = direction === 'LONG'
+      ? -positionValue * (fundingRate / 100)
+      : positionValue * (fundingRate / 100);
+    
+    // Update last funding time
+    this.lastFundingTime.set(key, now);
+    
+    // Update virtual balance
+    this.updateVirtualBalance(accountId, fundingPayment);
+    
+    console.log(`[Simulation] Funding settled for ${symbol}: ${direction} rate=${fundingRate.toFixed(4)}% payment=${fundingPayment.toFixed(2)} USDT`);
+    
+    return fundingPayment;
+  }
+  
+  /**
+   * Update equity curve with current position state
+   */
+  private async updateEquityCurve(
+    accountId: string,
+    currentPrice?: number
+  ): Promise<void> {
+    try {
+      // Get account state
+      const balance = this.getInternalVirtualBalance(accountId);
+      
+      // Get open positions for this account
+      const positions = await db.position.findMany({
+        where: { 
+          accountId,
+          status: { in: ['OPEN', 'ACTIVE'] },
+          isDemo: true,
+        },
+      });
+      
+      let unrealizedPnl = 0;
+      for (const pos of positions) {
+        if (currentPrice && pos.symbol) {
+          const pnl = pos.direction === 'LONG'
+            ? (currentPrice - pos.avgEntryPrice) * pos.filledAmount * pos.leverage
+            : (pos.avgEntryPrice - currentPrice) * pos.filledAmount * pos.leverage;
+          unrealizedPnl += pnl;
+        }
+      }
+      
+      const equity = balance.total + unrealizedPnl;
+      
+      // Update peak equity
+      const currentPeak = this.peakEquity.get(accountId) || balance.total;
+      const newPeak = Math.max(currentPeak, equity);
+      this.peakEquity.set(accountId, newPeak);
+      
+      // Calculate drawdown
+      const drawdown = newPeak - equity;
+      const drawdownPercent = newPeak > 0 ? (drawdown / newPeak) * 100 : 0;
+      
+      // Get realized PnL from trade history
+      const trades = this.tradeHistory.get(accountId) || [];
+      const realizedPnl = trades.reduce((sum, t) => sum + t.pnl, 0);
+      
+      const point: EquityPoint = {
+        timestamp: new Date(),
+        balance: balance.total,
+        equity,
+        unrealizedPnl,
+        realizedPnl,
+        drawdown,
+        drawdownPercent,
+        openPositions: positions.length,
+      };
+      
+      // Add to equity curve
+      if (!this.equityCurves.has(accountId)) {
+        this.equityCurves.set(accountId, []);
+      }
+      this.equityCurves.get(accountId)!.push(point);
+      
+    } catch (error) {
+      console.error('[Simulation] Failed to update equity curve:', error);
+    }
+  }
+  
+  /**
+   * Calculate performance metrics from trade history
+   */
+  private calculatePerformanceMetrics(accountId: string): PerformanceMetrics {
+    const trades = this.tradeHistory.get(accountId) || [];
+    const equityCurve = this.equityCurves.get(accountId) || [];
+    
+    const wins = trades.filter(t => t.pnl > 0);
+    const losses = trades.filter(t => t.pnl <= 0);
+    
+    const totalPnl = trades.reduce((sum, t) => sum + t.pnl, 0);
+    const grossProfit = wins.reduce((sum, t) => sum + t.pnl, 0);
+    const grossLoss = Math.abs(losses.reduce((sum, t) => sum + t.pnl, 0));
+    
+    // Win rate
+    const winRate = trades.length > 0 ? (wins.length / trades.length) * 100 : 0;
+    
+    // Profit factor
+    const profitFactor = grossLoss > 0 ? grossProfit / grossLoss : grossProfit > 0 ? Infinity : 0;
+    
+    // Sharpe Ratio calculation
+    const returns: number[] = [];
+    for (let i = 1; i < equityCurve.length; i++) {
+      const prevEquity = equityCurve[i - 1].equity;
+      const currEquity = equityCurve[i].equity;
+      if (prevEquity > 0) {
+        returns.push((currEquity - prevEquity) / prevEquity);
+      }
+    }
+    
+    const avgReturn = returns.length > 0 
+      ? returns.reduce((a, b) => a + b, 0) / returns.length 
+      : 0;
+    const stdReturn = returns.length > 1
+      ? Math.sqrt(returns.reduce((sum, r) => sum + Math.pow(r - avgReturn, 2), 0) / (returns.length - 1))
+      : 0;
+    
+    // Annualized Sharpe (assuming daily returns, 252 trading days)
+    const sharpeRatio = stdReturn > 0 
+      ? (avgReturn / stdReturn) * Math.sqrt(252) 
+      : 0;
+    
+    // Sortino Ratio (only negative returns for denominator)
+    const negativeReturns = returns.filter(r => r < 0);
+    const downsideDeviation = negativeReturns.length > 1
+      ? Math.sqrt(negativeReturns.reduce((sum, r) => sum + Math.pow(r, 2), 0) / negativeReturns.length)
+      : 0;
+    const sortinoRatio = downsideDeviation > 0
+      ? (avgReturn / downsideDeviation) * Math.sqrt(252)
+      : 0;
+    
+    // Drawdown metrics
+    const drawdowns = equityCurve.map(p => p.drawdownPercent);
+    const maxDrawdownPercent = drawdowns.length > 0 ? Math.max(...drawdowns) : 0;
+    const avgDrawdown = drawdowns.length > 0
+      ? drawdowns.reduce((a, b) => a + b, 0) / drawdowns.length
+      : 0;
+    
+    // Max drawdown in absolute terms
+    const maxDrawdown = Math.max(...equityCurve.map(p => p.drawdown), 0);
+    
+    // Time in drawdown
+    const inDrawdown = equityCurve.filter(p => p.drawdownPercent > 0).length;
+    const timeInDrawdown = equityCurve.length > 0 
+      ? (inDrawdown / equityCurve.length) * 100 
+      : 0;
+    
+    // Streaks
+    let maxWinStreak = 0;
+    let maxLossStreak = 0;
+    let currentWinStreak = 0;
+    let currentLossStreak = 0;
+    
+    for (const trade of trades) {
+      if (trade.pnl > 0) {
+        currentWinStreak++;
+        currentLossStreak = 0;
+        maxWinStreak = Math.max(maxWinStreak, currentWinStreak);
+      } else {
+        currentLossStreak++;
+        currentWinStreak = 0;
+        maxLossStreak = Math.max(maxLossStreak, currentLossStreak);
+      }
+    }
+    
+    // Average trade duration
+    const avgTradeDuration = trades.length > 0
+      ? trades.reduce((sum, t) => sum + t.duration, 0) / trades.length
+      : 0;
+    
+    // Total PnL percent (from initial balance)
+    const initialBalance = 10000; // Default
+    const totalPnlPercent = (totalPnl / initialBalance) * 100;
+    
+    return {
+      totalTrades: trades.length,
+      winningTrades: wins.length,
+      losingTrades: losses.length,
+      winRate,
+      totalPnl,
+      totalPnlPercent,
+      avgWin: wins.length > 0 ? grossProfit / wins.length : 0,
+      avgLoss: losses.length > 0 ? grossLoss / losses.length : 0,
+      profitFactor,
+      sharpeRatio,
+      sortinoRatio,
+      maxDrawdown,
+      maxDrawdownPercent,
+      avgDrawdown,
+      timeInDrawdown,
+      maxWinStreak,
+      maxLossStreak,
+      avgTradeDuration,
+    };
+  }
+  
+  /**
+   * Match pending limit orders against current price
+   */
+  async matchPendingOrders(accountId: string, prices: Record<string, number>): Promise<number> {
+    const orders = this.pendingOrders.get(accountId) || [];
+    let matchedCount = 0;
+    
+    for (let i = orders.length - 1; i >= 0; i--) {
+      const order = orders[i];
+      const currentPrice = prices[order.symbol];
+      
+      if (!currentPrice) continue;
+      
+      let shouldMatch = false;
+      
+      // Check if limit price is reached
+      if (order.type === 'LIMIT') {
+        if (order.direction === 'LONG' && currentPrice <= order.price) {
+          shouldMatch = true;
+        } else if (order.direction === 'SHORT' && currentPrice >= order.price) {
+          shouldMatch = true;
+        }
+      }
+      
+      // Check stop-limit trigger
+      if (order.type === 'STOP_LIMIT' && order.triggerPrice) {
+        if (order.direction === 'LONG' && currentPrice >= order.triggerPrice) {
+          // Stop triggered, now check limit price
+          if (currentPrice <= order.price) {
+            shouldMatch = true;
+          }
+        } else if (order.direction === 'SHORT' && currentPrice <= order.triggerPrice) {
+          if (currentPrice >= order.price) {
+            shouldMatch = true;
+          }
+        }
+      }
+      
+      if (shouldMatch) {
+        // Execute the order
+        const executedPrice = this.applySlippage(
+          order.price,
+          order.direction,
+          this.DEFAULT_SIMULATION_CONFIG.slippagePercent
+        );
+        
+        const positionValue = order.quantity * executedPrice;
+        const fee = this.calculateFee(positionValue, 'maker', this.DEFAULT_SIMULATION_CONFIG);
+        
+        // Update balance
+        const marginRequired = positionValue / order.leverage;
+        this.updateVirtualBalance(accountId, -(marginRequired + fee));
+        
+        // Create position in DB
+        await db.position.create({
+          data: {
+            accountId,
+            symbol: order.symbol,
+            direction: order.direction,
+            status: 'OPEN',
+            totalAmount: order.quantity,
+            filledAmount: order.quantity,
+            avgEntryPrice: executedPrice,
+            leverage: order.leverage,
+            stopLoss: order.stopLoss || null,
+            takeProfit: order.takeProfit || null,
+            isDemo: true,
+            source: 'MANUAL',
+          },
+        });
+        
+        // Remove from pending
+        orders.splice(i, 1);
+        matchedCount++;
+        
+        console.log(`[Simulation] Limit order matched: ${order.symbol} ${order.direction} @ ${executedPrice}`);
+      }
+    }
+    
+    return matchedCount;
+  }
+  
+  /**
+   * Get internal virtual balance from cache
+   */
+  private getInternalVirtualBalance(accountId: string): VirtualBalance {
+    let balance = this.virtualBalances.get(accountId);
+    
+    if (!balance) {
+      // Initialize with default balance
+      balance = {
+        currency: 'USDT',
+        total: 10000,
+        available: 10000,
+        frozen: 0,
+      };
+      this.virtualBalances.set(accountId, balance);
+    }
+    
+    return balance;
+  }
+  
+  /**
+   * Update virtual balance
+   */
+  private updateVirtualBalance(accountId: string, delta: number): void {
+    const balance = this.getInternalVirtualBalance(accountId);
+    balance.total += delta;
+    balance.available += delta;
+    
+    // Ensure non-negative
+    if (balance.total < 0) balance.total = 0;
+    if (balance.available < 0) balance.available = 0;
+    
+    this.virtualBalances.set(accountId, balance);
+  }
+  
+  /**
+   * Get equity curve for account
+   */
+  getEquityCurve(accountId: string): EquityPoint[] {
+    return this.equityCurves.get(accountId) || [];
+  }
+  
+  /**
+   * Get performance metrics for account
+   */
+  getPerformanceMetrics(accountId: string): PerformanceMetrics {
+    return this.calculatePerformanceMetrics(accountId);
+  }
+  
+  /**
+   * Get virtual balance (public method)
+   */
+  getAccountBalance(accountId: string): VirtualBalance {
+    return this.getInternalVirtualBalance(accountId);
+  }
+  
+  /**
+   * Set initial balance for simulation
+   */
+  setInitialBalance(accountId: string, amount: number): void {
+    this.virtualBalances.set(accountId, {
+      currency: 'USDT',
+      total: amount,
+      available: amount,
+      frozen: 0,
+    });
+    this.peakEquity.set(accountId, amount);
+  }
+  
+  /**
+   * Record trade for metrics calculation
+   */
+  recordTrade(accountId: string, pnl: number, durationMinutes: number): void {
+    if (!this.tradeHistory.has(accountId)) {
+      this.tradeHistory.set(accountId, []);
+    }
+    this.tradeHistory.get(accountId)!.push({
+      pnl,
+      timestamp: new Date(),
+      duration: durationMinutes,
+    });
+  }
+  
+  /**
+   * Get simulation config
+   */
+  getSimulationConfig(): SimulationConfig {
+    return { ...this.DEFAULT_SIMULATION_CONFIG };
+  }
+  
+  /**
+   * Update simulation config
+   */
+  updateSimulationConfig(updates: Partial<SimulationConfig>): void {
+    Object.assign(this.DEFAULT_SIMULATION_CONFIG, updates);
+  }
+  
+  /**
+   * Process price update for simulation (matching, funding, liquidation)
+   */
+  async processPriceUpdate(
+    accountId: string,
+    symbol: string,
+    price: number
+  ): Promise<{
+    matchedOrders: number;
+    fundingPayment: number;
+    liquidations: string[];
+  }> {
+    const result = {
+      matchedOrders: 0,
+      fundingPayment: 0,
+      liquidations: [] as string[],
+    };
+    
+    // Match pending orders
+    result.matchedOrders = await this.matchPendingOrders(accountId, { [symbol]: price });
+    
+    // Check funding
+    const positions = await db.position.findMany({
+      where: { accountId, symbol, status: 'OPEN', isDemo: true },
+    });
+    
+    for (const pos of positions) {
+      const positionValue = pos.filledAmount * price;
+      result.fundingPayment += await this.settleFunding(
+        accountId,
+        symbol,
+        positionValue,
+        pos.direction as Direction,
+        this.DEFAULT_SIMULATION_CONFIG
+      );
+      
+      // Check liquidation
+      const { isLiquidated, liquidationPrice } = this.checkLiquidation(
+        pos.avgEntryPrice,
+        price,
+        pos.leverage,
+        pos.direction as Direction,
+        this.DEFAULT_SIMULATION_CONFIG.maintenanceMarginPercent
+      );
+      
+      if (isLiquidated) {
+        // Close position at liquidation price
+        await db.position.update({
+          where: { id: pos.id },
+          data: {
+            status: 'LIQUIDATED',
+            closedAt: new Date(),
+            closeReason: 'LIQUIDATION',
+            realizedPnl: -pos.avgEntryPrice * pos.filledAmount / pos.leverage, // Loss of margin
+          },
+        });
+        
+        result.liquidations.push(pos.id);
+        
+        console.warn(`[Simulation] Position liquidated: ${symbol} ${pos.direction} @ ${liquidationPrice.toFixed(2)}`);
+      }
+    }
+    
+    // Update equity curve
+    await this.updateEquityCurve(accountId, price);
+    
+    return result;
+  }
+  
+  // ==================== MODE HANDLER ACCESS ====================
+  
+  /**
+   * Get mode-specific handler
+   */
+  getModeHandler(mode: TradingMode): LiveTradeHandler | DemoTradeHandler | PaperTradeHandler {
+    return getModeHandler(mode);
+  }
+  
+  /**
+   * Get LIVE handler for configuration
+   */
+  getLiveHandler(): LiveTradeHandler {
+    return liveHandler;
+  }
+  
+  /**
+   * Get DEMO handler for configuration
+   */
+  getDemoHandler(): DemoTradeHandler {
+    return demoHandler;
+  }
+  
+  /**
+   * Get PAPER handler for configuration and metrics
+   */
+  getPaperHandler(): PaperTradeHandler {
+    return paperHandler;
+  }
+  
+  /**
+   * Configure LIVE mode
+   */
+  configureLiveMode(config: Partial<LiveModeConfig>): void {
+    liveHandler.updateConfig(config);
+  }
+  
+  /**
+   * Configure DEMO mode
+   */
+  configureDemoMode(config: Partial<DemoModeConfig>): void {
+    demoHandler.updateConfig(config);
+  }
+  
+  /**
+   * Configure PAPER mode
+   */
+  configurePaperMode(config: Partial<PaperModeConfig>): void {
+    paperHandler.updateConfig(config);
+  }
+  
+  /**
+   * Get PAPER mode equity curve
+   */
+  getPaperEquityCurve(accountId: string): EquityPoint[] {
+    return paperHandler.getEquityCurve(accountId);
+  }
+  
+  /**
+   * Get PAPER mode performance metrics
+   */
+  getPaperPerformanceMetrics(accountId: string): PerformanceMetrics {
+    return paperHandler.getPerformanceMetrics(accountId);
+  }
+  
+  /**
+   * Set initial balance for DEMO/PAPER mode
+   */
+  setVirtualBalance(accountId: string, amount: number, mode: 'DEMO' | 'PAPER' = 'PAPER'): void {
+    if (mode === 'DEMO') {
+      demoHandler.setInitialBalance(accountId, amount);
+    } else {
+      paperHandler.setInitialBalance(accountId, amount);
+    }
+  }
+  
+  /**
+   * Get virtual balance for DEMO/PAPER mode
+   */
+  getVirtualBalance(accountId: string, mode: 'DEMO' | 'PAPER' = 'PAPER'): VirtualBalance {
+    if (mode === 'DEMO') {
+      return demoHandler.getBalance(accountId);
+    }
+    return paperHandler.getBalance(accountId);
+  }
+  
   clearCache(): void {
     this.clientCache.clear();
   }
 }
 
+// ==================== MODE-SPECIFIC HANDLERS ====================
+
+/**
+ * LIVE Mode Handler
+ * Real trading with actual exchange API
+ */
+class LiveTradeHandler {
+  private config: LiveModeConfig = {
+    requireConfirmation: true,
+    maxPositionSize: 100000, // $100k max
+    syncBalance: true,
+    orderTimeout: 30000, // 30 seconds
+  };
+
+  async execute(
+    signal: ParsedSignal,
+    quantity: number,
+    currentPrice: number,
+    client: IExchangeClient,
+    account: { id: string; exchangeId: string }
+  ): Promise<OrderResult> {
+    const side = signal.direction === 'LONG' ? 'buy' : 'sell';
+    const clientOrderId = `citarion-live-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+    console.log(`[LIVE] Executing ${signal.direction} ${quantity} ${signal.symbol} @ ~${currentPrice}`);
+
+    try {
+      // Real exchange order
+      const result = await client.createOrder({
+        symbol: signal.symbol,
+        side,
+        type: 'market',
+        quantity,
+        leverage: signal.leverage,
+        marginMode: signal.marginMode,
+        positionSide: signal.direction.toLowerCase() as 'long' | 'short',
+        clientOrderId,
+      });
+
+      if (result.success) {
+        console.log(`[LIVE] Order filled: ${result.order?.id} @ ${result.order?.avgPrice}`);
+      } else {
+        console.error(`[LIVE] Order failed: ${result.error}`);
+      }
+
+      return result;
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      console.error(`[LIVE] Execution error:`, errorMsg);
+      return { success: false, error: errorMsg, errorCode: 'LIVE_EXECUTION_ERROR' };
+    }
+  }
+
+  async closePosition(
+    position: any,
+    client: IExchangeClient
+  ): Promise<OrderResult> {
+    const side = position.direction === 'LONG' ? 'sell' : 'buy';
+
+    return await client.createOrder({
+      symbol: position.symbol,
+      side,
+      type: 'market',
+      quantity: position.filledAmount,
+      reduceOnly: true,
+      positionSide: position.direction.toLowerCase(),
+      clientOrderId: `close-live-${Date.now()}`,
+    });
+  }
+
+  updateConfig(updates: Partial<LiveModeConfig>): void {
+    Object.assign(this.config, updates);
+  }
+
+  getConfig(): LiveModeConfig {
+    return { ...this.config };
+  }
+}
+
+/**
+ * DEMO Mode Handler
+ * Basic simulation with slippage and fees
+ * Suitable for: Quick testing, learning, strategy validation
+ */
+class DemoTradeHandler {
+  private config: DemoModeConfig = {
+    initialBalance: 10000,
+    slippagePercent: 0.05,
+    makerFeePercent: 0.02,
+    takerFeePercent: 0.04,
+    enableLiquidation: true,
+    maintenanceMarginPercent: 0.5,
+  };
+
+  private virtualBalances: Map<string, VirtualBalance> = new Map();
+  private pendingOrders: Map<string, PendingOrder[]> = new Map();
+
+  async execute(
+    signal: ParsedSignal,
+    quantity: number,
+    currentPrice: number,
+    accountId: string
+  ): Promise<OrderResult> {
+    const side = signal.direction === 'LONG' ? 'buy' : 'sell';
+
+    // Apply slippage
+    const slippageFactor = signal.direction === 'LONG' 
+      ? 1 + (this.config.slippagePercent / 100)
+      : 1 - (this.config.slippagePercent / 100);
+    const executedPrice = currentPrice * slippageFactor;
+
+    // Calculate costs
+    const positionValue = quantity * executedPrice;
+    const fee = positionValue * (this.config.takerFeePercent / 100);
+    const marginRequired = positionValue / signal.leverage;
+
+    // Check balance
+    const balance = this.getBalance(accountId);
+    if (balance.available < marginRequired + fee) {
+      return {
+        success: false,
+        error: `Insufficient balance. Required: ${(marginRequired + fee).toFixed(2)}, Available: ${balance.available.toFixed(2)}`,
+        errorCode: 'INSUFFICIENT_BALANCE',
+      };
+    }
+
+    // Deduct from balance
+    this.updateBalance(accountId, -(marginRequired + fee));
+
+    console.log(`[DEMO] Executed ${signal.direction} ${quantity} ${signal.symbol} @ ${executedPrice.toFixed(2)} (slippage: ${this.config.slippagePercent}%)`);
+
+    return {
+      success: true,
+      order: {
+        id: `demo-${Date.now()}`,
+        symbol: signal.symbol,
+        side: side as 'buy' | 'sell',
+        type: 'market',
+        status: 'filled',
+        price: currentPrice,
+        avgPrice: executedPrice,
+        quantity,
+        filledQuantity: quantity,
+        fee,
+        feeCurrency: 'USDT',
+        createdAt: new Date(),
+      },
+    };
+  }
+
+  async closePosition(
+    position: any,
+    currentPrice: number
+  ): Promise<OrderResult> {
+    const side = position.direction === 'LONG' ? 'sell' : 'buy';
+
+    // Calculate PnL
+    const pnl = position.direction === 'LONG'
+      ? (currentPrice - position.avgEntryPrice) * position.filledAmount
+      : (position.avgEntryPrice - currentPrice) * position.filledAmount;
+
+    // Apply closing fee
+    const closeFee = position.filledAmount * currentPrice * (this.config.takerFeePercent / 100);
+    const netPnl = pnl - closeFee;
+
+    // Return margin + PnL
+    const margin = position.avgEntryPrice * position.filledAmount / position.leverage;
+    this.updateBalance(position.accountId, margin + netPnl);
+
+    console.log(`[DEMO] Closed position ${position.symbol} PnL: ${netPnl.toFixed(2)} USDT`);
+
+    return {
+      success: true,
+      order: {
+        id: `demo-close-${Date.now()}`,
+        symbol: position.symbol,
+        side: side as 'buy' | 'sell',
+        type: 'market',
+        status: 'filled',
+        price: currentPrice,
+        avgPrice: currentPrice,
+        quantity: position.filledAmount,
+        filledQuantity: position.filledAmount,
+        fee: closeFee,
+        feeCurrency: 'USDT',
+        createdAt: new Date(),
+      },
+    };
+  }
+
+  checkLiquidation(
+    entryPrice: number,
+    currentPrice: number,
+    leverage: number,
+    direction: Direction
+  ): { isLiquidated: boolean; liquidationPrice: number } {
+    if (!this.config.enableLiquidation) {
+      return { isLiquidated: false, liquidationPrice: 0 };
+    }
+
+    const liquidationPrice = direction === 'LONG'
+      ? entryPrice * (1 - (1 / leverage) + (this.config.maintenanceMarginPercent / 100))
+      : entryPrice * (1 + (1 / leverage) - (this.config.maintenanceMarginPercent / 100));
+
+    const isLiquidated = direction === 'LONG'
+      ? currentPrice <= liquidationPrice
+      : currentPrice >= liquidationPrice;
+
+    return { isLiquidated, liquidationPrice };
+  }
+
+  getBalance(accountId: string): VirtualBalance {
+    let balance = this.virtualBalances.get(accountId);
+    if (!balance) {
+      balance = {
+        currency: 'USDT',
+        total: this.config.initialBalance,
+        available: this.config.initialBalance,
+        frozen: 0,
+      };
+      this.virtualBalances.set(accountId, balance);
+    }
+    return balance;
+  }
+
+  updateBalance(accountId: string, delta: number): void {
+    const balance = this.getBalance(accountId);
+    balance.total += delta;
+    balance.available += delta;
+    balance.total = Math.max(0, balance.total);
+    balance.available = Math.max(0, balance.available);
+    this.virtualBalances.set(accountId, balance);
+  }
+
+  setInitialBalance(accountId: string, amount: number): void {
+    this.virtualBalances.set(accountId, {
+      currency: 'USDT',
+      total: amount,
+      available: amount,
+      frozen: 0,
+    });
+  }
+
+  updateConfig(updates: Partial<DemoModeConfig>): void {
+    Object.assign(this.config, updates);
+  }
+
+  getConfig(): DemoModeConfig {
+    return { ...this.config };
+  }
+}
+
+/**
+ * PAPER Mode Handler
+ * Full simulation with metrics, equity tracking, and funding
+ * Suitable for: Serious backtesting, strategy development, performance analysis
+ */
+class PaperTradeHandler {
+  private config: PaperModeConfig = {
+    initialBalance: 10000,
+    slippagePercent: 0.05,
+    makerFeePercent: 0.02,
+    takerFeePercent: 0.04,
+    enableFunding: true,
+    fundingIntervalMs: 8 * 60 * 60 * 1000, // 8 hours
+    baseFundingRate: 0.01,
+    maintenanceMarginPercent: 0.5,
+    trackEquityCurve: true,
+    equityRecordInterval: 60000, // 1 minute
+    calculateMetrics: true,
+  };
+
+  private virtualBalances: Map<string, VirtualBalance> = new Map();
+  private pendingOrders: Map<string, PendingOrder[]> = new Map();
+  private equityCurves: Map<string, EquityPoint[]> = new Map();
+  private lastFundingTime: Map<string, Date> = new Map();
+  private peakEquity: Map<string, number> = new Map();
+  private tradeHistory: Map<string, Array<{ pnl: number; timestamp: Date; duration: number }>> = new Map();
+
+  async execute(
+    signal: ParsedSignal,
+    quantity: number,
+    currentPrice: number,
+    accountId: string
+  ): Promise<OrderResult> {
+    const side = signal.direction === 'LONG' ? 'buy' : 'sell';
+
+    // Apply slippage
+    const slippageFactor = signal.direction === 'LONG' 
+      ? 1 + (this.config.slippagePercent / 100)
+      : 1 - (this.config.slippagePercent / 100);
+    const executedPrice = currentPrice * slippageFactor;
+
+    // Calculate costs
+    const positionValue = quantity * executedPrice;
+    const fee = positionValue * (this.config.takerFeePercent / 100);
+    const marginRequired = positionValue / signal.leverage;
+
+    // Check balance
+    const balance = this.getBalance(accountId);
+    if (balance.available < marginRequired + fee) {
+      return {
+        success: false,
+        error: `Insufficient balance. Required: ${(marginRequired + fee).toFixed(2)}, Available: ${balance.available.toFixed(2)}`,
+        errorCode: 'INSUFFICIENT_BALANCE',
+      };
+    }
+
+    // Deduct from balance
+    this.updateBalance(accountId, -(marginRequired + fee));
+
+    // Record equity point
+    if (this.config.trackEquityCurve) {
+      await this.recordEquityPoint(accountId, executedPrice);
+    }
+
+    console.log(`[PAPER] Executed ${signal.direction} ${quantity} ${signal.symbol} @ ${executedPrice.toFixed(2)}`);
+
+    return {
+      success: true,
+      order: {
+        id: `paper-${Date.now()}`,
+        symbol: signal.symbol,
+        side: side as 'buy' | 'sell',
+        type: 'market',
+        status: 'filled',
+        price: currentPrice,
+        avgPrice: executedPrice,
+        quantity,
+        filledQuantity: quantity,
+        fee,
+        feeCurrency: 'USDT',
+        createdAt: new Date(),
+      },
+    };
+  }
+
+  async closePosition(
+    position: any,
+    currentPrice: number,
+    accountId: string
+  ): Promise<OrderResult> {
+    const side = position.direction === 'LONG' ? 'sell' : 'buy';
+
+    // Calculate PnL
+    const pnl = position.direction === 'LONG'
+      ? (currentPrice - position.avgEntryPrice) * position.filledAmount
+      : (position.avgEntryPrice - currentPrice) * position.filledAmount;
+
+    // Apply closing fee
+    const closeFee = position.filledAmount * currentPrice * (this.config.takerFeePercent / 100);
+    const netPnl = pnl - closeFee;
+
+    // Return margin + PnL
+    const margin = position.avgEntryPrice * position.filledAmount / position.leverage;
+    this.updateBalance(accountId, margin + netPnl);
+
+    // Record trade for metrics
+    const duration = position.openedAt 
+      ? (Date.now() - new Date(position.openedAt).getTime()) / 60000 
+      : 0;
+    this.recordTrade(accountId, netPnl, duration);
+
+    // Record equity point
+    if (this.config.trackEquityCurve) {
+      await this.recordEquityPoint(accountId, currentPrice);
+    }
+
+    console.log(`[PAPER] Closed position ${position.symbol} PnL: ${netPnl.toFixed(2)} USDT (duration: ${duration.toFixed(0)} min)`);
+
+    return {
+      success: true,
+      order: {
+        id: `paper-close-${Date.now()}`,
+        symbol: position.symbol,
+        side: side as 'buy' | 'sell',
+        type: 'market',
+        status: 'filled',
+        price: currentPrice,
+        avgPrice: currentPrice,
+        quantity: position.filledAmount,
+        filledQuantity: position.filledAmount,
+        fee: closeFee,
+        feeCurrency: 'USDT',
+        createdAt: new Date(),
+      },
+    };
+  }
+
+  async settleFunding(
+    accountId: string,
+    symbol: string,
+    positionValue: number,
+    direction: Direction
+  ): Promise<number> {
+    if (!this.config.enableFunding) return 0;
+
+    const key = `${accountId}:${symbol}`;
+    const now = new Date();
+    const lastFunding = this.lastFundingTime.get(key);
+
+    if (lastFunding && (now.getTime() - lastFunding.getTime()) < this.config.fundingIntervalMs) {
+      return 0;
+    }
+
+    // Simulate funding rate
+    const fundingRate = this.config.baseFundingRate * (0.5 + Math.random());
+    
+    // LONG pays, SHORT receives (when rate > 0)
+    const fundingPayment = direction === 'LONG'
+      ? -positionValue * (fundingRate / 100)
+      : positionValue * (fundingRate / 100);
+
+    this.updateBalance(accountId, fundingPayment);
+    this.lastFundingTime.set(key, now);
+
+    console.log(`[PAPER] Funding ${symbol}: ${direction} rate=${fundingRate.toFixed(4)}% payment=${fundingPayment.toFixed(2)} USDT`);
+
+    return fundingPayment;
+  }
+
+  checkLiquidation(
+    entryPrice: number,
+    currentPrice: number,
+    leverage: number,
+    direction: Direction
+  ): { isLiquidated: boolean; liquidationPrice: number; marginRatio: number } {
+    const liquidationPrice = direction === 'LONG'
+      ? entryPrice * (1 - (1 / leverage) + (this.config.maintenanceMarginPercent / 100))
+      : entryPrice * (1 + (1 / leverage) - (this.config.maintenanceMarginPercent / 100));
+
+    const isLiquidated = direction === 'LONG'
+      ? currentPrice <= liquidationPrice
+      : currentPrice >= liquidationPrice;
+
+    // Calculate margin ratio for warnings
+    const marginRatio = direction === 'LONG'
+      ? ((currentPrice - liquidationPrice) / liquidationPrice) * 100
+      : ((liquidationPrice - currentPrice) / liquidationPrice) * 100;
+
+    return { isLiquidated, liquidationPrice, marginRatio };
+  }
+
+  getBalance(accountId: string): VirtualBalance {
+    let balance = this.virtualBalances.get(accountId);
+    if (!balance) {
+      balance = {
+        currency: 'USDT',
+        total: this.config.initialBalance,
+        available: this.config.initialBalance,
+        frozen: 0,
+      };
+      this.virtualBalances.set(accountId, balance);
+      this.peakEquity.set(accountId, this.config.initialBalance);
+    }
+    return balance;
+  }
+
+  updateBalance(accountId: string, delta: number): void {
+    const balance = this.getBalance(accountId);
+    balance.total += delta;
+    balance.available += delta;
+    balance.total = Math.max(0, balance.total);
+    balance.available = Math.max(0, balance.available);
+    this.virtualBalances.set(accountId, balance);
+  }
+
+  setInitialBalance(accountId: string, amount: number): void {
+    this.virtualBalances.set(accountId, {
+      currency: 'USDT',
+      total: amount,
+      available: amount,
+      frozen: 0,
+    });
+    this.peakEquity.set(accountId, amount);
+  }
+
+  private async recordEquityPoint(accountId: string, currentPrice?: number): Promise<void> {
+    const balance = this.getBalance(accountId);
+    
+    // Get open positions
+    const positions = await db.position.findMany({
+      where: { accountId, status: 'OPEN', isDemo: true },
+    });
+
+    let unrealizedPnl = 0;
+    for (const pos of positions) {
+      if (currentPrice) {
+        const pnl = pos.direction === 'LONG'
+          ? (currentPrice - pos.avgEntryPrice) * pos.filledAmount * pos.leverage
+          : (pos.avgEntryPrice - currentPrice) * pos.filledAmount * pos.leverage;
+        unrealizedPnl += pnl;
+      }
+    }
+
+    const equity = balance.total + unrealizedPnl;
+    const peak = Math.max(this.peakEquity.get(accountId) || balance.total, equity);
+    this.peakEquity.set(accountId, peak);
+
+    const drawdown = peak - equity;
+    const drawdownPercent = peak > 0 ? (drawdown / peak) * 100 : 0;
+
+    const trades = this.tradeHistory.get(accountId) || [];
+    const realizedPnl = trades.reduce((sum, t) => sum + t.pnl, 0);
+
+    const point: EquityPoint = {
+      timestamp: new Date(),
+      balance: balance.total,
+      equity,
+      unrealizedPnl,
+      realizedPnl,
+      drawdown,
+      drawdownPercent,
+      openPositions: positions.length,
+    };
+
+    if (!this.equityCurves.has(accountId)) {
+      this.equityCurves.set(accountId, []);
+    }
+    this.equityCurves.get(accountId)!.push(point);
+  }
+
+  private recordTrade(accountId: string, pnl: number, duration: number): void {
+    if (!this.tradeHistory.has(accountId)) {
+      this.tradeHistory.set(accountId, []);
+    }
+    this.tradeHistory.get(accountId)!.push({
+      pnl,
+      timestamp: new Date(),
+      duration,
+    });
+  }
+
+  getEquityCurve(accountId: string): EquityPoint[] {
+    return this.equityCurves.get(accountId) || [];
+  }
+
+  getPerformanceMetrics(accountId: string): PerformanceMetrics {
+    const trades = this.tradeHistory.get(accountId) || [];
+    const equityCurve = this.equityCurves.get(accountId) || [];
+
+    const wins = trades.filter(t => t.pnl > 0);
+    const losses = trades.filter(t => t.pnl <= 0);
+    const totalPnl = trades.reduce((sum, t) => sum + t.pnl, 0);
+    const grossProfit = wins.reduce((sum, t) => sum + t.pnl, 0);
+    const grossLoss = Math.abs(losses.reduce((sum, t) => sum + t.pnl, 0));
+
+    // Win rate
+    const winRate = trades.length > 0 ? (wins.length / trades.length) * 100 : 0;
+
+    // Profit factor
+    const profitFactor = grossLoss > 0 ? grossProfit / grossLoss : grossProfit > 0 ? Infinity : 0;
+
+    // Sharpe Ratio
+    const returns: number[] = [];
+    for (let i = 1; i < equityCurve.length; i++) {
+      const prev = equityCurve[i - 1].equity;
+      const curr = equityCurve[i].equity;
+      if (prev > 0) returns.push((curr - prev) / prev);
+    }
+
+    const avgReturn = returns.length > 0 ? returns.reduce((a, b) => a + b, 0) / returns.length : 0;
+    const stdReturn = returns.length > 1
+      ? Math.sqrt(returns.reduce((sum, r) => sum + Math.pow(r - avgReturn, 2), 0) / (returns.length - 1))
+      : 0;
+    const sharpeRatio = stdReturn > 0 ? (avgReturn / stdReturn) * Math.sqrt(252) : 0;
+
+    // Sortino Ratio
+    const negativeReturns = returns.filter(r => r < 0);
+    const downsideDeviation = negativeReturns.length > 1
+      ? Math.sqrt(negativeReturns.reduce((sum, r) => sum + Math.pow(r, 2), 0) / negativeReturns.length)
+      : 0;
+    const sortinoRatio = downsideDeviation > 0 ? (avgReturn / downsideDeviation) * Math.sqrt(252) : 0;
+
+    // Drawdown
+    const drawdowns = equityCurve.map(p => p.drawdownPercent);
+    const maxDrawdownPercent = drawdowns.length > 0 ? Math.max(...drawdowns) : 0;
+    const avgDrawdown = drawdowns.length > 0 ? drawdowns.reduce((a, b) => a + b, 0) / drawdowns.length : 0;
+    const maxDrawdown = Math.max(...equityCurve.map(p => p.drawdown), 0);
+
+    // Time in drawdown
+    const inDrawdown = equityCurve.filter(p => p.drawdownPercent > 0).length;
+    const timeInDrawdown = equityCurve.length > 0 ? (inDrawdown / equityCurve.length) * 100 : 0;
+
+    // Streaks
+    let maxWinStreak = 0, maxLossStreak = 0, currentWinStreak = 0, currentLossStreak = 0;
+    for (const trade of trades) {
+      if (trade.pnl > 0) {
+        currentWinStreak++;
+        currentLossStreak = 0;
+        maxWinStreak = Math.max(maxWinStreak, currentWinStreak);
+      } else {
+        currentLossStreak++;
+        currentWinStreak = 0;
+        maxLossStreak = Math.max(maxLossStreak, currentLossStreak);
+      }
+    }
+
+    const avgTradeDuration = trades.length > 0 ? trades.reduce((sum, t) => sum + t.duration, 0) / trades.length : 0;
+    const totalPnlPercent = (totalPnl / this.config.initialBalance) * 100;
+
+    return {
+      totalTrades: trades.length,
+      winningTrades: wins.length,
+      losingTrades: losses.length,
+      winRate,
+      totalPnl,
+      totalPnlPercent,
+      avgWin: wins.length > 0 ? grossProfit / wins.length : 0,
+      avgLoss: losses.length > 0 ? grossLoss / losses.length : 0,
+      profitFactor,
+      sharpeRatio,
+      sortinoRatio,
+      maxDrawdown,
+      maxDrawdownPercent,
+      avgDrawdown,
+      timeInDrawdown,
+      maxWinStreak,
+      maxLossStreak,
+      avgTradeDuration,
+    };
+  }
+
+  updateConfig(updates: Partial<PaperModeConfig>): void {
+    Object.assign(this.config, updates);
+  }
+
+  getConfig(): PaperModeConfig {
+    return { ...this.config };
+  }
+}
+
+// ==================== MODE HANDLER FACTORY ====================
+
+/**
+ * Get mode-specific handler
+ */
+function getModeHandler(mode: TradingMode): LiveTradeHandler | DemoTradeHandler | PaperTradeHandler {
+  switch (mode) {
+    case 'LIVE':
+      return liveHandler;
+    case 'DEMO':
+      return demoHandler;
+    case 'PAPER':
+      return paperHandler;
+    default:
+      return demoHandler;
+  }
+}
+
+// Singleton handlers
+const liveHandler = new LiveTradeHandler();
+const demoHandler = new DemoTradeHandler();
+const paperHandler = new PaperTradeHandler();
+
 // ==================== EXPORTS ====================
 
 export const unifiedTradingEngine = UnifiedTradingEngine.getInstance();
-export { SignalParser };
+export { 
+  LiveTradeHandler, 
+  DemoTradeHandler, 
+  PaperTradeHandler,
+  liveHandler,
+  demoHandler,
+  paperHandler
+};
 export default unifiedTradingEngine;
