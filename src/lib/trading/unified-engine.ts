@@ -49,6 +49,14 @@
 import { db } from '@/lib/db';
 import { credentialManager } from '@/lib/api-keys/credential-manager';
 import { cachedPriceService } from '@/lib/price-service';
+import { 
+  TradingError, 
+  BalanceError, 
+  OrderError, 
+  withTimeout, 
+  withRetry,
+  isRateLimitError 
+} from './trading-errors';
 
 // ==================== TYPES ====================
 
@@ -1416,72 +1424,99 @@ export class UnifiedTradingEngine {
     config: TradingConfig,
     client?: IExchangeClient | null
   ): Promise<number> {
-    try {
-      // Validate currentPrice
-      if (!currentPrice || isNaN(currentPrice) || currentPrice <= 0) {
-        console.error('[UnifiedTradingEngine] Invalid currentPrice:', currentPrice);
-        return 0;
-      }
-
-      let availableBalance = 10000;
-      
-      if (client && !account.isDemo) {
-        const accountInfo = await client.getAccountInfo();
-        availableBalance = accountInfo.availableMargin || 10000;
-      } else {
-        const paperAccount = await db.paperAccount.findUnique({
-          where: { accountId: account.id },
-        });
-        if (paperAccount) {
-          availableBalance = paperAccount.balance || 10000;
-        }
-      }
-
-      // Validate availableBalance
-      if (isNaN(availableBalance) || availableBalance <= 0) {
-        availableBalance = 10000; // Default fallback
-      }
-      
-      const amountPercent = signal.amountPercent || config.defaultAmountPercent || 2;
-      const tradeValue = availableBalance * (amountPercent / 100);
-      
-      let positionSize: number;
-      
-      if (signal.stopLoss && signal.entryPrices.length > 0) {
-        const riskPercent = signal.riskPercent || amountPercent;
-        const riskAmount = availableBalance * (riskPercent / 100);
-        const entryPrice = signal.entryPrices[0] || currentPrice;
-        const priceDiff = Math.abs(entryPrice - signal.stopLoss);
-        const riskPerUnit = priceDiff / currentPrice;
-        
-        positionSize = riskPerUnit > 0 ? riskAmount / riskPerUnit : tradeValue / currentPrice;
-      } else {
-        positionSize = tradeValue / currentPrice;
-      }
-      
-      // Apply leverage
-      const leverage = signal.leverage && !isNaN(signal.leverage) ? signal.leverage : 1;
-      positionSize *= leverage;
-      
-      // Round to 8 decimal places
-      positionSize = Math.floor(positionSize * 1e8) / 1e8;
-      
-      // Ensure non-negative
-      if (isNaN(positionSize) || positionSize < 0) {
-        positionSize = 0;
-      }
-      
-      // Apply max position size limit
-      if (config.maxPositionSize && positionSize > config.maxPositionSize) {
-        positionSize = config.maxPositionSize;
-      }
-      
-      return Math.max(0, positionSize);
-      
-    } catch (error) {
-      console.error('[UnifiedTradingEngine] Position size calculation failed:', error);
-      return 0;
+    // Validate currentPrice FIRST
+    if (!currentPrice || isNaN(currentPrice) || currentPrice <= 0) {
+      throw new TradingError(
+        `Invalid current price: ${currentPrice}`,
+        'INVALID_PRICE',
+        false,
+        400,
+        { symbol: signal.symbol, currentPrice }
+      );
     }
+
+    // Get available balance - NO DEFAULT FALLBACK
+    let availableBalance: number;
+    
+    if (client && !account.isDemo) {
+      // LIVE mode - fetch real balance with timeout
+      try {
+        const accountInfo = await withTimeout(
+          Promise.resolve(client.getAccountInfo()),
+          10000,
+          'getAccountInfo'
+        );
+        availableBalance = accountInfo.availableMargin;
+      } catch (error) {
+        throw new BalanceError(
+          `Failed to fetch account balance for LIVE trading`,
+          'BALANCE_FETCH_FAILED',
+          { 
+            accountId: account.id, 
+            originalError: error instanceof Error ? error.message : String(error) 
+          }
+        );
+      }
+    } else {
+      // DEMO/PAPER mode - get from paper account
+      const paperAccount = await db.paperAccount.findUnique({
+        where: { accountId: account.id },
+      });
+      if (!paperAccount) {
+        throw new BalanceError(
+          `Paper account not found: ${account.id}`,
+          'BALANCE_FETCH_FAILED',
+          { accountId: account.id }
+        );
+      }
+      availableBalance = paperAccount.balance;
+    }
+
+    // Validate availableBalance - THROW ERROR instead of fallback
+    if (isNaN(availableBalance) || availableBalance <= 0) {
+      throw new BalanceError(
+        `Invalid or zero balance: ${availableBalance}. Cannot calculate position size.`,
+        'INSUFFICIENT_BALANCE',
+        false,
+        { accountId: account.id, availableBalance }
+      );
+    }
+    
+    const amountPercent = signal.amountPercent || config.defaultAmountPercent || 2;
+    const tradeValue = availableBalance * (amountPercent / 100);
+    
+    let positionSize: number;
+    
+    if (signal.stopLoss && signal.entryPrices.length > 0) {
+      const riskPercent = signal.riskPercent || amountPercent;
+      const riskAmount = availableBalance * (riskPercent / 100);
+      const entryPrice = signal.entryPrices[0] || currentPrice;
+      const priceDiff = Math.abs(entryPrice - signal.stopLoss);
+      const riskPerUnit = priceDiff / currentPrice;
+      
+      positionSize = riskPerUnit > 0 ? riskAmount / riskPerUnit : tradeValue / currentPrice;
+    } else {
+      positionSize = tradeValue / currentPrice;
+    }
+    
+    // Apply leverage
+    const leverage = signal.leverage && !isNaN(signal.leverage) ? signal.leverage : 1;
+    positionSize *= leverage;
+    
+    // Round to 8 decimal places
+    positionSize = Math.floor(positionSize * 1e8) / 1e8;
+    
+    // Ensure non-negative
+    if (isNaN(positionSize) || positionSize < 0) {
+      positionSize = 0;
+    }
+    
+    // Apply max position size limit
+    if (config.maxPositionSize && positionSize > config.maxPositionSize) {
+      positionSize = config.maxPositionSize;
+    }
+    
+    return Math.max(0, positionSize);
   }
   
   private async executeEntryOrder(
@@ -2086,6 +2121,9 @@ export class UnifiedTradingEngine {
     accountId: string,
     currentPrice?: number
   ): Promise<void> {
+    // MAX_EQUITY_POINTS - prevents memory leak
+    const MAX_EQUITY_POINTS = 10000; // ~10k points max per account
+    
     try {
       // Get account state
       const balance = this.getInternalVirtualBalance(accountId);
@@ -2135,11 +2173,19 @@ export class UnifiedTradingEngine {
         openPositions: positions.length,
       };
       
-      // Add to equity curve
+      // Add to equity curve with SIZE LIMIT to prevent memory leak
       if (!this.equityCurves.has(accountId)) {
         this.equityCurves.set(accountId, []);
       }
-      this.equityCurves.get(accountId)!.push(point);
+      
+      const curve = this.equityCurves.get(accountId)!;
+      curve.push(point);
+      
+      // MEMORY LEAK FIX: Trim old points if exceeds max
+      if (curve.length > MAX_EQUITY_POINTS) {
+        // Keep the last MAX_EQUITY_POINTS
+        curve.splice(0, curve.length - MAX_EQUITY_POINTS);
+      }
       
     } catch (error) {
       console.error('[Simulation] Failed to update equity curve:', error);
@@ -2606,6 +2652,8 @@ export class UnifiedTradingEngine {
 /**
  * LIVE Mode Handler
  * Real trading with actual exchange API
+ * 
+ * CRITICAL: Uses timeout and retry for production safety
  */
 class LiveTradeHandler {
   private config: LiveModeConfig = {
@@ -2628,17 +2676,31 @@ class LiveTradeHandler {
     console.log(`[LIVE] Executing ${signal.direction} ${quantity} ${signal.symbol} @ ~${currentPrice}`);
 
     try {
-      // Real exchange order
-      const result = await client.createOrder({
-        symbol: signal.symbol,
-        side,
-        type: 'market',
-        quantity,
-        leverage: signal.leverage,
-        marginMode: signal.marginMode,
-        positionSide: signal.direction.toLowerCase() as 'long' | 'short',
-        clientOrderId,
-      });
+      // CRITICAL: Wrap order execution with timeout
+      const result = await withRetry(
+        async () => {
+          return await withTimeout(
+            Promise.resolve(client.createOrder({
+              symbol: signal.symbol,
+              side,
+              type: 'market',
+              quantity,
+              leverage: signal.leverage,
+              marginMode: signal.marginMode,
+              positionSide: signal.direction.toLowerCase() as 'long' | 'short',
+              clientOrderId,
+            })),
+            this.config.orderTimeout,
+            `LIVE order ${signal.symbol}`
+          );
+        },
+        {
+          maxRetries: 2,
+          baseDelayMs: 1000,
+          retryableErrors: ['TIMEOUT', 'EXCHANGE_UNREACHABLE', 'ORDER_TIMEOUT'],
+        },
+        `LIVE order ${signal.symbol}`
+      );
 
       if (result.success) {
         console.log(`[LIVE] Order filled: ${result.order?.id} @ ${result.order?.avgPrice}`);
@@ -2648,8 +2710,28 @@ class LiveTradeHandler {
 
       return result;
     } catch (error) {
+      // Classify error properly
+      if (error instanceof TimeoutError) {
+        throw new OrderError(
+          `Order timeout after ${this.config.orderTimeout}ms`,
+          'ORDER_TIMEOUT',
+          true, // Recoverable - can retry
+          { symbol: signal.symbol, timeout: this.config.orderTimeout }
+        );
+      }
+      
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
       console.error(`[LIVE] Execution error:`, errorMsg);
+      
+      // Check for rate limiting
+      if (isRateLimitError(error)) {
+        throw new ExchangeError(
+          'Exchange rate limited - please wait',
+          'EXCHANGE_RATE_LIMITED',
+          { symbol: signal.symbol }
+        );
+      }
+      
       return { success: false, error: errorMsg, errorCode: 'LIVE_EXECUTION_ERROR' };
     }
   }
@@ -2660,15 +2742,26 @@ class LiveTradeHandler {
   ): Promise<OrderResult> {
     const side = position.direction === 'LONG' ? 'sell' : 'buy';
 
-    return await client.createOrder({
-      symbol: position.symbol,
-      side,
-      type: 'market',
-      quantity: position.filledAmount,
-      reduceOnly: true,
-      positionSide: position.direction.toLowerCase(),
-      clientOrderId: `close-live-${Date.now()}`,
-    });
+    // CRITICAL: Wrap close order with timeout and retry
+    return await withRetry(
+      async () => {
+        return await withTimeout(
+          Promise.resolve(client.createOrder({
+            symbol: position.symbol,
+            side,
+            type: 'market',
+            quantity: position.filledAmount,
+            reduceOnly: true,
+            positionSide: position.direction.toLowerCase(),
+            clientOrderId: `close-live-${Date.now()}`,
+          })),
+          this.config.orderTimeout,
+          `Close position ${position.symbol}`
+        );
+      },
+      { maxRetries: 2 },
+      `Close position ${position.symbol}`
+    );
   }
 
   updateConfig(updates: Partial<LiveModeConfig>): void {

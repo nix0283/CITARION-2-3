@@ -8,6 +8,12 @@
 export * from './trading-notifications';
 export * from './trading-notifications-service';
 
+// Trading Errors (Professional Error Handling)
+export * from './trading-errors';
+
+// Backtesting Engine
+export * from './backtesting-engine';
+
 // Re-export commonly used items
 export { 
   tradingNotificationsService,
